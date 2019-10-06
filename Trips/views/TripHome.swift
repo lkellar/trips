@@ -7,14 +7,18 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TripHome: View {
-    var trips: [Trip]
+    // ❇️ Core Data property wrappers
+    @Environment(\.managedObjectContext) var context
+    
+    @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     var body: some View {
         NavigationView {
             List {
-                ForEach((trips), id:  \.self) {trip in
+                ForEach((self.trips), id:  \.self) {trip in
                     NavigationLink(destination: TripDetail(trip: trip)) {
                         TripHomeRow(trip: trip)
                     }
@@ -27,6 +31,7 @@ struct TripHome: View {
 
 struct TripsHome_Previews: PreviewProvider {
     static var previews: some View {
-        TripHome(trips: exampleTrips)
+        //TripHome()
+        Text("Hello!")
     }
 }

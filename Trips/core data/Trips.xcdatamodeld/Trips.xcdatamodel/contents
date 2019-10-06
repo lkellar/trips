@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14903" systemVersion="18G95" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Item" representedClassName="Item" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <relationship name="pack" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pack" inverseName="items" inverseEntity="Pack"/>
+    </entity>
+    <entity name="Pack" representedClassName="Pack" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <relationship name="items" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Item" inverseName="pack" inverseEntity="Item"/>
+        <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="packs" inverseEntity="Trip"/>
+    </entity>
+    <entity name="Trip" representedClassName="Trip" syncable="YES">
+        <attribute name="color" optional="YES" attributeType="String" valueTransformerName="NSSecureUnarchiveFromData"/>
+        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="icon" optional="YES" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="packs" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Pack" inverseName="trip" inverseEntity="Pack"/>
+    </entity>
+    <elements>
+        <element name="Item" positionX="-54" positionY="27" width="128" height="88"/>
+        <element name="Pack" positionX="-36" positionY="36" width="128" height="88"/>
+        <element name="Trip" positionX="-63" positionY="-18" width="128" height="133"/>
+    </elements>
+</model>

@@ -22,10 +22,10 @@ struct TripHomeRow: View {
                     Text("\(trip.startDate.formatted_date) - \(trip.endDate.formatted_date)").font(.subheadline)
                     Spacer()
                 }
-            }.layoutPriority(1)
+            }.layoutPriority(1.0)
             Spacer()
             ZStack {
-                Circle().frame(width: 64, height: 64).foregroundColor(trip.color)
+                Circle().frame(width: CGFloat(64.0), height: CGFloat(64.0)).foregroundColor(Color.fromString(color: trip.color ?? "primary"))
                 Image(systemName: "house.fill").foregroundColor(Color.white).font(.system(size: 32))
                 
             }
@@ -35,9 +35,10 @@ struct TripHomeRow: View {
 
 struct TripsHomeRow_Previews: PreviewProvider {
     static var previews: some View {
-        List {
-            TripHomeRow(trip: exampleTrips[0])
-            TripHomeRow(trip: exampleTrips[1])
-        }
+        Text("Example Trips?")
+        /*List {
+            //TripHomeRow(trip: exampleTrips[0])
+            //TripHomeRow(trip: exampleTrips[1])
+        }*/
     }
 }
