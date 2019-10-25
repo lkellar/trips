@@ -21,6 +21,7 @@
 		A0B61B692343A44500D0D13C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B61B652343A44500D0D13C /* Trip.swift */; };
 		A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0E7811A233E8579007974CD /* Trips.xcdatamodeld */; };
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
+		A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		A0B61B652343A44500D0D13C /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		A0E7811B233E8579007974CD /* Trips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trips.xcdatamodel; sourceTree = "<group>"; };
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
+		A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 				A0877C5B233274360006F902 /* TripHome.swift */,
 				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
+				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -202,6 +205,7 @@
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
 				A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */,
+				A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */,
 				A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */,
 				A0B61B692343A44500D0D13C /* Trip.swift in Sources */,
 				A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */,

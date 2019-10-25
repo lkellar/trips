@@ -43,8 +43,52 @@ func addSampleData(context: NSManagedObjectContext) {
     let examplePack = Pack(context: context)
     examplePack.name = "Tech"
     
+    
+    // TODO ADD secondary packs
+    let clothesPack = Pack(context: context)
+    clothesPack.name = "Clothes"
+    
     examplePack.addToItems(exampleItem)
     exampleTrip.addToPacks(examplePack)
+    exampleTrip.addToPacks(clothesPack)
+    
+    
+    let secondTrip = Trip(context: context)
+    secondTrip.name = "Vancouver Campout"
+    secondTrip.startDate = Date(timeIntervalSinceReferenceDate: 591600000)
+    secondTrip.endDate = Date(timeIntervalSinceReferenceDate: 592300000)
+    secondTrip.color = "purple"
+    
+    let clothesPackTwo = Pack(context: context)
+    clothesPackTwo.name = "Clothes"
+    
+    let exampleItemTwo = Item(context: context)
+    exampleItemTwo.name = "Laptop"
+    
+    let examplePackTwo = Pack(context: context)
+    examplePackTwo.name = "Tech"
+    
+    examplePackTwo.addToItems(exampleItemTwo)
+    
+    let toiletriesPack = Pack(context: context)
+    toiletriesPack.name = "Toiletries"
+    
+    let grassPack = Pack(context: context)
+    grassPack.name = "Grass-Related Items"
+    
+    let catPack = Pack(context: context)
+    catPack.name = "Cats"
+    
+    let catItem = Item(context: context)
+    catItem.name = "Yellow Cat"
+    
+    
+    secondTrip.addToPacks(clothesPackTwo)
+    secondTrip.addToPacks(grassPack)
+    catPack.addToItems(catItem)
+    secondTrip.addToPacks(catPack)
+    secondTrip.addToPacks(toiletriesPack)
+    secondTrip.addToPacks(examplePackTwo)
     
     do {
         try context.save()

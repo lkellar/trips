@@ -18,13 +18,29 @@ struct TripHome: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach((self.trips), id:  \.self) {trip in
+                ForEach((self.trips)) {trip in
                     NavigationLink(destination: TripDetail(trip: trip)) {
                         TripHomeRow(trip: trip)
                     }
                 }
             }
             .navigationBarTitle("Trips")
+        .navigationBarItems(trailing:
+            Button(action: {
+                do {
+                    let trips = try self.context.fetch(Trip.allTripsFetchRequest())
+                    for obj in trips {
+                        self.context.delete(obj)
+                    }
+                    addSampleData(context: self.context)
+                    
+                } catch {
+                    print(error)
+                }
+            }, label: {
+                Image(systemName: "trash")
+            }
+            ))
         }
     }
 }

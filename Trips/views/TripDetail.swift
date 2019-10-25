@@ -11,26 +11,31 @@ import SwiftUI
 struct TripDetail: View {
     @Environment(\.managedObjectContext) var context
     
+    @State var modalDisplayed = false
+    
     var trip: Trip
     
     var body: some View {
         List {
-            ForEach((trip.packs.array as! [Pack]), id: \.self) {pack in
+            ForEach((trip.packs.array as! [Pack])) {pack in
                 Section(header: Text(pack.name)) {
-                    
-                    ForEach((pack.items.array as! [Item]), id: \.self) { item in
+                    ForEach((pack.items.array as! [Item])) { item in
                         Text(item.name)
                     }
                 }
             }
             }.navigationBarTitle(trip.name)
-            /*.navigationBarItems(trailing:
+            .navigationBarItems(trailing:
                 Button(action: {
-                    self.trip.packs[0].addToItems(Item(name:"2nd Laptop"))
+                    self.modalDisplayed = true
                 }, label: {
                     Image(systemName: "plus")
-                })
-        )*/
+                }
+                    // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                    ).padding()
+                    .sheet(isPresented: $modalDisplayed, content: {
+                    AddItem(packs: self.trip.packs.array as! [Pack]).environment(\.managedObjectContext, self.context)
+                }))
     }
 }
 
