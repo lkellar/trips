@@ -9,14 +9,10 @@
 
 import Foundation
 import CoreData
-
+import Combine
 
 @objc(Pack)
 public class Pack: NSManagedObject, Identifiable {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Pack> {
-        return NSFetchRequest<Pack>(entityName: "Pack")
-    }
 
     @NSManaged public var name: String
     @NSManaged public var items: NSOrderedSet
@@ -57,4 +53,11 @@ extension Pack {
     @objc(removeItems:)
     @NSManaged public func removeFromItems(_ values: NSOrderedSet)
 
+    static func allPacksFetchRequest() ->NSFetchRequest<Pack> {
+        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+       
+        return request
+    }
 }

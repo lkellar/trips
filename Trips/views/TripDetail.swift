@@ -15,13 +15,17 @@ struct TripDetail: View {
     
     var trip: Trip
     
+    @FetchRequest(fetchRequest: Pack.allPacksFetchRequest()) var packs: FetchedResults<Pack>
+    
+    @FetchRequest(fetchRequest: Item.allItemsFetchRequest()) var items: FetchedResults<Item>
+    
     var body: some View {
         List {
-            ForEach((trip.packs.array as! [Pack])) {pack in
+            ForEach(self.packs.filter {$0.trip == self.trip} ) {pack in
                 Section(header: Text(pack.name)) {
-                    ForEach((pack.items.array as! [Item])) { item in
+                    ForEach(self.items.filter {$0.pack == pack}) { item in
                         Text(item.name)
-                    }
+                    }.onDelete(perform: self.getDeleteFunction(pack: pack))
                 }
             }
             }.navigationBarTitle(trip.name)
@@ -37,6 +41,23 @@ struct TripDetail: View {
                     AddItem(packs: self.trip.packs.array as! [Pack]).environment(\.managedObjectContext, self.context)
                 }))
     }
+    
+    func getDeleteFunction(pack: Pack) -> (IndexSet) -> Void {
+        func delete(at offsets: IndexSet) {
+            pack.removeFromItems(at: NSIndexSet(indexSet: offsets))
+            
+            do {
+                try self.context.save()
+            } catch {
+                print(error)
+            }
+            
+        }
+        
+        return delete
+    }
+    
+    
 }
 
 struct TripItem_Previews: PreviewProvider {

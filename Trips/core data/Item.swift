@@ -14,12 +14,15 @@ import CoreData
 @objc(Item)
 public class Item: NSManagedObject, Identifiable {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Item> {
-        return NSFetchRequest<Item>(entityName: "Item")
-    }
-
     @NSManaged public var name: String
     @NSManaged public var notes: String?
     @NSManaged public var pack: Pack?
 
+    static func allItemsFetchRequest() ->NSFetchRequest<Item> {
+        let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
+        return request
+    }
 }

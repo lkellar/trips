@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
             // ❇️ Pass it to the ContentView through the managedObjectContext @Environment variable
             let contentView = TripHome()
-            .environment(\.managedObjectContext, managedObjectContext)
+                .environment(\.managedObjectContext, managedObjectContext)
             
             window.rootViewController = UIHostingController(
                 rootView: contentView

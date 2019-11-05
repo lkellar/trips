@@ -40,7 +40,8 @@ struct TripHome: View {
             }, label: {
                 Image(systemName: "trash")
             }
-            ))
+            ).padding()
+            )
         }
     }
 }
