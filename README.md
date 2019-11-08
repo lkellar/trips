@@ -24,9 +24,9 @@ Currently, the app's functionality is quite limited, but it does have basic list
 ![detail view](screenshots/detail.png)
 
 # Contributing
-So, this is mostly a self-worked project, but if you have anything to contribute, please feel free to submit a PR or [file an issue](issues/new).
+So, this is mostly a self-worked project, but if you have anything to contribute, please feel free to submit a PR or filing an issue.
 
-And if any bugs or issues do come up, you can alert me by [filing an issue](issues/new), but as my time is limited, and this project is constantly changing (not much stability yet), I can't promise immediate resolution.
+And if any bugs or issues do come up, you can alert me by [filing an issue](https://github.com/katzrkool/trips/issues/new), but as my time is limited, and this project is constantly changing (not much stability yet), I can't promise immediate resolution.
 
 # Future
 I hope to have this app become a fully featured packing list app with native tie-ins like Shortcuts support and other features.
