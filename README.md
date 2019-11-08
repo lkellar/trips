@@ -31,4 +31,4 @@ And if any bugs or issues do come up, you can alert me by [filing an issue](http
 # Future
 I hope to have this app become a fully featured packing list app with native tie-ins like Shortcuts support and other features.
 
-Eventually, I'd like to have this be submitted in the app store, but regardless,  it's been a great learning opportunity, and I hope my work and help others with (poorly documented) SwiftUI, especially w/ Core Data connections. 
+Eventually, I'd like to have this be submitted in the app store, but regardless,  it's been a great learning opportunity, and I hope my work can help others with (poorly documented) SwiftUI, especially w/ Core Data connections. 
