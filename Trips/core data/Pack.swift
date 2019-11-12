@@ -9,7 +9,6 @@
 
 import Foundation
 import CoreData
-import Combine
 
 @objc(Pack)
 public class Pack: NSManagedObject, Identifiable {

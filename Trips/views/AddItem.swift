@@ -27,7 +27,7 @@ struct AddItem: View {
                            content: {
                             ForEach(0 ..< packs.count, id:\.self) { index in
                                 Text(self.packs[index].name).tag(index)
-                            }.navigationBarTitle("Packs")
+                            }
                     })
                 }
                 Button(action: {

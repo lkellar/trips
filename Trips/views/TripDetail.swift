@@ -12,6 +12,8 @@ struct TripDetail: View {
     @Environment(\.managedObjectContext) var context
     
     @State var modalDisplayed = false
+    @State var packModalDisplayed = false
+    @State var actionSheetDisplayed = false
     
     var trip: Trip
     
@@ -30,16 +32,28 @@ struct TripDetail: View {
             }
             }.navigationBarTitle(trip.name)
             .navigationBarItems(trailing:
-                Button(action: {
-                    self.modalDisplayed = true
-                }, label: {
-                    Image(systemName: "plus")
-                }
-                    // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                    ).padding()
-                    .sheet(isPresented: $modalDisplayed, content: {
-                    AddItem(packs: self.trip.packs.array as! [Pack]).environment(\.managedObjectContext, self.context)
-                }))
+                HStack {
+                    Button(action: {
+                        self.packModalDisplayed = true
+                    }, label: {
+                        Image(systemName: "plus.rectangle.on.rectangle")
+                    }
+                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                        ).padding()
+                        .sheet(isPresented: $packModalDisplayed, content: {
+                            AddPack(trip: self.trip).environment(\.managedObjectContext, self.context)
+                        })
+                    Button(action: {
+                        self.modalDisplayed = true
+                    }, label: {
+                        Image(systemName: "plus")
+                    }
+                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                        ).padding()
+                        .sheet(isPresented: $modalDisplayed, content: {
+                            AddItem(packs: self.trip.packs.array as! [Pack]).environment(\.managedObjectContext, self.context)
+                        })
+            })
     }
     
     func getDeleteFunction(pack: Pack) -> (IndexSet) -> Void {

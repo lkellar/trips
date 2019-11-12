@@ -22,6 +22,7 @@
 		A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0E7811A233E8579007974CD /* Trips.xcdatamodeld */; };
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
 		A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */; };
+		A0F756FF237B0B9700DCBC77 /* AddPack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F756FE237B0B9700DCBC77 /* AddPack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		A0E7811B233E8579007974CD /* Trips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trips.xcdatamodel; sourceTree = "<group>"; };
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
 		A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
+		A0F756FE237B0B9700DCBC77 /* AddPack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +126,7 @@
 				A0877C5B233274360006F902 /* TripHome.swift */,
 				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
 				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
+				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Pack.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
+				A0F756FF237B0B9700DCBC77 /* AddPack.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
 				A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */,
