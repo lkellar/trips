@@ -13,7 +13,7 @@ struct TripDetail: View {
     
     @State var modalDisplayed = false
     @State var packModalDisplayed = false
-    @State var actionSheetDisplayed = false
+    @State var editTripDisplayed = false
     
     var trip: Trip
     
@@ -33,6 +33,14 @@ struct TripDetail: View {
             }.navigationBarTitle(trip.name)
             .navigationBarItems(trailing:
                 HStack {
+                    Button(action: {
+                        self.editTripDisplayed = true
+                    }, label: {
+                        Image(systemName: "info.circle")
+                        }).padding()
+                        .sheet(isPresented: $editTripDisplayed, content: {
+                            EditTrip(trip: self.trip).environment(\.managedObjectContext, self.context)
+                        })
                     Button(action: {
                         self.packModalDisplayed = true
                     }, label: {

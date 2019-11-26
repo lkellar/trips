@@ -12,6 +12,7 @@
 		A01FB8C62331CE4A008062A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01FB8C52331CE4A008062A1 /* Assets.xcassets */; };
 		A01FB8C92331CE4A008062A1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01FB8C82331CE4A008062A1 /* Preview Assets.xcassets */; };
 		A01FB8CC2331CE4A008062A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A01FB8CA2331CE4A008062A1 /* LaunchScreen.storyboard */; };
+		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
 		A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleTrips.swift */; };
 		A07B6C8F234798FA00578CDC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C8E234798FA00578CDC /* Util.swift */; };
 		A07B6C952347994D00578CDC /* Pack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C912347994D00578CDC /* Pack.swift */; };
@@ -33,6 +34,7 @@
 		A01FB8C82331CE4A008062A1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		A01FB8CB2331CE4A008062A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A01FB8CD2331CE4A008062A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
 		A04D80E82342BC08004EE95F /* sampleTrips.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleTrips.swift; sourceTree = "<group>"; };
 		A07B6C8E234798FA00578CDC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A07B6C912347994D00578CDC /* Pack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pack.swift; sourceTree = "<group>"; };
@@ -112,6 +114,16 @@
 			path = "core data";
 			sourceTree = "<group>";
 		};
+		A03AB4B5237EF8CE00979899 /* modals */ = {
+			isa = PBXGroup;
+			children = (
+				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
+				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
+				A03AB4B6237EF8F900979899 /* EditTrip.swift */,
+			);
+			path = modals;
+			sourceTree = "<group>";
+		};
 		A0877C51233268940006F902 /* models */ = {
 			isa = PBXGroup;
 			children = (
@@ -122,11 +134,10 @@
 		A0877C5623326DD20006F902 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				A03AB4B5237EF8CE00979899 /* modals */,
 				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 				A0877C5B233274360006F902 /* TripHome.swift */,
 				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
-				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
-				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -204,6 +215,7 @@
 			files = (
 				A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */,
 				A07B6C8F234798FA00578CDC /* Util.swift in Sources */,
+				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Pack.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
@@ -351,6 +363,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = NW3S65A6Q9;
 				ENABLE_PREVIEWS = YES;
@@ -371,6 +384,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = NW3S65A6Q9;
 				ENABLE_PREVIEWS = YES;

@@ -7,9 +7,14 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct TripHomeRow: View {
     var trip: Trip
+    @Environment(\.managedObjectContext) var context
+    
+    @State var refreshing = false
+    var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
     
     var body: some View {
         HStack {
@@ -19,7 +24,9 @@ struct TripHomeRow: View {
                     Spacer()
                 }
                 HStack {
-                    Text("\(trip.startDate.formatted_date) - \(trip.endDate.formatted_date)").font(.subheadline)
+                    // Kind of a hack, but basically, if the trip name is 0, trip is deleted almost certainly, so don't calculate dates (which crashes app if trip is deleted)
+                    Text(trip.name.count > 0 ? "\(trip.startDate.formatted_date) - \(trip.endDate.formatted_date)" : "").font(.subheadline)
+                    Text(refreshing ? "": "")
                     Spacer()
                 }
             }.layoutPriority(1.0)
@@ -29,7 +36,9 @@ struct TripHomeRow: View {
                 Image(systemName: "house.fill").foregroundColor(Color.white).font(.system(size: 32))
                 
             }
-        }
+        }.onReceive(self.didSave, perform: { _ in
+            self.refreshing.toggle()
+        })
     }
 }
 

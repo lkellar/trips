@@ -21,8 +21,8 @@ struct TripHome: View {
                 ForEach((self.trips)) {trip in
                     NavigationLink(destination: TripDetail(trip: trip)) {
                         TripHomeRow(trip: trip)
+                        }
                     }
-                }
             }
             .navigationBarTitle("Trips")
         .navigationBarItems(trailing:
