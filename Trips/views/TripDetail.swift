@@ -68,11 +68,7 @@ struct TripDetail: View {
         func delete(at offsets: IndexSet) {
             pack.removeFromItems(at: NSIndexSet(indexSet: offsets))
             
-            do {
-                try self.context.save()
-            } catch {
-                print(error)
-            }
+            saveContext(self.context)
             
         }
         

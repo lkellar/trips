@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 import SwiftUI
 
 extension Date {
@@ -53,5 +54,13 @@ extension Color {
             // Don't want to raise an error, so returning primary color seems like best option
             return Color.primary
         }
+    }
+}
+
+func saveContext(_ context: NSManagedObjectContext) -> Void {
+    do {
+        try context.save()
+    } catch {
+        print(error)
     }
 }

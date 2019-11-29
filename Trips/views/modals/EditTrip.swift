@@ -13,7 +13,16 @@ struct EditTrip: View {
     
     @Environment(\.managedObjectContext) var context
     
+    var packRequest : FetchRequest<Pack>
+    
     var trip: Trip
+    
+    var packs: FetchedResults<Pack>{packRequest.wrappedValue}
+    init(trip: Trip) {
+        self.trip = trip
+        self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
+    }
     
     @State var updatedTitle: String = ""
     @State var updatedStartDate: Date = Date()
@@ -28,14 +37,14 @@ struct EditTrip: View {
                             self.updatedTitle = self.trip.name
                     }
                 }
-                Section {
+                Section() {
                     DatePicker(selection: $updatedStartDate, in: ...updatedEndDate, displayedComponents: .date, label: { Text("Start Date")
                     }).onAppear {
-                        self.updatedStartDate = self.trip.startDate
+                        self.updatedStartDate = self.trip.name.count > 0 ? self.trip.startDate : Date()
                     }
                     DatePicker(selection: $updatedEndDate, in: updatedStartDate..., displayedComponents: .date, label: { Text("End Date")
                     }).onAppear {
-                        self.updatedEndDate = self.trip.endDate
+                        self.updatedEndDate = self.trip.name.count > 0 ? self.trip.endDate : Date()
                     }
                 }
                 Button(action: {
@@ -43,11 +52,7 @@ struct EditTrip: View {
                     self.trip.startDate = self.updatedStartDate
                     self.trip.endDate = self.updatedEndDate
                     
-                    do {
-                        try self.context.save()
-                    } catch {
-                        print(error)
-                    }
+                    saveContext(self.context)
                     
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
@@ -65,6 +70,11 @@ struct EditTrip: View {
                 }) {
                     Text("Delete").foregroundColor(.red)
                 }
+                Section(header: Text("Packs")) {
+                   ForEach(self.packs) { pack in
+                    Text(pack.name)
+                   }.onDelete(perform: self.deletePack)
+                }
                 
                 
             }
@@ -76,6 +86,14 @@ struct EditTrip: View {
                     Text("Cancel")
                 }))
         }
+    }
+    
+    func deletePack(at offsets: IndexSet) {
+        for offset in offsets {
+            self.trip.removeFromPacks(self.packs[offset])
+        }
+            
+        saveContext(self.context)
     }
 }
 
