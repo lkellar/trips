@@ -82,7 +82,6 @@
 			children = (
 				A033D3E5234273010065C3A4 /* core data */,
 				A0877C5623326DD20006F902 /* views */,
-				A0877C51233268940006F902 /* models */,
 				A01FB8BF2331CE48008062A1 /* AppDelegate.swift */,
 				A04D80E82342BC08004EE95F /* sampleTrips.swift */,
 				A01FB8C12331CE48008062A1 /* SceneDelegate.swift */,
@@ -124,20 +123,13 @@
 			path = modals;
 			sourceTree = "<group>";
 		};
-		A0877C51233268940006F902 /* models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = models;
-			sourceTree = "<group>";
-		};
 		A0877C5623326DD20006F902 /* views */ = {
 			isa = PBXGroup;
 			children = (
 				A03AB4B5237EF8CE00979899 /* modals */,
-				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 				A0877C5B233274360006F902 /* TripHome.swift */,
 				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
+				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -372,7 +364,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lkellar.Trips;
+				PRODUCT_BUNDLE_IDENTIFIER = org.lkellar.Trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -393,7 +385,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.lkellar.Trips;
+				PRODUCT_BUNDLE_IDENTIFIER = org.lkellar.Trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
