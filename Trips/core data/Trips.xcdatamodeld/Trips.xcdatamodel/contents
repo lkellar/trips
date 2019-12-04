@@ -7,7 +7,7 @@
         <relationship name="pack" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pack" inverseName="items" inverseEntity="Pack"/>
     </entity>
     <entity name="Pack" representedClassName="Pack" syncable="YES">
-        <attribute name="completed" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="items" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Item" inverseName="pack" inverseEntity="Item"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="packs" inverseEntity="Trip"/>
