@@ -17,19 +17,18 @@ struct EditTrip: View {
     
     var trip: Trip
     
-    @Binding var showCompleted: Bool
-    
-    var packs: FetchedResults<Pack>{packRequest.wrappedValue}
-    init(trip: Trip, showCompleted: Binding<Bool>) {
-        self.trip = trip
-        self._showCompleted = showCompleted
-        self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
-    }
-    
+    @State var showCompleted: Bool
     @State var updatedTitle: String = ""
     @State var updatedStartDate: Date = Date()
     @State var updatedEndDate: Date = Date()
+    
+    var packs: FetchedResults<Pack>{packRequest.wrappedValue}
+    init(trip: Trip) {
+        self.trip = trip
+        self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
+        self._showCompleted = State.init(initialValue: trip.showCompleted)
+    }
     
     var body: some View {
         NavigationView {
@@ -82,6 +81,7 @@ struct EditTrip: View {
             self.trip.name = self.updatedTitle
             self.trip.startDate = self.updatedStartDate
             self.trip.endDate = self.updatedEndDate
+            self.trip.showCompleted = self.showCompleted
             
             saveContext(self.context)
         }

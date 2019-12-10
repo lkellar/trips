@@ -18,12 +18,13 @@
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
+        <attribute name="showCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="packs" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Pack" inverseName="trip" inverseEntity="Pack"/>
     </entity>
     <elements>
         <element name="Item" positionX="-54" positionY="27" width="128" height="103"/>
         <element name="Pack" positionX="-36" positionY="36" width="128" height="103"/>
-        <element name="Trip" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="Trip" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>
 </model>

@@ -35,7 +35,7 @@ struct TripDetail: View {
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
                 Section(header: Text(pack.name + (self.refreshing ? "" : ""))) {
                     ForEach(self.fetchItems(pack)) { item in
-                        if !item.completed || self.showCompleted {
+                        if !item.completed || self.trip.showCompleted {
                             HStack {
                                 Button(action: {print("ITEM DETAIL PLS IMPLEMENT")}) {
                                     Text(item.name).strikethrough(item.completed)
@@ -71,7 +71,7 @@ struct TripDetail: View {
                         Image(systemName: "info.circle")
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: self.trip, showCompleted: self.$showCompleted).environment(\.managedObjectContext, self.context)
+                            EditTrip(trip: self.trip).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
                         self.packModalDisplayed = true
