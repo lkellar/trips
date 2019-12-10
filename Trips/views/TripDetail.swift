@@ -16,6 +16,7 @@ struct TripDetail: View {
     @State var packModalDisplayed = false
     @State var editTripDisplayed = false
     @State var refreshing = false
+    @State var showCompleted = false
     
     var trip: Trip
 
@@ -34,12 +35,32 @@ struct TripDetail: View {
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
                 Section(header: Text(pack.name + (self.refreshing ? "" : ""))) {
                     ForEach(self.fetchItems(pack)) { item in
-                        Text(item.name)
+                        if !item.completed || self.showCompleted {
+                            HStack {
+                                Button(action: {print("ITEM DETAIL PLS IMPLEMENT")}) {
+                                    Text(item.name).strikethrough(item.completed)
+                                }
+                                Spacer()
+                                Button(action: {self.toggleItemCompleted(item)}) {
+                                    ZStack {
+                                    RoundedRectangle(cornerRadius: CGFloat(15))
+                                    .stroke(Color.secondary, lineWidth: CGFloat(3))
+                                        
+                                        if item.completed {
+                                            Circle().fill(Color.secondary)
+                                                .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                        }
+                                        
+                                    }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
+                                    .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                }.buttonStyle(BorderlessButtonStyle())
+                            }
+                        }
                     }.onDelete(perform: self.getDeleteFunction(pack: pack))
+                    
+                    
                 }
             }
-            
-            
             //Text(refreshing ? "" : "")
             }.navigationBarTitle(trip.name)
             .navigationBarItems(trailing:
@@ -50,7 +71,7 @@ struct TripDetail: View {
                         Image(systemName: "info.circle")
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: self.trip).environment(\.managedObjectContext, self.context)
+                            EditTrip(trip: self.trip, showCompleted: self.$showCompleted).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
                         self.packModalDisplayed = true
@@ -105,6 +126,12 @@ struct TripDetail: View {
         }
         
         return delete
+    }
+    
+    func toggleItemCompleted(_ item: Item) -> Void {
+        item.completed.toggle()
+        saveContext(self.context)
+        self.refreshing.toggle()
     }
     
     

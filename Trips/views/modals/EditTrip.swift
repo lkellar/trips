@@ -17,9 +17,12 @@ struct EditTrip: View {
     
     var trip: Trip
     
+    @Binding var showCompleted: Bool
+    
     var packs: FetchedResults<Pack>{packRequest.wrappedValue}
-    init(trip: Trip) {
+    init(trip: Trip, showCompleted: Binding<Bool>) {
         self.trip = trip
+        self._showCompleted = showCompleted
         self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
     }
@@ -37,6 +40,7 @@ struct EditTrip: View {
                             self.updatedTitle = self.trip.name
                     }
                 }
+                Toggle("Show Completed Items", isOn: $showCompleted)
                 Section() {
                     DatePicker(selection: $updatedStartDate, in: ...updatedEndDate, displayedComponents: .date, label: { Text("Start Date")
                     }).onAppear {
@@ -47,16 +51,10 @@ struct EditTrip: View {
                         self.updatedEndDate = self.trip.name.count > 0 ? self.trip.endDate : Date()
                     }
                 }
-                Button(action: {
-                    self.trip.name = self.updatedTitle
-                    self.trip.startDate = self.updatedStartDate
-                    self.trip.endDate = self.updatedEndDate
-                    
-                    saveContext(self.context)
-                    
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Save!")
+                Section(header: Text("Packs")) {
+                   ForEach(self.packs) { pack in
+                    Text(pack.name)
+                   }.onDelete(perform: self.deletePack)
                 }
                 Button(action: {
                     do {
@@ -70,11 +68,6 @@ struct EditTrip: View {
                 }) {
                     Text("Delete").foregroundColor(.red)
                 }
-                Section(header: Text("Packs")) {
-                   ForEach(self.packs) { pack in
-                    Text(pack.name)
-                   }.onDelete(perform: self.deletePack)
-                }
                 
                 
             }
@@ -83,8 +76,14 @@ struct EditTrip: View {
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text("Cancel")
+                    Text("Close")
                 }))
+        }.onDisappear {
+            self.trip.name = self.updatedTitle
+            self.trip.startDate = self.updatedStartDate
+            self.trip.endDate = self.updatedEndDate
+            
+            saveContext(self.context)
         }
     }
     
