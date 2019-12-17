@@ -61,6 +61,6 @@ func saveContext(_ context: NSManagedObjectContext) -> Void {
     do {
         try context.save()
     } catch {
-        print(error)
+        print("ERROR: \(error); END OF ERROR")
     }
 }

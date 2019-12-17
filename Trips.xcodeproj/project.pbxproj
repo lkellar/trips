@@ -17,6 +17,7 @@
 		A07B6C8F234798FA00578CDC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C8E234798FA00578CDC /* Util.swift */; };
 		A07B6C952347994D00578CDC /* Pack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C912347994D00578CDC /* Pack.swift */; };
 		A07B6C972347994D00578CDC /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C932347994D00578CDC /* Item.swift */; };
+		A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A081AB6E23A3ECA6000F391A /* EditItem.swift */; };
 		A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5723326E140006F902 /* TripHomeRow.swift */; };
 		A0877C5C233274360006F902 /* TripHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5B233274360006F902 /* TripHome.swift */; };
 		A0B61B692343A44500D0D13C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B61B652343A44500D0D13C /* Trip.swift */; };
@@ -39,6 +40,7 @@
 		A07B6C8E234798FA00578CDC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A07B6C912347994D00578CDC /* Pack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pack.swift; sourceTree = "<group>"; };
 		A07B6C932347994D00578CDC /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		A081AB6E23A3ECA6000F391A /* EditItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItem.swift; sourceTree = "<group>"; };
 		A0877C5723326E140006F902 /* TripHomeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHomeRow.swift; sourceTree = "<group>"; };
 		A0877C5B233274360006F902 /* TripHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHome.swift; sourceTree = "<group>"; };
 		A08E15722375C7DB00DB454E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
 				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
 				A03AB4B6237EF8F900979899 /* EditTrip.swift */,
+				A081AB6E23A3ECA6000F391A /* EditItem.swift */,
 			);
 			path = modals;
 			sourceTree = "<group>";
@@ -126,9 +129,9 @@
 		A0877C5623326DD20006F902 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
 				A03AB4B5237EF8CE00979899 /* modals */,
 				A0877C5B233274360006F902 /* TripHome.swift */,
-				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
 				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 			);
 			path = views;
@@ -218,6 +221,7 @@
 				A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */,
 				A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */,
 				A0B61B692343A44500D0D13C /* Trip.swift in Sources */,
+				A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */,
 				A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

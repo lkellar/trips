@@ -13,20 +13,29 @@ struct TripDetail: View {
     @Environment(\.managedObjectContext) var context
     
     @State var modalDisplayed = false
-    @State var packModalDisplayed = false
-    @State var editTripDisplayed = false
     @State var refreshing = false
     @State var showCompleted = false
+    
+    @State var itemModalDisplayed = false
+    @State var packModalDisplayed = false
+    @State var editTripDisplayed = false
     
     var trip: Trip
 
     var packRequest : FetchRequest<Pack>
     
+    var itemRequest : FetchRequest<Item>
+    
     var packs: FetchedResults<Pack>{packRequest.wrappedValue}
+    var items: FetchedResults<Item>{itemRequest.wrappedValue}
+    
     init(trip: Trip) {
         self.trip = trip
         self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
+        
+        self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+            NSPredicate(format: "%K IN %@", #keyPath(Item.pack), self.trip.packs))
     }
     
     var body: some View {
@@ -34,12 +43,14 @@ struct TripDetail: View {
             ForEach(self.packs ) {pack in
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
                 Section(header: Text(pack.name + (self.refreshing ? "" : ""))) {
-                    ForEach(self.fetchItems(pack)) { item in
+                    ForEach(self.items.filter {$0.pack == pack}) { item in
                         if !item.completed || self.trip.showCompleted {
                             HStack {
-                                Button(action: {print("ITEM DETAIL PLS IMPLEMENT")}) {
+                                Button(action: {self.itemModalDisplayed = true}) {
                                     Text(item.name).strikethrough(item.completed)
-                                }
+                                }.sheet(isPresented: self.$itemModalDisplayed, content: {
+                                    EditItem(item: item).environment(\.managedObjectContext, self.context)
+                                })
                                 Spacer()
                                 Button(action: {self.toggleItemCompleted(item)}) {
                                     ZStack {
@@ -118,6 +129,7 @@ struct TripDetail: View {
             
             for offset in offsets {
                 pack.removeFromItems(items[offset])
+                //self.context.delete(items[offset])
             }
                         
             saveContext(self.context)
