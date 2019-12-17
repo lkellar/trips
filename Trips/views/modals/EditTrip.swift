@@ -21,6 +21,7 @@ struct EditTrip: View {
     @State var updatedTitle: String = ""
     @State var updatedStartDate: Date = Date()
     @State var updatedEndDate: Date = Date()
+    @State var updatedColor: String
     
     var packs: FetchedResults<Pack>{packRequest.wrappedValue}
     init(trip: Trip) {
@@ -28,6 +29,12 @@ struct EditTrip: View {
         self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
         self._showCompleted = State.init(initialValue: trip.showCompleted)
+        if let color = trip.color {
+            self._updatedColor = State.init(initialValue: color)
+        } else{
+            self._updatedColor = State.init(initialValue: "none")
+        }
+        
     }
     
     var body: some View {
@@ -49,6 +56,9 @@ struct EditTrip: View {
                     }).onAppear {
                         self.updatedEndDate = self.trip.name.count > 0 ? self.trip.endDate : Date()
                     }
+                }
+                Section(header: Text("Color")) {
+                    ColorPicker(updatedColor: $updatedColor)
                 }
                 Section(header: Text("Packs")) {
                    ForEach(self.packs) { pack in
@@ -82,6 +92,7 @@ struct EditTrip: View {
             self.trip.startDate = self.updatedStartDate
             self.trip.endDate = self.updatedEndDate
             self.trip.showCompleted = self.showCompleted
+            self.trip.color = self.updatedColor
             
             saveContext(self.context)
         }

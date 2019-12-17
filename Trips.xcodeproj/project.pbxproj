@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A0050B7A23A92E54000B7E59 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0050B7923A92E54000B7E59 /* ColorPicker.swift */; };
+		A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0050B7B23A9346F000B7E59 /* ColorPickerCircle.swift */; };
 		A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01FB8BF2331CE48008062A1 /* AppDelegate.swift */; };
 		A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A01FB8C12331CE48008062A1 /* SceneDelegate.swift */; };
 		A01FB8C62331CE4A008062A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A01FB8C52331CE4A008062A1 /* Assets.xcassets */; };
@@ -28,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A0050B7923A92E54000B7E59 /* ColorPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		A0050B7B23A9346F000B7E59 /* ColorPickerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCircle.swift; sourceTree = "<group>"; };
 		A01FB8BC2331CE48008062A1 /* Trips.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trips.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A01FB8BF2331CE48008062A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A01FB8C12331CE48008062A1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -129,12 +133,22 @@
 		A0877C5623326DD20006F902 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
+				A0A8A69723A9789500E3AC04 /* components */,
 				A03AB4B5237EF8CE00979899 /* modals */,
+				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
 				A0877C5B233274360006F902 /* TripHome.swift */,
-				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 			);
 			path = views;
+			sourceTree = "<group>";
+		};
+		A0A8A69723A9789500E3AC04 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				A0877C5723326E140006F902 /* TripHomeRow.swift */,
+				A0050B7923A92E54000B7E59 /* ColorPicker.swift */,
+				A0050B7B23A9346F000B7E59 /* ColorPickerCircle.swift */,
+			);
+			path = components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -211,12 +225,14 @@
 				A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */,
 				A07B6C8F234798FA00578CDC /* Util.swift in Sources */,
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
+				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Pack.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
 				A0F756FF237B0B9700DCBC77 /* AddPack.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
+				A0050B7A23A92E54000B7E59 /* ColorPicker.swift in Sources */,
 				A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */,
 				A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */,
 				A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */,
