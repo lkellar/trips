@@ -15,11 +15,11 @@
     <entity name="Trip" representedClassName="Trip" syncable="YES">
         <attribute name="color" optional="YES" attributeType="String" valueTransformerName="NSSecureUnarchiveFromData"/>
         <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="icon" optional="YES" attributeType="String"/>
         <attribute name="name" attributeType="String"/>
         <attribute name="showCompleted" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
-        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="packs" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Pack" inverseName="trip" inverseEntity="Pack"/>
     </entity>
     <elements>

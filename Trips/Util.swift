@@ -64,3 +64,14 @@ func saveContext(_ context: NSManagedObjectContext) -> Void {
         print("ERROR: \(error); END OF ERROR")
     }
 }
+
+func checkDateValidity(startDate: Date, endDate: Date, showStartDate: Bool, showEndDate: Bool) -> Bool {
+    if showEndDate == true && showStartDate == true {
+        if startDate > endDate {
+            if startDate.formatted_date != endDate.formatted_date {
+                return false
+            }
+        }
+    }
+    return true
+}

@@ -15,6 +15,8 @@ struct TripHome: View {
     
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
+    @State var showAddTrip = false
+    
     var body: some View {
         NavigationView {
             List {
@@ -25,22 +27,30 @@ struct TripHome: View {
                     }
             }
             .navigationBarTitle("Trips")
-        .navigationBarItems(trailing:
+        .navigationBarItems(leading:
             Button(action: {
-                do {
-                    let trips = try self.context.fetch(Trip.allTripsFetchRequest())
-                    for obj in trips {
-                        self.context.delete(obj)
+                    do {
+                        let trips = try self.context.fetch(Trip.allTripsFetchRequest())
+                        for obj in trips {
+                            self.context.delete(obj)
+                        }
+                        addSampleData(context: self.context)
+                        
+                    } catch {
+                        print(error)
                     }
-                    addSampleData(context: self.context)
-                    
-                } catch {
-                    print(error)
+                }, label: {
+                    Image(systemName: "trash")
                 }
-            }, label: {
-                Image(systemName: "trash")
-            }
-            ).padding()
+                ).padding(),
+             trailing: Button(action: {
+                    self.showAddTrip = true
+                 }) {
+                    Image(systemName: "plus")
+                }.padding()
+                .sheet(isPresented: $showAddTrip, content: {
+                    AddTrip().environment(\.managedObjectContext, self.context)
+                })
             )
         }
     }

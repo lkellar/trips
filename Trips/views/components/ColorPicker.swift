@@ -30,7 +30,6 @@ struct ColorPicker: View {
             VStack {
                 ColorPickerCircle(circleSize: self.circleSize, color: "black", updatedColor: self.$updatedColor)
                 ColorPickerCircle(circleSize: self.circleSize, color: "yellow", updatedColor: self.$updatedColor)
-                
             }
         }
     }

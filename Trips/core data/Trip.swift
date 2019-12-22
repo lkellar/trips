@@ -14,10 +14,10 @@ import CoreData
 public class Trip: NSManagedObject, Identifiable {
 
     @NSManaged public var color: String?
-    @NSManaged public var endDate: Date
+    @NSManaged public var endDate: Date?
     @NSManaged public var icon: String?
     @NSManaged public var name: String
-    @NSManaged public var startDate: Date
+    @NSManaged public var startDate: Date?
     @NSManaged public var completed: Bool
     @NSManaged public var showCompleted: Bool
     @NSManaged public var packs: NSOrderedSet

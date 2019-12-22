@@ -19,9 +19,20 @@ struct EditTrip: View {
     
     @State var showCompleted: Bool
     @State var updatedTitle: String = ""
+    
     @State var updatedStartDate: Date = Date()
     @State var updatedEndDate: Date = Date()
+    
+    @State var showStartDate: Bool = false
+    @State var showEndDate: Bool = false
+    
     @State var updatedColor: String
+    
+    var validDates: Bool {
+        get {
+            checkDateValidity(startDate: updatedStartDate, endDate: updatedEndDate, showStartDate: showStartDate, showEndDate: showEndDate)
+        }
+    }
     
     var packs: FetchedResults<Pack>{packRequest.wrappedValue}
     init(trip: Trip) {
@@ -35,6 +46,21 @@ struct EditTrip: View {
             self._updatedColor = State.init(initialValue: "none")
         }
         
+        if let startDate = trip.startDate {
+            self._updatedStartDate = State.init(initialValue: startDate)
+            self._showStartDate = State.init(initialValue: true)
+        } else {
+            self._updatedStartDate = State.init(initialValue: Date())
+        }
+        
+        if let endDate = trip.endDate {
+            self._updatedEndDate = State.init(initialValue: endDate)
+            self._showEndDate = State.init(initialValue: true)
+        } else {
+            self._updatedEndDate = State.init(initialValue: Date())
+        }
+        
+        
     }
     
     var body: some View {
@@ -47,16 +73,9 @@ struct EditTrip: View {
                     }
                 }
                 Toggle("Show Completed Items", isOn: $showCompleted)
-                Section() {
-                    DatePicker(selection: $updatedStartDate, in: ...updatedEndDate, displayedComponents: .date, label: { Text("Start Date")
-                    }).onAppear {
-                        self.updatedStartDate = self.trip.name.count > 0 ? self.trip.startDate : Date()
-                    }
-                    DatePicker(selection: $updatedEndDate, in: updatedStartDate..., displayedComponents: .date, label: { Text("End Date")
-                    }).onAppear {
-                        self.updatedEndDate = self.trip.name.count > 0 ? self.trip.endDate : Date()
-                    }
-                }
+                
+                TripDateSelector(startDate: self.$updatedStartDate, endDate: self.$updatedEndDate, showStartDate: self.$showStartDate, showEndDate: self.$showEndDate, validDates: self.validDates)
+                
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $updatedColor)
                 }
@@ -89,8 +108,14 @@ struct EditTrip: View {
                 }))
         }.onDisappear {
             self.trip.name = self.updatedTitle
-            self.trip.startDate = self.updatedStartDate
-            self.trip.endDate = self.updatedEndDate
+            if self.validDates {
+                if self.showStartDate {
+                    self.trip.startDate = self.updatedStartDate
+                }
+                if self.showEndDate {
+                    self.trip.endDate = self.updatedEndDate
+                }
+            }
             self.trip.showCompleted = self.showCompleted
             self.trip.color = self.updatedColor
             

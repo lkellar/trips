@@ -22,7 +22,9 @@
 		A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A081AB6E23A3ECA6000F391A /* EditItem.swift */; };
 		A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5723326E140006F902 /* TripHomeRow.swift */; };
 		A0877C5C233274360006F902 /* TripHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5B233274360006F902 /* TripHome.swift */; };
+		A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */; };
 		A0B61B692343A44500D0D13C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B61B652343A44500D0D13C /* Trip.swift */; };
+		A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C9210023B0191700A3493E /* TripDateSelector.swift */; };
 		A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0E7811A233E8579007974CD /* Trips.xcdatamodeld */; };
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
 		A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */; };
@@ -48,7 +50,9 @@
 		A0877C5723326E140006F902 /* TripHomeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHomeRow.swift; sourceTree = "<group>"; };
 		A0877C5B233274360006F902 /* TripHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHome.swift; sourceTree = "<group>"; };
 		A08E15722375C7DB00DB454E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrip.swift; sourceTree = "<group>"; };
 		A0B61B652343A44500D0D13C /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		A0C9210023B0191700A3493E /* TripDateSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDateSelector.swift; sourceTree = "<group>"; };
 		A0E7811B233E8579007974CD /* Trips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trips.xcdatamodel; sourceTree = "<group>"; };
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
 		A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
@@ -122,10 +126,8 @@
 		A03AB4B5237EF8CE00979899 /* modals */ = {
 			isa = PBXGroup;
 			children = (
-				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
-				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
-				A03AB4B6237EF8F900979899 /* EditTrip.swift */,
-				A081AB6E23A3ECA6000F391A /* EditItem.swift */,
+				A0A8A69923A97B2500E3AC04 /* edit */,
+				A0A8A69823A97B1100E3AC04 /* addition */,
 			);
 			path = modals;
 			sourceTree = "<group>";
@@ -147,8 +149,28 @@
 				A0877C5723326E140006F902 /* TripHomeRow.swift */,
 				A0050B7923A92E54000B7E59 /* ColorPicker.swift */,
 				A0050B7B23A9346F000B7E59 /* ColorPickerCircle.swift */,
+				A0C9210023B0191700A3493E /* TripDateSelector.swift */,
 			);
 			path = components;
+			sourceTree = "<group>";
+		};
+		A0A8A69823A97B1100E3AC04 /* addition */ = {
+			isa = PBXGroup;
+			children = (
+				A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */,
+				A0F756FE237B0B9700DCBC77 /* AddPack.swift */,
+				A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */,
+			);
+			path = addition;
+			sourceTree = "<group>";
+		};
+		A0A8A69923A97B2500E3AC04 /* edit */ = {
+			isa = PBXGroup;
+			children = (
+				A03AB4B6237EF8F900979899 /* EditTrip.swift */,
+				A081AB6E23A3ECA6000F391A /* EditItem.swift */,
+			);
+			path = edit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,8 +252,10 @@
 				A07B6C952347994D00578CDC /* Pack.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
 				A0F756FF237B0B9700DCBC77 /* AddPack.swift in Sources */,
+				A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
+				A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */,
 				A0050B7A23A92E54000B7E59 /* ColorPicker.swift in Sources */,
 				A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */,
 				A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */,
