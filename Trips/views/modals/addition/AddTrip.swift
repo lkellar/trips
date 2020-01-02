@@ -33,7 +33,9 @@ struct AddTrip: View {
                     TextField("Trip Name", text: $title)
                 }
                 
-                TripDateSelector(startDate: self.$startDate, endDate: self.$endDate, showStartDate: self.$showStartDate, showEndDate: self.$showEndDate, validDates: self.validDates)
+                TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
+                
+                TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
                 
                 Section {
                     ColorPicker(updatedColor: $color)

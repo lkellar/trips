@@ -9,36 +9,29 @@
 import SwiftUI
 
 struct TripDateSelector: View {
-    @Binding var startDate: Date
-    @Binding var endDate: Date
-    
-    @Binding var showStartDate: Bool
-    @Binding var showEndDate: Bool
+    @Binding var date: Date
+    @Binding var showDate: Bool
     
     var validDates: Bool
     
+    var isEndDate: Bool
+    
     var body: some View {
-        Section(footer: Text(self.validDates ? "" : "These dates are invalid and cannot be saved")) {
-            if !self.showStartDate {
+        Section(footer: Text(!(!self.validDates && self.isEndDate) ? "" : "These dates are invalid and cannot be saved")) {
+            if !self.showDate {
                 Button(action: {
-                    self.showStartDate = true
+                    self.showDate = true
                 }) {
-                    Text("Add Start Date")
+                    Text("Add \(self.isEndDate ? "End" : "Start" ) Date")
                 }
             } else {
-                DatePicker(selection: $startDate, displayedComponents: .date, label: { Text("Start Date")
+                DatePicker(selection: $date, displayedComponents: .date, label: { Text("\(self.isEndDate ? "End" : "Start") Date")
                 }).foregroundColor(self.validDates ? .primary : .red)
-            }
-            
-            if !self.showEndDate {
                 Button(action: {
-                    self.showEndDate = true
+                    self.showDate = false
                 }) {
-                    Text("Add End Date")
+                    Text("Reset \(self.isEndDate ? "End" : "Start" ) Date")
                 }
-            } else {
-                DatePicker(selection: $endDate, displayedComponents: .date, label: { Text("End Date")
-                }).foregroundColor(self.validDates ? .primary : .red)
             }
         }
     }

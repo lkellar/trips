@@ -74,7 +74,9 @@ struct EditTrip: View {
                 }
                 Toggle("Show Completed Items", isOn: $showCompleted)
                 
-                TripDateSelector(startDate: self.$updatedStartDate, endDate: self.$updatedEndDate, showStartDate: self.$showStartDate, showEndDate: self.$showEndDate, validDates: self.validDates)
+                TripDateSelector(date: self.$updatedStartDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
+                
+                TripDateSelector(date: self.$updatedEndDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
                 
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $updatedColor)
@@ -111,9 +113,13 @@ struct EditTrip: View {
             if self.validDates {
                 if self.showStartDate {
                     self.trip.startDate = self.updatedStartDate
+                } else {
+                    self.trip.startDate = nil
                 }
                 if self.showEndDate {
                     self.trip.endDate = self.updatedEndDate
+                } else {
+                    self.trip.endDate = nil
                 }
             }
             self.trip.showCompleted = self.showCompleted
