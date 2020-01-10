@@ -16,6 +16,7 @@ public class Pack: NSManagedObject, Identifiable {
     @NSManaged public var name: String
     @NSManaged public var items: NSOrderedSet
     @NSManaged public var completed: Bool
+    @NSManaged public var isTemplate: Bool
     @NSManaged public var trip: Trip?
 
 }

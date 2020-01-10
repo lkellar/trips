@@ -8,6 +8,7 @@
     </entity>
     <entity name="Pack" representedClassName="Pack" syncable="YES">
         <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="isTemplate" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
         <relationship name="items" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Item" inverseName="pack" inverseEntity="Item"/>
         <relationship name="trip" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Trip" inverseName="packs" inverseEntity="Trip"/>
@@ -24,7 +25,7 @@
     </entity>
     <elements>
         <element name="Item" positionX="-54" positionY="27" width="128" height="103"/>
-        <element name="Pack" positionX="-36" positionY="36" width="128" height="103"/>
+        <element name="Pack" positionX="-36" positionY="36" width="128" height="118"/>
         <element name="Trip" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>
 </model>
