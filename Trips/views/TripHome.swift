@@ -34,6 +34,17 @@ struct TripHome: View {
                         for obj in trips {
                             self.context.delete(obj)
                         }
+
+                        let packs = try self.context.fetch(Pack.allPacksFetchRequest())
+                        for obj in packs {
+                            self.context.delete(obj)
+                        }
+                        
+                        let items = try self.context.fetch(Item.allItemsFetchRequest())
+                        for obj in items {
+                            self.context.delete(obj)
+                        }
+                        
                         addSampleData(context: self.context)
                         
                     } catch {

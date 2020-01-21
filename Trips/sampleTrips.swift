@@ -90,6 +90,27 @@ func addSampleData(context: NSManagedObjectContext) {
     secondTrip.addToPacks(toiletriesPack)
     secondTrip.addToPacks(examplePackTwo)
     
+    let clothes = Pack(context: context)
+    clothes.name = "Clothes"
+    clothes.isTemplate = true
+    clothes.color = "blue"
+    
+    let yellow = Pack(context: context)
+    yellow.name = "Yellow Cats"
+    yellow.isTemplate = true
+    yellow.color = "yellow"
+    
+    let tech = Pack(context: context)
+    tech.name = "Tech"
+    tech.isTemplate = true
+    tech.color = "red"
+    
+    let grass = Pack(context: context)
+    grass.name = "Grass"
+    grass.isTemplate = true
+    grass.color = "green"
+    
+    
     do {
         try context.save()
     } catch {

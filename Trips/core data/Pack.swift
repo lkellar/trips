@@ -18,6 +18,7 @@ public class Pack: NSManagedObject, Identifiable {
     @NSManaged public var completed: Bool
     @NSManaged public var isTemplate: Bool
     @NSManaged public var trip: Trip?
+    @NSManaged public var color: String?
 
 }
 
@@ -53,12 +54,25 @@ extension Pack {
 
     @objc(removeItems:)
     @NSManaged public func removeFromItems(_ values: NSOrderedSet)
-
-    static func allPacksFetchRequest() ->NSFetchRequest<Pack> {
+    
+    static func allTemplatesFetchRequest() -> NSFetchRequest<Pack> {
+        // This one fetches templates, ha, kinda like reverse
+        // Ha, I deleted the inverse function that did the opposite of this one
+        // So now the joke on the first comment makes no sense; ha
         let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
         
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-       
+        
+        request.predicate = NSPredicate(format: "%K == true", #keyPath(Pack.isTemplate))
+        
+        return request
+    }
+    
+    static func allPacksFetchRequest() -> NSFetchRequest<Pack> {
+        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        
         return request
     }
 }
