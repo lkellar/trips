@@ -18,7 +18,6 @@ public class Pack: NSManagedObject, Identifiable {
     @NSManaged public var completed: Bool
     @NSManaged public var isTemplate: Bool
     @NSManaged public var trip: Trip?
-    @NSManaged public var color: String?
 
 }
 

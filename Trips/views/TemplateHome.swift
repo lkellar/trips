@@ -28,12 +28,18 @@ struct TemplateHome: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                List (self.pairs, id:\.self) { pair in
+            ScrollView {
+                ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
                     HStack {
                         Spacer()
-                        PackRectangular(title: pair.first.name, color: .fromString(color: pair.first.color ?? "primary"))
-                        PackRectangular(title: pair.second.name, color: .fromString(color: pair.second.color ?? "primary"))
+                        NavigationLink(destination: TemplateDetail(template: pair.first)) {
+                            PackRectangular(title: pair.first.name, color: (index % 2 == 0 ? .blue : .pink))
+                        }.buttonStyle(PlainButtonStyle())
+
+                            NavigationLink(destination: TemplateDetail(template: pair.second)) {
+                                PackRectangular(title: pair.second.name, color: (index % 2 == 0 ? .pink : .blue))
+                        }.buttonStyle(PlainButtonStyle())
+
                         Spacer()
                     }
                 }

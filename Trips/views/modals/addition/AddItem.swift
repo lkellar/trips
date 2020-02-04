@@ -10,6 +10,7 @@ import SwiftUI
 
 struct AddItem: View {
     var packs: [Pack]
+    var selectPack = true
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -23,12 +24,14 @@ struct AddItem: View {
             Form {
                 Section {
                     TextField("Item Name", text: $title)
-                    Picker(selection: $selectedPack, label: Text("Pack"),
-                           content: {
-                            ForEach(0 ..< packs.count, id:\.self) { index in
-                                Text(self.packs[index].name).tag(index)
-                            }
-                    })
+                    if (selectPack) {
+                        Picker(selection: $selectedPack, label: Text("Pack"),
+                               content: {
+                                ForEach(0 ..< packs.count, id:\.self) { index in
+                                    Text(self.packs[index].name).tag(index)
+                                }
+                        })
+                    }
                 }
                 Button(action: {
                     do {
