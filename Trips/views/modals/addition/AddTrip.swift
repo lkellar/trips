@@ -8,6 +8,10 @@
 
 import SwiftUI
 
+enum TripError : Error {
+    case TemplateIsPackError(String)
+}
+
 struct AddTrip: View {
     @State var title: String = ""
     @State var color: String = ""
@@ -15,6 +19,7 @@ struct AddTrip: View {
     @State var showStartDate: Bool = false
     @State var endDate: Date = Date()
     @State var showEndDate: Bool = false
+    @State var includedTemplates: [Pack] = []
     
     @Environment(\.managedObjectContext) var context
     
@@ -36,6 +41,12 @@ struct AddTrip: View {
                 TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
                 
                 TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
+                
+                Section {
+                    NavigationLink(destination: AddTemplates(included: $includedTemplates)) {
+                        Text("Templates")
+                    }
+                }
                 
                 Section {
                     ColorPicker(updatedColor: $color)
@@ -80,9 +91,35 @@ struct AddTrip: View {
         }
         pendingTrip.color = self.color.count > 0 ? self.color : nil
         
+        for tomplate in self.includedTemplates {
+            print(tomplate.name)
+            do {
+                try self.copyTemplateToTrip(template: tomplate, trip: pendingTrip)
+            } catch {
+                print(error)
+            }
+        }
+        
         saveContext(self.context)
         
         self.presentationMode.wrappedValue.dismiss()
+    }
+    
+    func copyTemplateToTrip(template: Pack, trip: Trip) throws {
+        guard template.isTemplate else {
+            throw TripError.TemplateIsPackError("Provided \"template\" is NOT a template!")
+        }
+        let transitionPack = Pack(context: self.context)
+        // completed and istemplate are by default set to false
+        transitionPack.name = template.name
+        for item in template.items {
+            let itom = Item(context: self.context)
+            itom.name = (item as! Item).name
+            
+            transitionPack.addToItems(itom)
+        }
+        
+        trip.addToPacks(transitionPack)
     }
 }
 
