@@ -16,7 +16,7 @@ struct PackRectangular: View {
     var sneaky: Bool
     
     var body: some View {
-        ZStack(alignment: .bottom) {tow
+        ZStack(alignment: .bottom) {
             RoundedRectangle(cornerRadius: 30)
                 .fill(self.color)
                 .frame(width: 150, height: 150)
