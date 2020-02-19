@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct AddTemplates: View {
+struct IncludeTemplates: View {
     @Environment(\.managedObjectContext) var context
     
     @FetchRequest(fetchRequest: Pack.allTemplatesFetchRequest()) var templates: FetchedResults<Pack>
@@ -41,7 +41,7 @@ struct AddTemplates: View {
     }
 }
 
-struct AddTemplates_Previews: PreviewProvider {
+struct IncludeTemplates_Previews: PreviewProvider {
     static var previews: some View {
         Text("I think it's faster for me to just run simulator than deal with the previews")
     }

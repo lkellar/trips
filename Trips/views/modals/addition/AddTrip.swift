@@ -43,7 +43,7 @@ struct AddTrip: View {
                 TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
                 
                 Section {
-                    NavigationLink(destination: AddTemplates(included: $includedTemplates)) {
+                    NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
                         Text("Templates")
                     }
                 }
@@ -92,7 +92,6 @@ struct AddTrip: View {
         pendingTrip.color = self.color.count > 0 ? self.color : nil
         
         for tomplate in self.includedTemplates {
-            print(tomplate.name)
             do {
                 try self.copyTemplateToTrip(template: tomplate, trip: pendingTrip)
             } catch {
