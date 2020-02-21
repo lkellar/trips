@@ -13,17 +13,20 @@ struct TemplateDetail: View {
     @Environment(\.managedObjectContext) var context
     var template: Pack
     
+    @Binding var refreshing: Bool
+    
     var itemRequest : FetchRequest<Item>
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
     
-    init(template: Pack) {
+    init(template: Pack, refreshing: Binding<Bool>) {
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.pack), template))
         
         self.template = template
+        self._refreshing = refreshing
     }
     
     var body: some View {
@@ -51,7 +54,7 @@ struct TemplateDetail: View {
                         })
                 }
             }
-        }.navigationBarTitle(self.template.name)
+        }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
         .navigationBarItems(trailing:
             HStack {
                 Button(action: {
@@ -60,7 +63,7 @@ struct TemplateDetail: View {
                     Image(systemName: "info.circle")
                     }).padding()
                     .sheet(isPresented: $editTemplateDisplayed, content: {
-                        EditTemplate(template: self.template).environment(\.managedObjectContext, self.context)
+                        EditTemplate(template: self.template, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                     })
                 Button(action: {
                     self.addItemModalDisplayed = true

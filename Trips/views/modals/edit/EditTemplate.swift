@@ -14,6 +14,7 @@ struct EditTemplate: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var template: Pack
+    @Binding var refreshing: Bool
     
     @State var updatedName: String = ""
    
@@ -52,6 +53,7 @@ struct EditTemplate: View {
         }.onDisappear {
             self.template.name = self.updatedName
             saveContext(self.context)
+            self.refreshing.toggle()
         }
     }
 }
