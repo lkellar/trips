@@ -37,6 +37,12 @@ struct AddTemplate: View {
                 }
             }
         .navigationBarTitle("Add Template")
+        .navigationBarItems(trailing:
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }, label: {
+                Text("Cancel")
+            }))
         }
     }
 }

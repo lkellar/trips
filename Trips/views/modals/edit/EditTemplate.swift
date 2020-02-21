@@ -29,8 +29,20 @@ struct EditTemplate: View {
                     }
                     //Text((self.refreshing ? "" : ""))
                 }
+                Button(action: {
+                    do {
+                        self.context.delete(self.template)
+                        try self.context.save()
+                    } catch {
+                        print(error)
+                    }
+                    
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("Delete").foregroundColor(.red)
+                }
             }
-            .navigationBarTitle("Edit Item")
+            .navigationBarTitle("Edit Template")
             .navigationBarItems(trailing:
             Button(action: {
                 self.presentationMode.wrappedValue.dismiss()

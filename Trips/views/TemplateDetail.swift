@@ -17,6 +17,7 @@ struct TemplateDetail: View {
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
     @State var addItemModalDisplayed = false;
+    @State var editTemplateDisplayed = false;
     
     init(template: Pack) {
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
@@ -51,16 +52,26 @@ struct TemplateDetail: View {
                 }
             }
         }.navigationBarTitle(self.template.name)
-        .navigationBarItems(trailing: Button(action: {
-            self.addItemModalDisplayed = true
-        }, label: {
-            Image(systemName: "plus")
-        }
-            // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-            ).padding()
-            .sheet(isPresented: $addItemModalDisplayed, content: {
-                AddItem(packs: [self.template], selectPack: false).environment(\.managedObjectContext, self.context)
-            }))
+        .navigationBarItems(trailing:
+            HStack {
+                Button(action: {
+                    self.editTemplateDisplayed = true
+                }, label: {
+                    Image(systemName: "info.circle")
+                    }).padding()
+                    .sheet(isPresented: $editTemplateDisplayed, content: {
+                        EditTemplate(template: self.template).environment(\.managedObjectContext, self.context)
+                    })
+                Button(action: {
+                    self.addItemModalDisplayed = true
+                }, label: {
+                    Image(systemName: "plus")
+                }
+                    // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                    ).padding()
+                    .sheet(isPresented: $addItemModalDisplayed, content: {
+                        AddItem(packs: [self.template], selectPack: false).environment(\.managedObjectContext, self.context)
+            })})
     }
     
     func removeItem(at offsets: IndexSet) {

@@ -30,29 +30,48 @@ struct TemplateHome: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                    TemplatePairView(pair: pair, index: index)
+            VStack {
+                if (self.templates.count > 0) {
+                    ScrollView {
+                        ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
+                            TemplatePairView(pair: pair, index: index)
+                        }
+                        Spacer()
+                    }
+                } else {
+                    Button(action: {
+                            self.addTemplateModalDisplayed = true
+                        }) {
+                            Text("Add a Template!")
+                                .fontWeight(.bold)
+                                .font(.title)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(Color(UIColor.systemGray6))
+                                .cornerRadius(40)
+                                .padding(20)
+                                .sheet(isPresented: $addTemplateModalDisplayed, content: {
+                                    AddTemplate().environment(\.managedObjectContext, self.context)
+                            })
+                        }
+                    }
                 }
-                Spacer()
-            }
             .navigationBarTitle("Templates")
             .navigationBarItems(trailing:
-                Button(action: {
-                    self.addTemplateModalDisplayed = true
-                }, label: {
-                    Image(systemName: "plus")
-                }
-                    // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                    ).padding()
-                    .sheet(isPresented: $addTemplateModalDisplayed, content: {
-                        AddTemplate().environment(\.managedObjectContext, self.context)
-                    }))
+            Button(action: {
+                self.addTemplateModalDisplayed = true
+            }, label: {
+                Image(systemName: "plus")
+            }
+                // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                ).padding()
+                .sheet(isPresented: $addTemplateModalDisplayed, content: {
+                    AddTemplate().environment(\.managedObjectContext, self.context)
+                }))
+            }
         }
     }
     
-    
-}
 struct TemplatePairView: View {
     var pair: TemplatePair
     var index: Int
