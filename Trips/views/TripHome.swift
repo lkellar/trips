@@ -19,12 +19,18 @@ struct TripHome: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach((self.trips)) {trip in
-                    NavigationLink(destination: TripDetail(trip: trip)) {
-                        TripHomeRow(trip: trip)
-                        }
+            VStack {
+                if (self.trips.count > 0) {
+                    List {
+                        ForEach((self.trips)) {trip in
+                            NavigationLink(destination: TripDetail(trip: trip)) {
+                                TripHomeRow(trip: trip)
+                                }
+                            }
                     }
+                } else {
+                    AddButton(action: {self.showAddTrip = true}, text: "Add a Trip!")
+                }
             }
             .navigationBarTitle("Trips")
         .navigationBarItems(leading:
