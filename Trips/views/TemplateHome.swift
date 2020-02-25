@@ -41,21 +41,7 @@ struct TemplateHome: View {
                         Spacer()
                     }
                 } else {
-                    Button(action: {
-                            self.addTemplateModalDisplayed = true
-                        }) {
-                            Text("Add a Template!")
-                                .fontWeight(.bold)
-                                .font(.title)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(Color(UIColor.systemGray6))
-                                .cornerRadius(40)
-                                .padding(20)
-                                .sheet(isPresented: $addTemplateModalDisplayed, content: {
-                                        AddTemplate().environment(\.managedObjectContext, self.context)
-                            })
-                        }
+                    AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
                     }
                 }
             .navigationBarTitle("Templates" + (self.refreshing ? "" : ""))

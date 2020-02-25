@@ -38,22 +38,9 @@ struct TemplateDetail: View {
                     }.onDelete(perform: removeItem)
                 }
             } else {
-                Button(action: {
-                    self.addItemModalDisplayed = true
-                }) {
-                    Text("Add an Item!")
-                        .fontWeight(.bold)
-                        .font(.title)
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(Color(UIColor.systemGray6))
-                        .cornerRadius(40)
-                        .padding(20)
-                        .sheet(isPresented: $addItemModalDisplayed, content: {
-                            AddItem(packs: [self.template], selectPack: false).environment(\.managedObjectContext, self.context)
-                        })
-                }
+                AddButton(action: {self.addItemModalDisplayed = true}, text: "Add an Item!")
             }
+                
         }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
         .navigationBarItems(trailing:
             HStack {
