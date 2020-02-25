@@ -28,7 +28,6 @@ struct EditItem: View {
                             if self.item.name.count > 0 {
                                 self.updatedName = self.item.name
                             }
-                            print("I HAVE APPEARED")
                     }
                     //Text((self.refreshing ? "" : ""))
                 }
