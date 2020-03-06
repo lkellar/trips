@@ -28,6 +28,9 @@ struct EditTrip: View {
     
     @State var updatedColor: String
     
+    @State var showAddTemplateExisting: Bool = false
+    @Binding var refreshing: Bool
+    
     var validDates: Bool {
         get {
             checkDateValidity(startDate: updatedStartDate, endDate: updatedEndDate, showStartDate: showStartDate, showEndDate: showEndDate)
@@ -35,7 +38,7 @@ struct EditTrip: View {
     }
     
     var packs: FetchedResults<Pack>{packRequest.wrappedValue}
-    init(trip: Trip) {
+    init(trip: Trip, refreshing: Binding<Bool>) {
         self.trip = trip
         self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
@@ -60,6 +63,7 @@ struct EditTrip: View {
             self._updatedEndDate = State.init(initialValue: Date())
         }
         
+        self._refreshing = refreshing
         
     }
     
@@ -82,10 +86,21 @@ struct EditTrip: View {
                     ColorPicker(updatedColor: $updatedColor)
                 }
                 Section(header: Text("Packs")) {
-                   ForEach(self.packs) { pack in
+                    ForEach(self.packs, id: \.self) { pack in
                     Text(pack.name)
                    }.onDelete(perform: self.deletePack)
                 }
+                Section {
+                    Button(action: {
+                        self.showAddTemplateExisting = true
+                    }, label: {
+                        Text("Add a Template")
+                    })
+                    .sheet(isPresented: $showAddTemplateExisting, content: {
+                        AddTemplateToExisting(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+                    })
+                }
+                
                 Button(action: {
                     do {
                         self.context.delete(self.trip)

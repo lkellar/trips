@@ -40,7 +40,7 @@ struct TripDetail: View {
     
     var body: some View {
         List {
-            ForEach(self.packs ) {pack in
+            ForEach(self.packs, id: \.self) {pack in
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
                 Section(header: Text(pack.name + (self.refreshing ? "" : ""))) {
                     ForEach(self.items.filter {$0.pack == pack}) { item in
@@ -82,7 +82,7 @@ struct TripDetail: View {
                         Image(systemName: "info.circle")
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: self.trip).environment(\.managedObjectContext, self.context)
+                            EditTrip(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
                         self.packModalDisplayed = true

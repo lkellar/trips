@@ -93,7 +93,7 @@ struct AddTrip: View {
         
         for tomplate in self.includedTemplates {
             do {
-                try self.copyTemplateToTrip(template: tomplate, trip: pendingTrip)
+                try copyTemplateToTrip(template: tomplate, trip: pendingTrip, context: self.context)
             } catch {
                 print(error)
             }
@@ -102,23 +102,6 @@ struct AddTrip: View {
         saveContext(self.context)
         
         self.presentationMode.wrappedValue.dismiss()
-    }
-    
-    func copyTemplateToTrip(template: Pack, trip: Trip) throws {
-        guard template.isTemplate else {
-            throw TripError.TemplateIsPackError("Provided \"template\" is NOT a template!")
-        }
-        let transitionPack = Pack(context: self.context)
-        // completed and istemplate are by default set to false
-        transitionPack.name = template.name
-        for item in template.items {
-            let itom = Item(context: self.context)
-            itom.name = (item as! Item).name
-            
-            transitionPack.addToItems(itom)
-        }
-        
-        trip.addToPacks(transitionPack)
     }
 }
 
