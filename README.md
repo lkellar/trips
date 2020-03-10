@@ -21,8 +21,8 @@ Currently, the app's functionality is quite limited, but it does have basic list
 * Creating templates of items
 * And more misc things
 
-<img src="home.png" alt="Home Screen" style="height: 50%;">
-<img src="detail.png" alt="Detail Screen" style="height: 50%;">
+<img src="home.png" alt="Home Screen" style="height: 50%">
+<img src="detail.png" alt="Detail Screen" style="height: 50%">
 
 # Contributing
 So, this is mostly a self-worked project, but if you have anything to contribute, please feel free to submit a PR or filing an issue.
