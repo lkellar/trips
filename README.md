@@ -22,8 +22,8 @@ Currently, the app's functionality is quite limited, but it does have basic list
 * And more misc things
 
 <span>
-<img src="screenshots/home.png" alt="Home Screen" style="width: 40%;">
-<img src="screenshots/detail.png" alt="Detail Screen" style="width: 40%;">
+<img src="screenshots/home.png" alt="Home Screen" width="300">
+<img src="screenshots/detail.png" alt="Detail Screen" width="300">
 </span>
 
 # Contributing
