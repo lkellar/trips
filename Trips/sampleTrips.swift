@@ -31,6 +31,13 @@ func addSampleData(context: NSManagedObjectContext) {
     
     
     let exampleTrip = Trip(context: context)
+    var rollingIndex: Int
+    do {
+        rollingIndex = try Pack.generatePackIndex(trip: exampleTrip, context: context)
+    } catch {
+        print("Rolling Index failed \(error)")
+        return
+    }
     
     exampleTrip.name = "Trip to Georgia"
     exampleTrip.startDate = Date(timeIntervalSinceReferenceDate: 588200000.0)
@@ -42,11 +49,13 @@ func addSampleData(context: NSManagedObjectContext) {
     
     let examplePack = Pack(context: context)
     examplePack.name = "Tech"
+    examplePack.index = rollingIndex
     
     
     // TODO ADD secondary packs
     let clothesPack = Pack(context: context)
     clothesPack.name = "Clothes"
+    clothesPack.index = increturn(&rollingIndex)
     
     examplePack.addToItems(exampleItem)
     exampleTrip.addToPacks(examplePack)
@@ -59,29 +68,40 @@ func addSampleData(context: NSManagedObjectContext) {
     secondTrip.endDate = Date(timeIntervalSinceReferenceDate: 592300000)
     secondTrip.color = "purple"
     
+    do {
+        rollingIndex = try Pack.generatePackIndex(trip: secondTrip, context: context)
+    } catch {
+        print("Rolling Index failed \(error)")
+        return
+    }
+    
     let clothesPackTwo = Pack(context: context)
     clothesPackTwo.name = "Clothes"
+    clothesPackTwo.index = rollingIndex
     
     let exampleItemTwo = Item(context: context)
     exampleItemTwo.name = "Laptop"
     
     let examplePackTwo = Pack(context: context)
     examplePackTwo.name = "Tech"
+    examplePackTwo.index = increturn(&rollingIndex)
     
     examplePackTwo.addToItems(exampleItemTwo)
     
     let toiletriesPack = Pack(context: context)
     toiletriesPack.name = "Toiletries"
+    toiletriesPack.index = increturn(&rollingIndex)
     
     let grassPack = Pack(context: context)
     grassPack.name = "Grass-Related Items"
+    grassPack.index = increturn(&rollingIndex)
     
     let catPack = Pack(context: context)
     catPack.name = "Cats"
+    catPack.index = increturn(&rollingIndex)
     
     let catItem = Item(context: context)
     catItem.name = "Yellow Cat"
-    
     
     secondTrip.addToPacks(clothesPackTwo)
     secondTrip.addToPacks(grassPack)

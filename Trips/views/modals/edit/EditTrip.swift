@@ -90,16 +90,6 @@ struct EditTrip: View {
                     Text(pack.name)
                    }.onDelete(perform: self.deletePack)
                 }
-                Section {
-                    Button(action: {
-                        self.showAddTemplateExisting = true
-                    }, label: {
-                        Text("Add a Template")
-                    })
-                    .sheet(isPresented: $showAddTemplateExisting, content: {
-                        AddTemplateToExisting(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
-                    })
-                }
                 
                 Button(action: {
                     do {

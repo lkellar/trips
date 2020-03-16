@@ -18,6 +18,8 @@ public class Pack: NSManagedObject, Identifiable {
     @NSManaged public var completed: Bool
     @NSManaged public var isTemplate: Bool
     @NSManaged public var trip: Trip?
+    // Templates get an index of -1 by default
+    @NSManaged public var index: Int
 
 }
 
@@ -73,5 +75,25 @@ extension Pack {
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         return request
+    }
+    
+    static func generatePackIndex(trip: Trip, context: NSManagedObjectContext) throws -> Int {
+        // Finds the lowest available pack index
+        
+        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: false)]
+        
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip)
+        
+        request.fetchLimit = 1
+        
+        let result = try context.fetch(request)
+        
+        if result.count == 0 {
+            return 0
+        }
+        
+        return result[0].index + 1
     }
 }

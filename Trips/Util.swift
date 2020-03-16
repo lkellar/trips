@@ -83,6 +83,9 @@ func copyTemplateToTrip(template: Pack, trip: Trip, context: NSManagedObjectCont
     let transitionPack = Pack(context: context)
     // completed and istemplate are by default set to false
     transitionPack.name = template.name
+    
+    transitionPack.index =  try Pack.generatePackIndex(trip: trip, context: context)
+    
     for item in template.items {
         let itom = Item(context: context)
         itom.name = (item as! Item).name
@@ -91,4 +94,10 @@ func copyTemplateToTrip(template: Pack, trip: Trip, context: NSManagedObjectCont
     }
     
     trip.addToPacks(transitionPack)
+}
+
+func increturn(_ num: inout Int) -> Int {
+    // increment by one and return
+    num += 1
+    return num
 }
