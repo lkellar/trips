@@ -76,24 +76,24 @@ func checkDateValidity(startDate: Date, endDate: Date, showStartDate: Bool, show
     return true
 }
 
-func copyTemplateToTrip(template: Pack, trip: Trip, context: NSManagedObjectContext) throws {
+func copyTemplateToTrip(template: Category, trip: Trip, context: NSManagedObjectContext) throws {
     guard template.isTemplate else {
-        throw TripError.TemplateIsPackError("Provided \"template\" is NOT a template!")
+        throw TripError.TemplateIsCategoryError("Provided \"template\" is NOT a template!")
     }
-    let transitionPack = Pack(context: context)
+    let transitionCategory = Category(context: context)
     // completed and istemplate are by default set to false
-    transitionPack.name = template.name
+    transitionCategory.name = template.name
     
-    transitionPack.index =  try Pack.generatePackIndex(trip: trip, context: context)
+    transitionCategory.index =  try Category.generateCategoryIndex(trip: trip, context: context)
     
     for item in template.items {
         let itom = Item(context: context)
         itom.name = (item as! Item).name
         
-        transitionPack.addToItems(itom)
+        transitionCategory.addToItems(itom)
     }
     
-    trip.addToPacks(transitionPack)
+    trip.addToCategories(transitionCategory)
 }
 
 func increturn(_ num: inout Int) -> Int {

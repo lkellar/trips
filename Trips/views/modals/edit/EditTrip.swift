@@ -13,7 +13,7 @@ struct EditTrip: View {
     
     @Environment(\.managedObjectContext) var context
     
-    var packRequest : FetchRequest<Pack>
+    var categoryRequest : FetchRequest<Category>
     
     var trip: Trip
     
@@ -37,11 +37,11 @@ struct EditTrip: View {
         }
     }
     
-    var packs: FetchedResults<Pack>{packRequest.wrappedValue}
+    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     init(trip: Trip, refreshing: Binding<Bool>) {
         self.trip = trip
-        self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
+        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         self._showCompleted = State.init(initialValue: trip.showCompleted)
         if let color = trip.color {
             self._updatedColor = State.init(initialValue: color)
@@ -85,10 +85,10 @@ struct EditTrip: View {
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $updatedColor)
                 }
-                Section(header: Text("Packs")) {
-                    ForEach(self.packs, id: \.self) { pack in
-                    Text(pack.name)
-                   }.onDelete(perform: self.deletePack)
+                Section(header: Text("Categories")) {
+                    ForEach(self.categories, id: \.self) { category in
+                    Text(category.name)
+                   }.onDelete(perform: self.deleteCategory)
                 }
                 
                 Button(action: {
@@ -134,9 +134,9 @@ struct EditTrip: View {
         }
     }
     
-    func deletePack(at offsets: IndexSet) {
+    func deleteCategory(at offsets: IndexSet) {
         for offset in offsets {
-            self.trip.removeFromPacks(self.packs[offset])
+            self.trip.removeFromCategories(self.categories[offset])
         }
             
         saveContext(self.context)

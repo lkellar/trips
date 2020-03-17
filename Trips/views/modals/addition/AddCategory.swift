@@ -1,5 +1,5 @@
 //
-//  AddPack.swift
+//  AddCategory.swift
 //  Trips
 //
 //  Created by Lucas Kellar on 2019-11-12.
@@ -8,20 +8,20 @@
 
 import SwiftUI
 
-struct AddPack: View {
+struct AddCategory: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.managedObjectContext) var context
     
     var trip: Trip
     @State var title: String = ""
-    @State var selected: Pack? = nil
+    @State var selected: Category? = nil
     
-    var templateRequest : FetchRequest<Pack>
-    var templates: FetchedResults<Pack>{templateRequest.wrappedValue}
+    var templateRequest : FetchRequest<Category>
+    var templates: FetchedResults<Category>{templateRequest.wrappedValue}
     
     init(trip: Trip) {
-        self.templateRequest = FetchRequest(entity: Pack.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-        NSPredicate(format: "%K == true", #keyPath(Pack.isTemplate)))
+        self.templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+        NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
     }
@@ -70,17 +70,17 @@ struct AddPack: View {
                 }.disabled(self.selected == nil)
                 }
                 
-                Section(header: Text("Create Custom Pack")) {
-                    TextField("Pack Name", text: $title)
+                Section(header: Text("Create Custom Category")) {
+                    TextField("Category Name", text: $title)
                 }
                 Button(action: {
                     do {
-                        let pack = Pack(context: self.context)
-                        pack.name = self.title
+                        let category = Category(context: self.context)
+                        category.name = self.title
                         
-                        pack.index =  try Pack.generatePackIndex(trip: self.trip, context: self.context)
+                        category.index =  try Category.generateCategoryIndex(trip: self.trip, context: self.context)
                         
-                        self.trip.addToPacks(pack)
+                        self.trip.addToCategories(category)
                         
                         try self.context.save()
                     } catch {
@@ -88,9 +88,9 @@ struct AddPack: View {
                     }
                     self.presentationMode.wrappedValue.dismiss()
                 }) {
-                    Text("Save Custom Pack")
+                    Text("Save Custom Category")
                 }.disabled(self.title.count == 0 ? true : false)
-            }.navigationBarTitle("Add Pack")
+            }.navigationBarTitle("Add Category")
                 .navigationBarItems(trailing:
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -102,7 +102,7 @@ struct AddPack: View {
     }
 }
 
-struct AddPack_Previews: PreviewProvider {
+struct AddCategory_Previews: PreviewProvider {
     static var previews: some View {
         Text("AAAH")
     }

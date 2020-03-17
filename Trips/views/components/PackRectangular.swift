@@ -1,5 +1,5 @@
 //
-//  PackRectangular.swift
+//  CategoryRectangular.swift
 //  Trips
 //
 //  Created by Lucas Kellar on 2020-01-10.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct PackRectangular: View {
+struct CategoryRectangular: View {
     var title: String
     var color: Color
     
@@ -44,8 +44,8 @@ struct PackRectangular: View {
     }
 }
 
-struct PackRectangular_Previews: PreviewProvider {
+struct CategoryRectangular_Previews: PreviewProvider {
     static var previews: some View {
-        PackRectangular(title: "Test 123", color: .red, sneaky: false)
+        CategoryRectangular(title: "Test 123", color: .red, sneaky: false)
     }
 }

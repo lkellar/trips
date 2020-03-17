@@ -9,7 +9,7 @@
 import SwiftUI
 
 enum TripError : Error {
-    case TemplateIsPackError(String)
+    case TemplateIsCategoryError(String)
 }
 
 struct AddTrip: View {
@@ -19,7 +19,7 @@ struct AddTrip: View {
     @State var showStartDate: Bool = false
     @State var endDate: Date = Date()
     @State var showEndDate: Bool = false
-    @State var includedTemplates: [Pack] = []
+    @State var includedTemplates: [Category] = []
     
     @Environment(\.managedObjectContext) var context
     

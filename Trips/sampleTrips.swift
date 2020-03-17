@@ -9,14 +9,6 @@
 import Foundation
 import SwiftUI
 import CoreData
-/*
-let packs = [Pack(name: "Tech", items: [Item(name: "Laptop")])]
-
-let exampleTrips = [
-    Trip(name: "Trip to Georgia", startDate: Date(timeIntervalSinceReferenceDate: 588200000.0), endDate: Date(timeIntervalSinceReferenceDate: 588804800.0), color: Color.red, icon: "house.fill"),
-    Trip(name: "Trip to Oregon", startDate: Date(timeIntervalSinceReferenceDate: 590515986.0), endDate: Date(timeIntervalSinceReferenceDate: 590516014.0), color: Color.blue, icon: "sunrise")
-]
-*/
 
 func addSampleData(context: NSManagedObjectContext) {
     do {
@@ -33,7 +25,7 @@ func addSampleData(context: NSManagedObjectContext) {
     let exampleTrip = Trip(context: context)
     var rollingIndex: Int
     do {
-        rollingIndex = try Pack.generatePackIndex(trip: exampleTrip, context: context)
+        rollingIndex = try Category.generateCategoryIndex(trip: exampleTrip, context: context)
     } catch {
         print("Rolling Index failed \(error)")
         return
@@ -47,19 +39,19 @@ func addSampleData(context: NSManagedObjectContext) {
     let exampleItem = Item(context: context)
     exampleItem.name = "Laptop"
     
-    let examplePack = Pack(context: context)
-    examplePack.name = "Tech"
-    examplePack.index = rollingIndex
+    let exampleCategory = Category(context: context)
+    exampleCategory.name = "Tech"
+    exampleCategory.index = rollingIndex
     
     
-    // TODO ADD secondary packs
-    let clothesPack = Pack(context: context)
-    clothesPack.name = "Clothes"
-    clothesPack.index = increturn(&rollingIndex)
+    // TODO ADD secondary categories
+    let clothesCategory = Category(context: context)
+    clothesCategory.name = "Clothes"
+    clothesCategory.index = increturn(&rollingIndex)
     
-    examplePack.addToItems(exampleItem)
-    exampleTrip.addToPacks(examplePack)
-    exampleTrip.addToPacks(clothesPack)
+    exampleCategory.addToItems(exampleItem)
+    exampleTrip.addToCategories(exampleCategory)
+    exampleTrip.addToCategories(clothesCategory)
     
     
     let secondTrip = Trip(context: context)
@@ -69,60 +61,60 @@ func addSampleData(context: NSManagedObjectContext) {
     secondTrip.color = "purple"
     
     do {
-        rollingIndex = try Pack.generatePackIndex(trip: secondTrip, context: context)
+        rollingIndex = try Category.generateCategoryIndex(trip: secondTrip, context: context)
     } catch {
         print("Rolling Index failed \(error)")
         return
     }
     
-    let clothesPackTwo = Pack(context: context)
-    clothesPackTwo.name = "Clothes"
-    clothesPackTwo.index = rollingIndex
+    let clothesCategoryTwo = Category(context: context)
+    clothesCategoryTwo.name = "Clothes"
+    clothesCategoryTwo.index = rollingIndex
     
     let exampleItemTwo = Item(context: context)
     exampleItemTwo.name = "Laptop"
     
-    let examplePackTwo = Pack(context: context)
-    examplePackTwo.name = "Tech"
-    examplePackTwo.index = increturn(&rollingIndex)
+    let exampleCategoryTwo = Category(context: context)
+    exampleCategoryTwo.name = "Tech"
+    exampleCategoryTwo.index = increturn(&rollingIndex)
     
-    examplePackTwo.addToItems(exampleItemTwo)
+    exampleCategoryTwo.addToItems(exampleItemTwo)
     
-    let toiletriesPack = Pack(context: context)
-    toiletriesPack.name = "Toiletries"
-    toiletriesPack.index = increturn(&rollingIndex)
+    let toiletriesCategory = Category(context: context)
+    toiletriesCategory.name = "Toiletries"
+    toiletriesCategory.index = increturn(&rollingIndex)
     
-    let grassPack = Pack(context: context)
-    grassPack.name = "Grass-Related Items"
-    grassPack.index = increturn(&rollingIndex)
+    let grassCategory = Category(context: context)
+    grassCategory.name = "Grass-Related Items"
+    grassCategory.index = increturn(&rollingIndex)
     
-    let catPack = Pack(context: context)
-    catPack.name = "Cats"
-    catPack.index = increturn(&rollingIndex)
+    let catCategory = Category(context: context)
+    catCategory.name = "Cats"
+    catCategory.index = increturn(&rollingIndex)
     
     let catItem = Item(context: context)
     catItem.name = "Yellow Cat"
     
-    secondTrip.addToPacks(clothesPackTwo)
-    secondTrip.addToPacks(grassPack)
-    catPack.addToItems(catItem)
-    secondTrip.addToPacks(catPack)
-    secondTrip.addToPacks(toiletriesPack)
-    secondTrip.addToPacks(examplePackTwo)
+    secondTrip.addToCategories(clothesCategoryTwo)
+    secondTrip.addToCategories(grassCategory)
+    catCategory.addToItems(catItem)
+    secondTrip.addToCategories(catCategory)
+    secondTrip.addToCategories(toiletriesCategory)
+    secondTrip.addToCategories(exampleCategoryTwo)
     
-    let clothes = Pack(context: context)
+    let clothes = Category(context: context)
     clothes.name = "Clothes"
     clothes.isTemplate = true
     
-    let yellow = Pack(context: context)
+    let yellow = Category(context: context)
     yellow.name = "Yellow Cats"
     yellow.isTemplate = true
     
-    let tech = Pack(context: context)
+    let tech = Category(context: context)
     tech.name = "Tech"
     tech.isTemplate = true
     
-    let grass = Pack(context: context)
+    let grass = Category(context: context)
     grass.name = "Grass"
     grass.isTemplate = true
     

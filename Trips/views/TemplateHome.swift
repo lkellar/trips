@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct TemplatePair: Hashable {
-    var first: Pack
-    var second: Pack?
+    var first: Category
+    var second: Category?
 }
 
 struct TemplateHome: View {
@@ -20,7 +20,7 @@ struct TemplateHome: View {
     
     @Environment(\.managedObjectContext) var context
     
-    @FetchRequest(fetchRequest: Pack.allTemplatesFetchRequest()) var templates: FetchedResults<Pack>
+    @FetchRequest(fetchRequest: Category.allTemplatesFetchRequest()) var templates: FetchedResults<Category>
     
     var pairs: [TemplatePair] {
         get {
@@ -71,16 +71,16 @@ struct TemplatePairView: View {
             Spacer()
         
             NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing)) {
-                PackRectangular(title: pair.first.name, color: (index % 2 == 0 ? .blue : .pink), sneaky: false)
+                CategoryRectangular(title: pair.first.name, color: (index % 2 == 0 ? .blue : .pink), sneaky: false)
         }.buttonStyle(PlainButtonStyle())
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
             NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing)) {
-                PackRectangular(title: pair.second!.name, color: (index % 2 == 0 ? .pink : .blue), sneaky: false)
+                CategoryRectangular(title: pair.second!.name, color: (index % 2 == 0 ? .pink : .blue), sneaky: false)
             }.buttonStyle(PlainButtonStyle())
         } else {
-            PackRectangular(title: "", color: Color.white, sneaky: true)
+            CategoryRectangular(title: "", color: Color.white, sneaky: true)
         }
         Spacer()
         }

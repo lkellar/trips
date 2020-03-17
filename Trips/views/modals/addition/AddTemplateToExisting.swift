@@ -14,18 +14,18 @@ struct AddTemplateToExisting: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-     var templateRequest : FetchRequest<Pack>
-     var templates: FetchedResults<Pack>{templateRequest.wrappedValue}
+     var templateRequest : FetchRequest<Category>
+     var templates: FetchedResults<Category>{templateRequest.wrappedValue}
     
-    @State var included: [Pack] = []
+    @State var included: [Category] = []
     
     @Binding var refreshing: Bool
     
     var trip: Trip
     
     init(trip: Trip, refreshing: Binding<Bool>) {
-        self.templateRequest = FetchRequest(entity: Pack.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-        NSPredicate(format: "%K == true", #keyPath(Pack.isTemplate)))
+        self.templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+        NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
         self._refreshing = refreshing

@@ -11,7 +11,7 @@ import CoreData
 
 struct TemplateDetail: View {
     @Environment(\.managedObjectContext) var context
-    var template: Pack
+    var template: Category
     
     @Binding var refreshing: Bool
     
@@ -21,9 +21,9 @@ struct TemplateDetail: View {
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
     
-    init(template: Pack, refreshing: Binding<Bool>) {
+    init(template: Category, refreshing: Binding<Bool>) {
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-        NSPredicate(format: "%K == %@", #keyPath(Item.pack), template))
+        NSPredicate(format: "%K == %@", #keyPath(Item.category), template))
         
         self.template = template
         self._refreshing = refreshing
@@ -60,7 +60,7 @@ struct TemplateDetail: View {
                     // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                     ).padding()
                     .sheet(isPresented: $addItemModalDisplayed, content: {
-                        AddItem(packs: [self.template], selectPack: false).environment(\.managedObjectContext, self.context)
+                        AddItem(categories: [self.template], selectCategory: false).environment(\.managedObjectContext, self.context)
             })})
     }
     

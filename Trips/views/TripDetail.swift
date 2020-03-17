@@ -17,33 +17,33 @@ struct TripDetail: View {
     @State var showCompleted = false
     
     @State var itemModalDisplayed = false
-    @State var packModalDisplayed = false
+    @State var categoryModalDisplayed = false
     @State var editTripDisplayed = false
     
     var trip: Trip
 
-    var packRequest : FetchRequest<Pack>
+    var categoryRequest : FetchRequest<Category>
     
     var itemRequest : FetchRequest<Item>
     
-    var packs: FetchedResults<Pack>{packRequest.wrappedValue}
+    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
     init(trip: Trip) {
         self.trip = trip
-        self.packRequest = FetchRequest(entity: Pack.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip))
+        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
-            NSPredicate(format: "%K IN %@", #keyPath(Item.pack), self.trip.packs))
+            NSPredicate(format: "%K IN %@", #keyPath(Item.category), self.trip.categories))
     }
     
     var body: some View {
         List {
-            ForEach(self.packs, id: \.self) {pack in
+            ForEach(self.categories, id: \.self) {category in
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                Section(header: Text(pack.name + (self.refreshing ? "" : ""))) {
-                    ForEach(self.items.filter {$0.pack == pack}) { item in
+                Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
+                    ForEach(self.items.filter {$0.category == category}) { item in
                         if !item.completed || self.trip.showCompleted {
                             HStack {
                                 Button(action: {self.itemModalDisplayed = true}) {
@@ -67,7 +67,7 @@ struct TripDetail: View {
                                 }.buttonStyle(BorderlessButtonStyle())
                             }
                         }
-                    }.onDelete(perform: self.getDeleteFunction(pack: pack))
+                    }.onDelete(perform: self.getDeleteFunction(category: category))
                     
                     
                 }
@@ -85,14 +85,14 @@ struct TripDetail: View {
                             EditTrip(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
-                        self.packModalDisplayed = true
+                        self.categoryModalDisplayed = true
                     }, label: {
                         Image(systemName: "plus.rectangle.on.rectangle")
                     }
                         // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                         ).padding()
-                        .sheet(isPresented: $packModalDisplayed, content: {
-                            AddPack(trip: self.trip).environment(\.managedObjectContext, self.context)
+                        .sheet(isPresented: $categoryModalDisplayed, content: {
+                            AddCategory(trip: self.trip).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
                         self.modalDisplayed = true
@@ -102,17 +102,17 @@ struct TripDetail: View {
                         // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                         ).padding()
                         .sheet(isPresented: $modalDisplayed, content: {
-                            AddItem(packs: self.trip.packs.array as! [Pack]).environment(\.managedObjectContext, self.context)
+                            AddItem(categories: self.trip.categories.array as! [Category]).environment(\.managedObjectContext, self.context)
                         })
             })
     }
     
-    func fetchItems(_ pack: Pack) -> [Item] {
+    func fetchItems(_ category: Category) -> [Item] {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
         
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.pack), pack)
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category), category)
         
         do {
             return try self.context.fetch(request)
@@ -123,12 +123,12 @@ struct TripDetail: View {
         
     }
     
-    func getDeleteFunction(pack: Pack) -> (IndexSet) -> Void {
+    func getDeleteFunction(category: Category) -> (IndexSet) -> Void {
         func delete(at offsets: IndexSet) {
-            let items = self.fetchItems(pack)
+            let items = self.fetchItems(category)
             
             for offset in offsets {
-                pack.removeFromItems(items[offset])
+                category.removeFromItems(items[offset])
                 //self.context.delete(items[offset])
             }
                         

@@ -14,7 +14,6 @@ struct EditItem: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var item: Item
-    //var pack: Pack
     
     @State var updatedName: String = ""
     // @State var refreshing: Bool = false

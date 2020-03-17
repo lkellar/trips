@@ -17,7 +17,7 @@ public class Item: NSManagedObject, Identifiable {
     @NSManaged public var name: String
     @NSManaged public var notes: String?
     @NSManaged public var completed: Bool
-    @NSManaged public var pack: Pack?
+    @NSManaged public var category: Category?
 
     static func allItemsFetchRequest() ->NSFetchRequest<Item> {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>

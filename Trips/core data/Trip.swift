@@ -20,42 +20,42 @@ public class Trip: NSManagedObject, Identifiable {
     @NSManaged public var startDate: Date?
     @NSManaged public var completed: Bool
     @NSManaged public var showCompleted: Bool
-    @NSManaged public var packs: NSOrderedSet
+    @NSManaged public var categories: NSOrderedSet
 
 }
 
-// MARK: Generated accessors for packs
+// MARK: Generated accessors for Categories
 extension Trip {
 
-    @objc(insertObject:inPacksAtIndex:)
-    @NSManaged public func insertIntoPacks(_ value: Pack, at idx: Int)
+    @objc(insertObject:inCategoriesAtIndex:)
+    @NSManaged public func insertIntoCategories(_ value: Category, at idx: Int)
 
-    @objc(removeObjectFromPacksAtIndex:)
-    @NSManaged public func removeFromPacks(at idx: Int)
+    @objc(removeObjectFromCategoriesAtIndex:)
+    @NSManaged public func removeFromCategories(at idx: Int)
 
-    @objc(insertPacks:atIndexes:)
-    @NSManaged public func insertIntoPacks(_ values: [Pack], at indexes: NSIndexSet)
+    @objc(insertCategories:atIndexes:)
+    @NSManaged public func insertIntoCategories(_ values: [Category], at indexes: NSIndexSet)
 
-    @objc(removePacksAtIndexes:)
-    @NSManaged public func removeFromPacks(at indexes: NSIndexSet)
+    @objc(removeCategoriesAtIndexes:)
+    @NSManaged public func removeFromCategories(at indexes: NSIndexSet)
 
-    @objc(replaceObjectInPacksAtIndex:withObject:)
-    @NSManaged public func replacePacks(at idx: Int, with value: Pack)
+    @objc(replaceObjectInCategoriesAtIndex:withObject:)
+    @NSManaged public func replaceCategories(at idx: Int, with value: Category)
 
-    @objc(replacePacksAtIndexes:withPacks:)
-    @NSManaged public func replacePacks(at indexes: NSIndexSet, with values: [Pack])
+    @objc(replaceCategoriesAtIndexes:withCategories:)
+    @NSManaged public func replaceCategories(at indexes: NSIndexSet, with values: [Category])
 
-    @objc(addPacksObject:)
-    @NSManaged public func addToPacks(_ value: Pack)
+    @objc(addCategoriesObject:)
+    @NSManaged public func addToCategories(_ value: Category)
 
-    @objc(removePacksObject:)
-    @NSManaged public func removeFromPacks(_ value: Pack)
+    @objc(removeCategoriesObject:)
+    @NSManaged public func removeFromCategories(_ value: Category)
 
-    @objc(addPacks:)
-    @NSManaged public func addToPacks(_ values: NSOrderedSet)
+    @objc(addCategories:)
+    @NSManaged public func addToCategories(_ values: NSOrderedSet)
 
-    @objc(removePacks:)
-    @NSManaged public func removeFromPacks(_ values: NSOrderedSet)
+    @objc(removeCategories:)
+    @NSManaged public func removeFromCategories(_ values: NSOrderedSet)
     
     static func allTripsFetchRequest() -> NSFetchRequest<Trip> {
         let request: NSFetchRequest<Trip> = Trip.fetchRequest() as! NSFetchRequest<Trip>

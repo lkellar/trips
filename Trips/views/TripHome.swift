@@ -41,8 +41,8 @@ struct TripHome: View {
                             self.context.delete(obj)
                         }
 
-                        let packs = try self.context.fetch(Pack.allPacksFetchRequest())
-                        for obj in packs {
+                        let categories = try self.context.fetch(Category.allCategoriesFetchRequest())
+                        for obj in categories {
                             self.context.delete(obj)
                         }
                         

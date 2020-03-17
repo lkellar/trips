@@ -11,9 +11,9 @@ import SwiftUI
 struct IncludeTemplates: View {
     @Environment(\.managedObjectContext) var context
     
-    @FetchRequest(fetchRequest: Pack.allTemplatesFetchRequest()) var templates: FetchedResults<Pack>
+    @FetchRequest(fetchRequest: Category.allTemplatesFetchRequest()) var templates: FetchedResults<Category>
     
-    @Binding var included: [Pack]
+    @Binding var included: [Category]
     
     var body: some View {
         List {

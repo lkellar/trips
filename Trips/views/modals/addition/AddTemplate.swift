@@ -23,7 +23,7 @@ struct AddTemplate: View {
                 
                 Section {
                     Button(action: {
-                        let pendingTemplate = Pack(context: self.context)
+                        let pendingTemplate = Category(context: self.context)
                         
                         pendingTemplate.name = self.title
                         pendingTemplate.isTemplate = true

@@ -9,37 +9,37 @@
 import SwiftUI
 
 struct AddItem: View {
-    var packs: [Pack]
-    var selectPack = true
+    var categories: [Category]
+    var selectCategory = true
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @Environment(\.managedObjectContext) var context
         
     @State var title: String = ""
-    @State var selectedPack: Int = 0
+    @State var selectedCategory: Int = 0
     
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("Item Name", text: $title)
-                    if (selectPack) {
-                        Picker(selection: $selectedPack, label: Text("Pack"),
+                    if (selectCategory) {
+                        Picker(selection: $selectedCategory, label: Text("Category"),
                                content: {
-                                ForEach(0 ..< packs.count, id:\.self) { index in
-                                    Text(self.packs[index].name).tag(index)
+                                ForEach(0 ..< categories.count, id:\.self) { index in
+                                    Text(self.categories[index].name).tag(index)
                                 }
                         })
                     }
                 }
                 Button(action: {
                     do {
-                        let pack = self.packs[self.selectedPack]
+                        let category = self.categories[self.selectedCategory]
                         let item = Item(context: self.context)
                         
                         item.name = self.title
-                        pack.addToItems(item)
+                        category.addToItems(item)
                         
                         try self.context.save()
                     } catch {

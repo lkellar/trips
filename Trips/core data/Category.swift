@@ -1,5 +1,5 @@
 //
-//  Pack.swift
+//  Category.swift
 //  Trips
 //
 //  Created by Lucas Kellar on 2019-10-04.
@@ -10,8 +10,8 @@
 import Foundation
 import CoreData
 
-@objc(Pack)
-public class Pack: NSManagedObject, Identifiable {
+@objc(Category)
+public class Category: NSManagedObject, Identifiable {
 
     @NSManaged public var name: String
     @NSManaged public var items: NSOrderedSet
@@ -24,7 +24,7 @@ public class Pack: NSManagedObject, Identifiable {
 }
 
 // MARK: Generated accessors for items
-extension Pack {
+extension Category {
 
     @objc(insertObject:inItemsAtIndex:)
     @NSManaged public func insertIntoItems(_ value: Item, at idx: Int)
@@ -56,35 +56,35 @@ extension Pack {
     @objc(removeItems:)
     @NSManaged public func removeFromItems(_ values: NSOrderedSet)
     
-    static func allTemplatesFetchRequest() -> NSFetchRequest<Pack> {
+    static func allTemplatesFetchRequest() -> NSFetchRequest<Category> {
         // This one fetches templates, ha, kinda like reverse
         // Ha, I deleted the inverse function that did the opposite of this one
         // So now the joke on the first comment makes no sense; ha
-        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+        let request: NSFetchRequest<Category> = Category.fetchRequest() as! NSFetchRequest<Category>
         
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
-        request.predicate = NSPredicate(format: "%K == true", #keyPath(Pack.isTemplate))
+        request.predicate = NSPredicate(format: "%K == true", #keyPath(Category.isTemplate))
         
         return request
     }
     
-    static func allPacksFetchRequest() -> NSFetchRequest<Pack> {
-        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+    static func allCategoriesFetchRequest() -> NSFetchRequest<Category> {
+        let request: NSFetchRequest<Category> = Category.fetchRequest() as! NSFetchRequest<Category>
         
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         
         return request
     }
     
-    static func generatePackIndex(trip: Trip, context: NSManagedObjectContext) throws -> Int {
-        // Finds the lowest available pack index
+    static func generateCategoryIndex(trip: Trip, context: NSManagedObjectContext) throws -> Int {
+        // Finds the lowest available Category index
         
-        let request: NSFetchRequest<Pack> = Pack.fetchRequest() as! NSFetchRequest<Pack>
+        let request: NSFetchRequest<Category> = Category.fetchRequest() as! NSFetchRequest<Category>
         
         request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: false)]
         
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Pack.trip), trip)
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip)
         
         request.fetchLimit = 1
         

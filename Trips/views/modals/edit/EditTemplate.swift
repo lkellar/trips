@@ -13,7 +13,7 @@ struct EditTemplate: View {
     @Environment(\.managedObjectContext) var context
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    var template: Pack
+    var template: Category
     @Binding var refreshing: Bool
     
     @State var updatedName: String = ""
