@@ -38,6 +38,7 @@ func addSampleData(context: NSManagedObjectContext) {
     
     let exampleItem = Item(context: context)
     exampleItem.name = "Laptop"
+    exampleItem.index = 0
     
     let exampleCategory = Category(context: context)
     exampleCategory.name = "Tech"
@@ -73,6 +74,7 @@ func addSampleData(context: NSManagedObjectContext) {
     
     let exampleItemTwo = Item(context: context)
     exampleItemTwo.name = "Laptop"
+    exampleItemTwo.index = 0
     
     let exampleCategoryTwo = Category(context: context)
     exampleCategoryTwo.name = "Tech"
@@ -94,6 +96,7 @@ func addSampleData(context: NSManagedObjectContext) {
     
     let catItem = Item(context: context)
     catItem.name = "Yellow Cat"
+    catItem.index = 0
     
     secondTrip.addToCategories(clothesCategoryTwo)
     secondTrip.addToCategories(grassCategory)
@@ -118,9 +121,11 @@ func addSampleData(context: NSManagedObjectContext) {
     grass.name = "Grass"
     grass.isTemplate = true
     
+    var itomIndex = -1
     for itom in ["Koi Grass", "Mowed", "Orange Grass"] {
         let item = Item(context: context)
         item.name = itom
+        item.index = increturn(&itomIndex)
         grass.addToItems(item)
     }
     

@@ -39,6 +39,7 @@ struct AddItem: View {
                         let item = Item(context: self.context)
                         
                         item.name = self.title
+                        item.index = try Item.generateItemIndex(category: category, context: self.context)
                         category.addToItems(item)
                         
                         try self.context.save()

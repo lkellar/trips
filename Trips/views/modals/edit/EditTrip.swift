@@ -112,8 +112,6 @@ struct EditTrip: View {
                         Text("Delete").foregroundColor(.red)
                     }
                 }
-                
-                
             }
             .navigationBarTitle("Edit Trip")
             .navigationBarItems(leading:

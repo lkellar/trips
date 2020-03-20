@@ -89,6 +89,7 @@ func copyTemplateToTrip(template: Category, trip: Trip, context: NSManagedObject
     for item in template.items {
         let itom = Item(context: context)
         itom.name = (item as! Item).name
+        itom.index = (item as! Item).index
         
         transitionCategory.addToItems(itom)
     }
