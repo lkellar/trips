@@ -98,8 +98,6 @@ struct EditTrip: View {
                 }
                 
                 Section {
-                    EditButton()
-                
                 
                     Button(action: {
                         do {
@@ -118,12 +116,16 @@ struct EditTrip: View {
                 
             }
             .navigationBarTitle("Edit Trip")
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading:
+
+                EditButton(), trailing:
+                
                 Button(action: {
                     self.presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Close")
-                }))
+                })
+            )
         }.onDisappear {
             self.trip.name = self.updatedTitle
             if self.validDates {
