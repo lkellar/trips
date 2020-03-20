@@ -96,4 +96,39 @@ extension Category {
         
         return result[0].index + 1
     }
+    
+    static func adjustCategoryIndex(source: Int, index: Int, trip: Trip, context: NSManagedObjectContext) {
+        // increases the category index of all categories with index equal to or larger than the param
+        let request: NSFetchRequest<Category> = Category.fetchRequest() as! NSFetchRequest<Category>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: false)]
+        
+        var upper, lower: Int
+        if (source > index) {
+            upper = source
+            lower = index
+        } else if (source < index) {
+            upper = index
+            lower = source
+        } else {
+            return
+        }
+        
+        request.predicate = NSCompoundPredicate(
+            type: .and,
+            subpredicates: [
+                NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip),
+                NSPredicate(format: "%K BETWEEN { %@, %@ }", #keyPath(Category.index), NSNumber(value: lower), NSNumber(value: upper))
+        ])
+        
+        do {
+            let results = try context.fetch(request)
+            results.forEach { result in
+                result.index += (source > index ? 1 : -1)
+            }
+            saveContext(context)
+        } catch {
+            print("Adjusting indexes error: \(error)")
+        }
+    }
 }

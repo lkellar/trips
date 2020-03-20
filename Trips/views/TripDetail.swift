@@ -44,7 +44,7 @@ struct TripDetail: View {
                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
                 Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
                     ForEach(self.items.filter {$0.category == category}) { item in
-                        if !item.completed || self.trip.showCompleted {
+                        if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
                             HStack {
                                 Button(action: {self.itemModalDisplayed = true}) {
                                     Text(item.name).strikethrough(item.completed)

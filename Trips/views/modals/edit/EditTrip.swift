@@ -13,6 +13,8 @@ struct EditTrip: View {
     
     @Environment(\.managedObjectContext) var context
     
+    @Environment(\.editMode) var editMode
+    
     var categoryRequest : FetchRequest<Category>
     
     var trip: Trip
@@ -40,7 +42,7 @@ struct EditTrip: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     init(trip: Trip, refreshing: Binding<Bool>) {
         self.trip = trip
-        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         self._showCompleted = State.init(initialValue: trip.showCompleted)
         if let color = trip.color {
@@ -85,23 +87,32 @@ struct EditTrip: View {
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $updatedColor)
                 }
-                Section(header: Text("Categories")) {
-                    ForEach(self.categories, id: \.self) { category in
-                    Text(category.name)
-                   }.onDelete(perform: self.deleteCategory)
+                
+                if (self.categories.count > 0) {
+                    Section(header: Text("Categories")) {
+                        ForEach(self.categories, id: \.self) { category in
+                            Text(category.name)
+                       }.onDelete(perform: self.deleteCategory)
+                            .onMove(perform: self.moveCategory)
+                    }
                 }
                 
-                Button(action: {
-                    do {
-                        self.context.delete(self.trip)
-                        try self.context.save()
-                    } catch {
-                        print(error)
+                Section {
+                    EditButton()
+                
+                
+                    Button(action: {
+                        do {
+                            self.context.delete(self.trip)
+                            try self.context.save()
+                        } catch {
+                            print(error)
+                        }
+                        
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Delete").foregroundColor(.red)
                     }
-                    
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Delete").foregroundColor(.red)
                 }
                 
                 
@@ -139,6 +150,20 @@ struct EditTrip: View {
             self.trip.removeFromCategories(self.categories[offset])
         }
             
+        saveContext(self.context)
+    }
+    
+    func moveCategory(from source: IndexSet, to destination: Int) {
+        var items: [Category] = []
+        for index in source {
+            items.append(self.categories[index])
+        }
+        
+        for item in items {
+            Category.adjustCategoryIndex(source: item.index, index: destination, trip: self.trip, context: self.context)
+            item.index = (self.categories.count != destination ? destination : destination - 1)
+        }
+        
         saveContext(self.context)
     }
 }
