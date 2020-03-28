@@ -28,6 +28,7 @@ struct EditTrip: View {
     @State var showStartDate: Bool = false
     @State var showEndDate: Bool = false
     
+    @State var showDeleteAlert: Bool = false
     @State var updatedColor: String
     
     @State var showAddTemplateExisting: Bool = false
@@ -100,17 +101,23 @@ struct EditTrip: View {
                 Section {
                 
                     Button(action: {
-                        do {
-                            self.context.delete(self.trip)
-                            try self.context.save()
-                        } catch {
-                            print(error)
-                        }
-                        
-                        self.presentationMode.wrappedValue.dismiss()
+                        self.showDeleteAlert = true;
                     }) {
                         Text("Delete").foregroundColor(.red)
-                    }
+                    }.alert(isPresented: self.$showDeleteAlert, content: {
+                        Alert(title: Text("Are you sure you want to delete \(self.updatedTitle)?"),
+                              message: Text("This cannot be undone."),
+                              primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                            do {
+                                self.context.delete(self.trip)
+                                try self.context.save()
+                            } catch {
+                                print(error)
+                            }
+                            
+                            self.presentationMode.wrappedValue.dismiss()
+                              }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
+                    })
                 }
             }
             .navigationBarTitle("Edit Trip")
