@@ -36,7 +36,7 @@ struct TemplateHome: View {
                 if (self.templates.count > 0) {
                     ScrollView {
                         ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing)
+                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                         }
                         Spacer()
                     }
@@ -64,19 +64,21 @@ struct TemplatePairView: View {
     var pair: TemplatePair
     var index: Int
     
+    @Environment(\.managedObjectContext) var context
+    
     @Binding var refreshing: Bool
     
     var body: some View {
         HStack {
             Spacer()
         
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing)) {
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
                 CategoryRectangular(title: pair.first.name, color: (index % 2 == 0 ? .blue : .pink), sneaky: false)
         }.buttonStyle(PlainButtonStyle())
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing)) {
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
                 CategoryRectangular(title: pair.second!.name, color: (index % 2 == 0 ? .pink : .blue), sneaky: false)
             }.buttonStyle(PlainButtonStyle())
         } else {

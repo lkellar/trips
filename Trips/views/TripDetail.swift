@@ -11,6 +11,7 @@ import CoreData
 
 struct TripDetail: View {
     @Environment(\.managedObjectContext) var context
+    @Environment(\.editMode) var editMode
     
     @State var modalDisplayed = false
     @State var refreshing = false
@@ -68,22 +69,22 @@ struct TripDetail: View {
                             }
                         }
                     }.onDelete(perform: self.getDeleteFunction(category: category))
+                        .onMove(perform: self.getMoveFunction(category: category))
                     
                     
                 }
             }
             //Text(refreshing ? "" : "")
             }.navigationBarTitle(trip.name)
-            .navigationBarItems(trailing:
-                HStack {
-                    Button(action: {
-                        self.editTripDisplayed = true
-                    }, label: {
-                        Image(systemName: "info.circle")
-                        }).padding()
-                        .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
-                        })
+            .navigationBarItems(trailing: HStack {
+                Button(action: {
+                    self.editTripDisplayed = true
+                }, label: {
+                    Image(systemName: "info.circle")
+                    }).padding()
+                    .sheet(isPresented: $editTripDisplayed, content: {
+                        EditTrip(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+                    })
                     Button(action: {
                         self.categoryModalDisplayed = true
                     }, label: {
@@ -104,13 +105,14 @@ struct TripDetail: View {
                         .sheet(isPresented: $modalDisplayed, content: {
                             AddItem(categories: self.trip.categories.array as! [Category]).environment(\.managedObjectContext, self.context)
                         })
+                    EditButton()
             })
     }
     
     func fetchItems(_ category: Category) -> [Item] {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
         
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
         
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category), category)
         
@@ -144,6 +146,24 @@ struct TripDetail: View {
         item.completed.toggle()
         saveContext(self.context)
         self.refreshing.toggle()
+    }
+    
+    func getMoveFunction(category: Category) -> (IndexSet, Int) -> Void {
+        func moveItem(from source: IndexSet, to destination: Int) {
+            var items: [Item] = []
+            for index in source {
+                items.append(fetchItems(category)[index])
+            }
+            
+            for item in items {
+                Item.adjustItemIndex(source: item.index, index: destination, category: category, context: self.context)
+                item.index = (self.fetchItems(category).count != destination ? destination : destination - 1)
+            }
+            
+            saveContext(self.context)
+        }
+        
+        return moveItem
     }
     
     
