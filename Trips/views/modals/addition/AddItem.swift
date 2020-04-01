@@ -19,12 +19,24 @@ struct AddItem: View {
     @State var title: String = ""
     @State var selectedCategory: Int = 0
     
+    @State var showTextField: Bool = true
+    
     var body: some View {
         NavigationView {
             Form {
-                Section {
+                if showTextField {
                     TextField("Item Name", text: $title)
-                    if (selectCategory) {
+                        .id("primary")
+                        .animation(Animation.default)
+                        .transition(.move(edge: .bottom))
+                } else {
+                    TextField("Item Name", text: $title)
+                        .id("secondary")
+                        .animation(Animation.default)
+                        .transition(.move(edge: .bottom))
+                }
+                Section {
+                    if selectCategory {
                         Picker(selection: $selectedCategory, label: Text("Category"),
                                content: {
                                 ForEach(0 ..< categories.count, id:\.self) { index in
@@ -33,23 +45,27 @@ struct AddItem: View {
                         })
                     }
                 }
-                Button(action: {
-                    do {
-                        let category = self.categories[self.selectedCategory]
-                        let item = Item(context: self.context)
+                Section {
+                    Button(action: {
+                        let localTitle = self.title
+                        self.title = ""
+                        self.saveItem(title: localTitle)
                         
-                        item.name = self.title
-                        item.index = try Item.generateItemIndex(category: category, context: self.context)
-                        category.addToItems(item)
-                        
-                        try self.context.save()
-                    } catch {
-                        print(error)
-                    }
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Save!")
-                }.disabled(self.title.count == 0 ? true : false)
+                        withAnimation {
+                            self.showTextField.toggle()
+                        }
+                    }) {
+                        Text("Add Another")
+                    }.disabled(self.title.count == 0 ? true : false)
+                }
+                Section {
+                    Button(action: {
+                        self.saveItem(title: self.title)
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Save!")
+                    }.disabled(self.title.count == 0 ? true : false)
+                }
             }.navigationBarTitle("Add Item")
             .navigationBarItems(trailing:
                 Button(action: {
@@ -57,6 +73,21 @@ struct AddItem: View {
                 }, label: {
                     Text("Cancel")
                 }))
+        }
+    }
+    
+    func saveItem(title: String) {
+        do {
+            let category = self.categories[self.selectedCategory]
+            let item = Item(context: self.context)
+            
+            item.name = title
+            item.index = try Item.generateItemIndex(category: category, context: self.context)
+            category.addToItems(item)
+            
+            try self.context.save()
+        } catch {
+            print(error)
         }
     }
 }
