@@ -22,7 +22,7 @@ struct TripHome: View {
             VStack {
                 if (self.trips.count > 0) {
                     List {
-                        ForEach((self.trips)) {trip in
+                        ForEach(sortTrips(self.trips)) {trip in
                             NavigationLink(destination: TripDetail(trip: trip)) {
                                 TripHomeRow(trip: trip)
                                 }
@@ -70,6 +70,13 @@ struct TripHome: View {
                 })
             )
         }
+    }
+    
+    func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
+        var newTrips = trips.filter {$0.startDate != nil}
+        newTrips = newTrips.sorted(by: {$0.startDate! < $1.startDate!})
+        newTrips.append(contentsOf: trips.filter {$0.startDate == nil})
+        return newTrips
     }
 }
 

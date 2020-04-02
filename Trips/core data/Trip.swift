@@ -60,7 +60,7 @@ extension Trip {
     static func allTripsFetchRequest() -> NSFetchRequest<Trip> {
         let request: NSFetchRequest<Trip> = Trip.fetchRequest() as! NSFetchRequest<Trip>
         
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
         
         return request
     }
