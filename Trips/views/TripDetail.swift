@@ -93,7 +93,7 @@ struct TripDetail: View {
                         // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                         ).padding()
                         .sheet(isPresented: $categoryModalDisplayed, content: {
-                            AddCategory(trip: self.trip).environment(\.managedObjectContext, self.context)
+                            AddCategory(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                         })
                     Button(action: {
                         self.modalDisplayed = true
@@ -103,7 +103,7 @@ struct TripDetail: View {
                         // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                         ).padding()
                         .sheet(isPresented: $modalDisplayed, content: {
-                            AddItem(categories: self.trip.categories.array as! [Category]).environment(\.managedObjectContext, self.context)
+                            AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                         })
                     EditButton()
             })

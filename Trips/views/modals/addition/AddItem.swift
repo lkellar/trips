@@ -20,6 +20,7 @@ struct AddItem: View {
     @State var selectedCategory: Int = 0
     
     @State var showTextField: Bool = true
+    @Binding var refreshing: Bool
     
     var body: some View {
         NavigationView {
@@ -73,7 +74,9 @@ struct AddItem: View {
                 }, label: {
                     Text("Cancel")
                 }))
-        }
+        }.onDisappear(perform: {
+            self.refreshing.toggle()
+        })
     }
     
     func saveItem(title: String) {

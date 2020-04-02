@@ -19,11 +19,15 @@ struct AddCategory: View {
     var templateRequest : FetchRequest<Category>
     var templates: FetchedResults<Category>{templateRequest.wrappedValue}
     
-    init(trip: Trip) {
+    @Binding var refreshing: Bool
+    
+    init(trip: Trip, refreshing: Binding<Bool>) {
         self.templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
+        
+        self._refreshing = refreshing
     }
     
     var body: some View {
@@ -98,7 +102,9 @@ struct AddCategory: View {
                         Text("Cancel")
                     })
             )
-        }
+        }.onDisappear(perform: {
+            self.refreshing.toggle()
+        })
     }
 }
 

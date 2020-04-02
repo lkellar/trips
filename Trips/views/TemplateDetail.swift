@@ -61,7 +61,7 @@ struct TemplateDetail: View {
                     // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                     ).padding()
                     .sheet(isPresented: $addItemModalDisplayed, content: {
-                        AddItem(categories: [self.template], selectCategory: false).environment(\.managedObjectContext, self.context)
+                        AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
             })
                 if self.items.count > 0 {
                     EditButton()

@@ -48,7 +48,7 @@ struct EditTrip: View {
         self._showCompleted = State.init(initialValue: trip.showCompleted)
         if let color = trip.color {
             self._updatedColor = State.init(initialValue: color)
-        } else{
+        } else {
             self._updatedColor = State.init(initialValue: "none")
         }
         
@@ -67,7 +67,6 @@ struct EditTrip: View {
         }
         
         self._refreshing = refreshing
-        
     }
     
     var body: some View {
