@@ -48,7 +48,7 @@ struct TripDetail: View {
                         if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
                             HStack {
                                 Button(action: {self.itemModalDisplayed = true}) {
-                                    Text(item.name).strikethrough(item.completed)
+                                    Text(item.name)
                                 }.sheet(isPresented: self.$itemModalDisplayed, content: {
                                     EditItem(item: item).environment(\.managedObjectContext, self.context)
                                 })
