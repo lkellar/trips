@@ -19,6 +19,8 @@ struct AddItem: View {
     @State var title: String = ""
     @State var selectedCategory: Int = 0
     
+    @State var quantity: Int = 1
+    
     @State var showTextField: Bool = true
     @Binding var refreshing: Bool
     
@@ -45,12 +47,15 @@ struct AddItem: View {
                                 }
                         })
                     }
+                    Stepper("Quantity: \(self.quantity)", value: self.$quantity, in: 1...20)
                 }
                 Section {
                     Button(action: {
                         let localTitle = self.title
                         self.title = ""
-                        self.saveItem(title: localTitle)
+                        for _ in 1...self.quantity {
+                            self.saveItem(title: localTitle)
+                        }
                         
                         withAnimation {
                             self.showTextField.toggle()
@@ -61,7 +66,9 @@ struct AddItem: View {
                 }
                 Section {
                     Button(action: {
-                        self.saveItem(title: self.title)
+                        for _ in 1...self.quantity {
+                            self.saveItem(title: self.title)
+                        }
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save!")
