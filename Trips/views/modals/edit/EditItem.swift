@@ -15,6 +15,8 @@ struct EditItem: View {
     
     var item: Item
     
+    var accent: Color
+    
     @State var updatedName: String = ""
     // @State var refreshing: Bool = false
    
@@ -38,7 +40,9 @@ struct EditItem: View {
             }, label: {
                 Text("Close")
             }))
-        }.onDisappear {
+        }
+        .accentColor(self.accent)
+        .onDisappear {
             self.item.name = self.updatedName
             saveContext(self.context)
         }

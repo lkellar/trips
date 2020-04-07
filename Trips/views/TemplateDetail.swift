@@ -11,6 +11,8 @@ import CoreData
 
 struct TemplateDetail: View {
     @Environment(\.managedObjectContext) var context
+    @Environment(\.editMode) var editMode
+    
     var template: Category
     
     @Binding var refreshing: Bool
@@ -45,27 +47,29 @@ struct TemplateDetail: View {
         }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
         .navigationBarItems(trailing:
             HStack {
+                if (.active == self.editMode?.wrappedValue) {
                 Button(action: {
                     self.editTemplateDisplayed = true
                 }, label: {
                     Image(systemName: "info.circle")
-                    }).padding()
-                    .sheet(isPresented: $editTemplateDisplayed, content: {
-                        EditTemplate(template: self.template, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
                     })
-                Button(action: {
-                    self.addItemModalDisplayed = true
-                }, label: {
-                    Image(systemName: "plus")
+                    .sheet(isPresented: $editTemplateDisplayed, content: {
+                        EditTemplate(template: self.template, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    })
+                } else {
+                    Button(action: {
+                        self.addItemModalDisplayed = true
+                    }, label: {
+                        Image(systemName: "plus")
+                    }
+                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
+                        )
+                        .sheet(isPresented: $addItemModalDisplayed, content: {
+                            AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing, accent: Color.accentColor).environment(\.managedObjectContext, self.context)
+                }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 }
-                    // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                    ).padding()
-                    .sheet(isPresented: $addItemModalDisplayed, content: {
-                        AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
-            })
-                if self.items.count > 0 {
-                    EditButton()
-                }
+                EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                
         })
     }
     

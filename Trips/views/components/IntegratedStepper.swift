@@ -18,7 +18,7 @@ struct IntegratedStepper: View {
     
     var body: some View {
         HStack {
-            Text("Quantity: ")
+            Text("Quantity")
             Spacer()
             ZStack {
                 RoundedRectangle(cornerRadius: 7.92)

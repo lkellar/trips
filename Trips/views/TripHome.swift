@@ -13,6 +13,8 @@ struct TripHome: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var context
     
+    @Binding var accent: Color
+    
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     @State var showAddTrip = false
@@ -23,7 +25,7 @@ struct TripHome: View {
                 if (self.trips.count > 0) {
                     List {
                         ForEach(sortTrips(self.trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip)) {
+                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent)) {
                                 TripHomeRow(trip: trip)
                                 }
                             }

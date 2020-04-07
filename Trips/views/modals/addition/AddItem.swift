@@ -23,6 +23,7 @@ struct AddItem: View {
     
     @State var showTextField: Bool = true
     @Binding var refreshing: Bool
+    var accent: Color
     
     var body: some View {
         NavigationView {
@@ -43,8 +44,8 @@ struct AddItem: View {
                     IntegratedStepper(quantity: self.$quantity, upperLimit: 20, lowerLimit: 1)
                     
                 }
-                Section {
-                    if selectCategory {
+                if selectCategory {
+                    Section {
                         Picker(selection: $selectedCategory, label: Text("Category"),
                                content: {
                                 ForEach(0 ..< categories.count, id:\.self) { index in
@@ -85,7 +86,8 @@ struct AddItem: View {
                 }, label: {
                     Text("Cancel")
                 }))
-        }.onDisappear(perform: {
+        }.accentColor(self.accent)
+            .onDisappear(perform: {
             self.refreshing.toggle()
         })
     }

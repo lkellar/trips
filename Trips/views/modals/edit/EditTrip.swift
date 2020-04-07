@@ -34,6 +34,8 @@ struct EditTrip: View {
     @State var showAddTemplateExisting: Bool = false
     @Binding var refreshing: Bool
     
+    var accent: Color
+    
     var validDates: Bool {
         get {
             checkDateValidity(startDate: updatedStartDate, endDate: updatedEndDate, showStartDate: showStartDate, showEndDate: showEndDate)
@@ -41,7 +43,7 @@ struct EditTrip: View {
     }
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    init(trip: Trip, refreshing: Binding<Bool>) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Color) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -67,6 +69,8 @@ struct EditTrip: View {
         }
         
         self._refreshing = refreshing
+        
+        self.accent = accent
     }
     
     var body: some View {
@@ -130,7 +134,8 @@ struct EditTrip: View {
                     Text("Close")
                 })
             )
-        }.onDisappear {
+        }.accentColor(self.accent)
+        .onDisappear {
             self.trip.name = self.updatedTitle
             if self.validDates {
                 if self.showStartDate {

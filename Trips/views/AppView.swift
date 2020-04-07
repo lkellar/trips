@@ -11,9 +11,11 @@ import SwiftUI
 struct AppView: View {
     @Environment(\.managedObjectContext) var context
     
+    @State var accentColor: Color = Color.blue
+    
     var body: some View {
         TabView {
-            TripHome()
+            TripHome(accent: $accentColor)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "house.fill")
@@ -25,7 +27,7 @@ struct AppView: View {
                     Image(systemName: "tray.full.fill")
                     Text("Templates")
                  }
-        }
+        }.accentColor(self.accentColor)
     }
 }
 

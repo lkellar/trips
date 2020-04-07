@@ -21,13 +21,17 @@ struct AddCategory: View {
     
     @Binding var refreshing: Bool
     
-    init(trip: Trip, refreshing: Binding<Bool>) {
+    var accent: Color
+    
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Color) {
         self.templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
         
         self._refreshing = refreshing
+        
+        self.accent = accent
     }
     
     var body: some View {
@@ -102,7 +106,8 @@ struct AddCategory: View {
                         Text("Cancel")
                     })
             )
-        }.onDisappear(perform: {
+        }.accentColor(self.accent)
+        .onDisappear(perform: {
             self.refreshing.toggle()
         })
     }

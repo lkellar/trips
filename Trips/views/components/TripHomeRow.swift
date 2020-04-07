@@ -18,6 +18,11 @@ struct TripHomeRow: View {
     
     var body: some View {
         HStack {
+            ZStack {
+                Circle().frame(width: CGFloat(42.0), height: CGFloat(42.0)).foregroundColor(Color.fromString(color: trip.color ?? "primary"))
+                Image(systemName: "house.fill").foregroundColor(Color.white).font(.system(size: 24))
+                
+            }
             VStack {
                 HStack {
                     Text(trip.name).bold().font(.title)
@@ -31,11 +36,6 @@ struct TripHomeRow: View {
                 }
             }.layoutPriority(1.0)
             Spacer()
-            ZStack {
-                Circle().frame(width: CGFloat(64.0), height: CGFloat(64.0)).foregroundColor(Color.fromString(color: trip.color ?? "primary"))
-                Image(systemName: "house.fill").foregroundColor(Color.white).font(.system(size: 32))
-                
-            }
         }.onReceive(self.didSave, perform: { _ in
             self.refreshing.toggle()
         })

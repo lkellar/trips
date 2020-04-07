@@ -21,6 +21,10 @@ struct TripDetail: View {
     @State var categoryModalDisplayed = false
     @State var editTripDisplayed = false
     
+    @State var addActionSheet = false
+    
+    @Binding var accent: Color
+    
     var trip: Trip
 
     var categoryRequest : FetchRequest<Category>
@@ -30,13 +34,16 @@ struct TripDetail: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip) {
+    init(trip: Trip, accent: Binding<Color>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K IN %@", #keyPath(Item.category), self.trip.categories))
+            NSPredicate(format: "%K IN %@",
+                        #keyPath(Item.category), self.trip.categories))
+        
+        self._accent = accent
     }
     
     var body: some View {
@@ -50,7 +57,7 @@ struct TripDetail: View {
                                 Button(action: {self.itemModalDisplayed = true}) {
                                     Text(item.name)
                                 }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                    EditItem(item: item).environment(\.managedObjectContext, self.context)
+                                    EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
                                 })
                                 Spacer()
                                 Button(action: {self.toggleItemCompleted(item)}) {
@@ -70,42 +77,60 @@ struct TripDetail: View {
                         }
                     }.onDelete(perform: self.getDeleteFunction(category: category))
                         .onMove(perform: self.getMoveFunction(category: category))
-                    
-                    
                 }
             }
             //Text(refreshing ? "" : "")
-            }.navigationBarTitle(trip.name)
+            }
+        .navigationBarTitle(trip.name)
             .navigationBarItems(trailing: HStack {
+                if (.active == self.editMode?.wrappedValue) {
                 Button(action: {
                     self.editTripDisplayed = true
                 }, label: {
                     Image(systemName: "info.circle")
                     }).padding()
                     .sheet(isPresented: $editTripDisplayed, content: {
-                        EditTrip(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                } else {
+                    Button(action: {
+                        print("Hidden 1")
+                    }) {
+                        Spacer()
+                    }
+                    .sheet(isPresented: $modalDisplayed, content: {
+                        AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
                     })
                     Button(action: {
-                        self.categoryModalDisplayed = true
-                    }, label: {
-                        Image(systemName: "plus.rectangle.on.rectangle")
+                        print("Hidden 2")
+                    }) {
+                        Spacer()
                     }
-                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                        ).padding()
-                        .sheet(isPresented: $categoryModalDisplayed, content: {
-                            AddCategory(trip: self.trip, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
-                        })
+                    .sheet(isPresented: $categoryModalDisplayed, content: {
+                        AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    })
+                    
                     Button(action: {
-                        self.modalDisplayed = true
+                        self.addActionSheet = true
                     }, label: {
                         Image(systemName: "plus")
                     }
                         // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                         ).padding()
-                        .sheet(isPresented: $modalDisplayed, content: {
-                            AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+                        .actionSheet(isPresented: self.$addActionSheet, content: {
+                            ActionSheet(title: Text("Add Item or Category"), buttons: [
+                                ActionSheet.Button.default(Text("Add Item")) {self.modalDisplayed = true},
+                                ActionSheet.Button.default(Text("Add Category")) {self.categoryModalDisplayed = true},
+                                ActionSheet.Button.cancel()
+                            ])
                         })
-                    EditButton()
+                }
+                EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+            }).onAppear(perform: {
+                self.accent = Color.fromString(color: self.trip.color ?? "blue")
+            }).onDisappear(perform: {
+                self.accent = Color.blue
+                self.refreshing.toggle()
             })
     }
     
