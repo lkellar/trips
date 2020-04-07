@@ -27,16 +27,21 @@ struct AddItem: View {
     var body: some View {
         NavigationView {
             Form {
-                if showTextField {
-                    TextField("Item Name", text: $title)
-                        .id("primary")
-                        .animation(Animation.default)
-                        .transition(.move(edge: .bottom))
-                } else {
-                    TextField("Item Name", text: $title)
-                        .id("secondary")
-                        .animation(Animation.default)
-                        .transition(.move(edge: .bottom))
+                Section {
+                    if showTextField {
+                        TextField("Item Name", text: $title)
+                            .id("primary")
+                            .animation(Animation.default)
+                            .transition(.move(edge: .bottom))
+                    } else {
+                        TextField("Item Name", text: $title)
+                            .id("secondary")
+                            .animation(Animation.default)
+                            .transition(.move(edge: .bottom))
+                    }
+                    
+                    IntegratedStepper(quantity: self.$quantity, upperLimit: 20, lowerLimit: 1)
+                    
                 }
                 Section {
                     if selectCategory {
@@ -47,7 +52,6 @@ struct AddItem: View {
                                 }
                         })
                     }
-                    Stepper("Quantity: \(self.quantity)", value: self.$quantity, in: 1...20)
                 }
                 Section {
                     Button(action: {
