@@ -101,6 +101,19 @@ struct EditTrip: View {
                     }
                 }
                 
+                Section(footer: Text("This will uncheck all items")) {
+                    Button(action: {
+                        do {
+                            try self.trip.beginNextLeg(context: self.context)
+                            self.presentationMode.wrappedValue.dismiss()
+                        } catch {
+                            print(error)
+                        }
+                    }) {
+                        Text("Begin Next Leg")
+                    }
+                }
+                
                 Section {
                 
                     Button(action: {

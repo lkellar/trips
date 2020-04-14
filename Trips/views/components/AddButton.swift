@@ -11,14 +11,21 @@ import SwiftUI
 struct AddButton: View {
     var action: () -> Void
     var text: String
+    var accent: Color
     
+    init(action: @escaping () -> Void, text: String, accent: Color = Color.blue) {
+        self.action = action
+        self.text = text
+        self.accent = accent
+    }
+
     var body: some View {
         Button(action: self.action) {
                 Text(text)
                     .fontWeight(.bold)
                     .font(.title)
                     .padding()
-                    .background(Color.blue)
+                    .background(self.accent)
                     .foregroundColor(Color(UIColor.systemGray6))
                     .cornerRadius(40)
                     .padding(20)

@@ -64,6 +64,16 @@ extension Trip {
         
         return request
     }
+    
+    func beginNextLeg(context: NSManagedObjectContext) throws -> Void {
+        let items = try context.fetch(Item.itemsInTripFetchRequest(trip: self))
+        
+        for item in items {
+            item.completed = false
+        }
+        
+        saveContext(context)
+    }
 
 }
 

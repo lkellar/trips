@@ -22,14 +22,14 @@ struct TripDetail: View {
     @State var editTripDisplayed = false
     
     @State var addActionSheet = false
+    @State var completedAlert = false
     
     @Binding var accent: Color
     
     var trip: Trip
 
     var categoryRequest : FetchRequest<Category>
-    
-    var itemRequest : FetchRequest<Item>
+    var itemRequest: FetchRequest<Item>
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
@@ -39,50 +39,83 @@ struct TripDetail: View {
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
-        self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K IN %@",
-                        #keyPath(Item.category), self.trip.categories))
+        self.itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
         
         self._accent = accent
     }
     
     var body: some View {
-        List {
-            ForEach(self.categories, id: \.self) {category in
-                // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
-                    ForEach(self.items.filter {$0.category == category}) { item in
-                        if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
-                            HStack {
-                                Button(action: {self.itemModalDisplayed = true}) {
-                                    Text(item.name)
-                                }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                    EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
-                                })
-                                Spacer()
-                                Button(action: {self.toggleItemCompleted(item)}) {
-                                    ZStack {
-                                    RoundedRectangle(cornerRadius: CGFloat(15))
-                                    .stroke(Color.secondary, lineWidth: CGFloat(3))
-                                        
-                                        if item.completed {
-                                            Circle().fill(Color.secondary)
-                                                .frame(width: CGFloat(16.0), height: CGFloat(16.0))
-                                        }
-                                        
-                                    }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
-                                    .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
-                                }.buttonStyle(BorderlessButtonStyle())
-                            }
+        VStack {
+            if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0) {
+                List {
+                    ForEach(self.categories, id: \.self) {category in
+                        // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
+                        Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
+                            ForEach(self.items.filter {$0.category == category}) { item in
+                                if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
+                                    HStack {
+                                        Button(action: {self.itemModalDisplayed = true}) {
+                                            Text(item.name)
+                                        }.sheet(isPresented: self.$itemModalDisplayed, content: {
+                                            EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
+                                        })
+                                        Spacer()
+                                        Button(action: {
+                                            self.toggleItemCompleted(item)
+                                            
+                                            // If there are no uncompleted items
+                                            if (self.items.filter {$0.completed == false}).count == 0 {
+                                                self.completedAlert = true
+                                            }
+                                        }) {
+                                            ZStack {
+                                            RoundedRectangle(cornerRadius: CGFloat(15))
+                                            .stroke(Color.secondary, lineWidth: CGFloat(3))
+                                                
+                                                if item.completed {
+                                                    Circle().fill(Color.secondary)
+                                                        .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                                }
+                                                
+                                            }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
+                                            .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                        }.buttonStyle(BorderlessButtonStyle())
+                                    }
+                                }
+                            }.onDelete(perform: self.getDeleteFunction(category: category))
+                                .onMove(perform: self.getMoveFunction(category: category))
                         }
-                    }.onDelete(perform: self.getDeleteFunction(category: category))
-                        .onMove(perform: self.getMoveFunction(category: category))
+                    }
                 }
-            }
             //Text(refreshing ? "" : "")
+            } else {
+                AddButton(action: {
+                    do {
+                        try self.trip.beginNextLeg(context: self.context)
+                    } catch {
+                        print(error)
+                    }
+                }, text: "Begin Next Leg", accent: self.accent)
+                Text("This will uncheck all items.").font(.callout)
             }
+        }
         .navigationBarTitle(trip.name)
             .navigationBarItems(trailing: HStack {
+                Button(action: {
+                    print("Hidden 0.5")
+                }) {
+                    Spacer()
+                }.alert(isPresented: $completedAlert, content: {
+                    Alert(title: Text("All Items Checked"),
+                          message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
+                          primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
+                            do {
+                                try self.trip.beginNextLeg(context: self.context)
+                            } catch {
+                                print(error)
+                            }
+                          }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
+                })
                 if (.active == self.editMode?.wrappedValue) {
                 Button(action: {
                     self.editTripDisplayed = true
@@ -133,7 +166,7 @@ struct TripDetail: View {
                 self.refreshing.toggle()
             })
     }
-    
+        
     func fetchItems(_ category: Category) -> [Item] {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
         

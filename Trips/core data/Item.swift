@@ -28,6 +28,16 @@ public class Item: NSManagedObject, Identifiable {
         return request
     }
     
+    static func itemsInTripFetchRequest(trip: Trip) ->  NSFetchRequest<Item> {
+        let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
+        
+        request.predicate = NSPredicate(format: "%K IN %@", #keyPath(Item.category), trip.categories)
+        
+        return request
+    }
+    
     static func generateItemIndex(category: Category, context: NSManagedObjectContext) throws -> Int {
         // Finds the lowest available Item index
         // Stolen from generateCategoryIndex
