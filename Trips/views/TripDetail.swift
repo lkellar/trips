@@ -45,58 +45,68 @@ struct TripDetail: View {
     }
     
     var body: some View {
-        VStack {
-            if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0) {
-                List {
-                    ForEach(self.categories, id: \.self) {category in
-                        // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                        Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
-                            ForEach(self.items.filter {$0.category == category}) { item in
-                                if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
-                                    HStack {
-                                        Button(action: {self.itemModalDisplayed = true}) {
-                                            Text(item.name)
-                                        }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                            EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
-                                        })
-                                        Spacer()
-                                        Button(action: {
-                                            self.toggleItemCompleted(item)
-                                            
-                                            // If there are no uncompleted items
-                                            if (self.items.filter {$0.completed == false}).count == 0 {
-                                                self.completedAlert = true
-                                            }
-                                        }) {
-                                            ZStack {
-                                            RoundedRectangle(cornerRadius: CGFloat(15))
-                                            .stroke(Color.secondary, lineWidth: CGFloat(3))
+        ZStack {
+            VStack {
+                if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0) {
+                    List {
+                        ForEach(self.categories, id: \.self) {category in
+                            // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
+                            Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
+                                ForEach(self.items.filter {$0.category == category}) { item in
+                                    if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
+                                        HStack {
+                                            Button(action: {self.itemModalDisplayed = true}) {
+                                                Text(item.name)
+                                            }.sheet(isPresented: self.$itemModalDisplayed, content: {
+                                                EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
+                                            })
+                                            Spacer()
+                                            Button(action: {
+                                                self.toggleItemCompleted(item)
                                                 
-                                                if item.completed {
-                                                    Circle().fill(Color.secondary)
-                                                        .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                                // If there are no uncompleted items
+                                                if (self.items.filter {$0.completed == false}).count == 0 {
+                                                    self.completedAlert = true
                                                 }
-                                                
-                                            }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
-                                            .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
-                                        }.buttonStyle(BorderlessButtonStyle())
+                                            }) {
+                                                ZStack {
+                                                RoundedRectangle(cornerRadius: CGFloat(15))
+                                                .stroke(Color.secondary, lineWidth: CGFloat(3))
+                                                    
+                                                    if item.completed {
+                                                        Circle().fill(Color.secondary)
+                                                            .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                                    }
+                                                    
+                                                }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
+                                                .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                            }.buttonStyle(BorderlessButtonStyle())
+                                        }
                                     }
-                                }
-                            }.onDelete(perform: self.getDeleteFunction(category: category))
-                                .onMove(perform: self.getMoveFunction(category: category))
+                                }.onDelete(perform: self.getDeleteFunction(category: category))
+                                    .onMove(perform: self.getMoveFunction(category: category))
+                            }
                         }
+                        Text("")
+                        Text("")
                     }
+                //Text(refreshing ? "" : "")
+                } else {
+                    AddButton(action: {
+                        do {
+                            try self.trip.beginNextLeg(context: self.context)
+                        } catch {
+                            print(error)
+                        }
+                    }, text: "Begin Next Leg", accent: self.accent)
+                    Text("This will uncheck all items.").font(.callout)
                 }
-            //Text(refreshing ? "" : "")
-            } else {
-                AddButton(action: {
-                    do {
-                        try self.trip.beginNextLeg(context: self.context)
-                    } catch {
-                        print(error)
-                    }
-                }, text: "Begin Next Leg", accent: self.accent)
-                Text("This will uncheck all items.").font(.callout)
+            }
+            VStack {
+                Spacer()
+                HStack {
+                    AddExpander(color: self.accent, showAddItem: self.$modalDisplayed, showAddCategory: self.$categoryModalDisplayed).padding()
+                }
             }
         }
         .navigationBarTitle(trip.name)
@@ -116,7 +126,6 @@ struct TripDetail: View {
                             }
                           }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
                 })
-                if (.active == self.editMode?.wrappedValue) {
                 Button(action: {
                     self.editTripDisplayed = true
                 }, label: {
@@ -125,39 +134,22 @@ struct TripDetail: View {
                     .sheet(isPresented: $editTripDisplayed, content: {
                         EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                } else {
-                    Button(action: {
-                        print("Hidden 1")
-                    }) {
-                        Spacer()
-                    }
-                    .sheet(isPresented: $modalDisplayed, content: {
-                        AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
-                    })
-                    Button(action: {
-                        print("Hidden 2")
-                    }) {
-                        Spacer()
-                    }
-                    .sheet(isPresented: $categoryModalDisplayed, content: {
-                        AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
-                    })
-                    
-                    Button(action: {
-                        self.addActionSheet = true
-                    }, label: {
-                        Image(systemName: "plus")
-                    }
-                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                        ).padding()
-                        .actionSheet(isPresented: self.$addActionSheet, content: {
-                            ActionSheet(title: Text("Add Item or Category"), buttons: [
-                                ActionSheet.Button.default(Text("Add Item")) {self.modalDisplayed = true},
-                                ActionSheet.Button.default(Text("Add Category")) {self.categoryModalDisplayed = true},
-                                ActionSheet.Button.cancel()
-                            ])
-                        })
+                Button(action: {
+                    print("Hidden 1")
+                }) {
+                    Spacer()
                 }
+                .sheet(isPresented: $modalDisplayed, content: {
+                    AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                })
+                Button(action: {
+                    print("Hidden 2")
+                }) {
+                    Spacer()
+                }
+                .sheet(isPresented: $categoryModalDisplayed, content: {
+                    AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                })
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
             }).onAppear(perform: {
                 self.accent = Color.fromString(color: self.trip.color ?? "blue")

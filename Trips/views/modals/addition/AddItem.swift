@@ -65,6 +65,7 @@ struct AddItem: View {
                         withAnimation {
                             self.showTextField.toggle()
                         }
+                        self.quantity = 1
                     }) {
                         Text("Add Another")
                     }.disabled(self.title.count == 0 ? true : false)
