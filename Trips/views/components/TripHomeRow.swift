@@ -25,12 +25,12 @@ struct TripHomeRow: View {
             }
             VStack {
                 HStack {
-                    Text(trip.name).bold().font(.title)
+                    Text(trip.name).bold().font(.title).foregroundColor(.primary)
                     Spacer()
                 }
                 HStack {
                     // Kind of a hack, but basically, if the trip name is 0, trip is deleted almost certainly, so don't calculate dates (which crashes app if trip is deleted)
-                    Text(trip.name.count > 0 ? "\(trip.startDate != nil ? trip.startDate!.formatted_date : "") - \(trip.endDate != nil ? trip.endDate!.formatted_date: "")" : "").font(.subheadline)
+                    Text(trip.name.count > 0 ? "\(trip.startDate != nil ? trip.startDate!.formatted_date : "") - \(trip.endDate != nil ? trip.endDate!.formatted_date: "")" : "").font(.subheadline).foregroundColor(.primary)
                     Text(refreshing ? "": "")
                     Spacer()
                 }

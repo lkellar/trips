@@ -47,7 +47,7 @@ struct TripDetail: View {
     var body: some View {
         ZStack {
             VStack {
-                if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0) {
+                if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0 && self.items.count > 0) {
                     List {
                         ForEach(self.categories, id: \.self) {category in
                             // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
@@ -92,14 +92,16 @@ struct TripDetail: View {
                     }
                 //Text(refreshing ? "" : "")
                 } else {
-                    AddButton(action: {
-                        do {
-                            try self.trip.beginNextLeg(context: self.context)
-                        } catch {
-                            print(error)
-                        }
-                    }, text: "Begin Next Leg", accent: self.accent)
-                    Text("This will uncheck all items.").font(.callout)
+                    if self.trip.categories.count > 0 && self.items.count > 0 {
+                        AddButton(action: {
+                            do {
+                                try self.trip.beginNextLeg(context: self.context)
+                            } catch {
+                                print(error)
+                            }
+                        }, text: "Begin Next Leg", accent: self.accent)
+                        Text("This will uncheck all items.").font(.callout)
+                    }
                 }
             }
             VStack {

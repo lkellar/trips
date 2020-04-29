@@ -18,6 +18,8 @@
 		A024932023BE7A60009AF5EF /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024931F23BE7A60009AF5EF /* AppView.swift */; };
 		A0251D9323EDF376001F5D66 /* AddTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0251D9223EDF376001F5D66 /* AddTemplate.swift */; };
 		A026AAF5240575AB003414AF /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026AAF4240575AB003414AF /* AddButton.swift */; };
+		A034F74A24536C980025EA62 /* EditCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74924536C980025EA62 /* EditCategory.swift */; };
+		A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */; };
 		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
 		A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleTrips.swift */; };
 		A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564377240FF9F10032217A /* AddTemplateToExisting.swift */; };
@@ -56,6 +58,8 @@
 		A024931F23BE7A60009AF5EF /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		A0251D9223EDF376001F5D66 /* AddTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplate.swift; sourceTree = "<group>"; };
 		A026AAF4240575AB003414AF /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
+		A034F74924536C980025EA62 /* EditCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategory.swift; sourceTree = "<group>"; };
+		A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyToOtherTrip.swift; sourceTree = "<group>"; };
 		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
 		A04D80E82342BC08004EE95F /* sampleTrips.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleTrips.swift; sourceTree = "<group>"; };
 		A0564377240FF9F10032217A /* AddTemplateToExisting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplateToExisting.swift; sourceTree = "<group>"; };
@@ -180,6 +184,7 @@
 				A026AAF4240575AB003414AF /* AddButton.swift */,
 				A091C10D243BF22500804B61 /* IntegratedStepper.swift */,
 				A0C28147244D33AA00012372 /* AddExpander.swift */,
+				A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -202,6 +207,7 @@
 				A03AB4B6237EF8F900979899 /* EditTrip.swift */,
 				A081AB6E23A3ECA6000F391A /* EditItem.swift */,
 				A0BE157123E0949E000F8542 /* EditTemplate.swift */,
+				A034F74924536C980025EA62 /* EditCategory.swift */,
 			);
 			path = edit;
 			sourceTree = "<group>";
@@ -292,6 +298,7 @@
 				A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */,
 				A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
+				A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
 				A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */,
 				A0EC86C423E9C7AB0081DFD5 /* IncludeTemplates.swift in Sources */,
@@ -305,6 +312,7 @@
 				A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */,
 				A0B61B692343A44500D0D13C /* Trip.swift in Sources */,
 				A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */,
+				A034F74A24536C980025EA62 /* EditCategory.swift in Sources */,
 				A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */,
 				A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */,
 			);
