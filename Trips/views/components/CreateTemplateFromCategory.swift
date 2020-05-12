@@ -66,11 +66,13 @@ struct CreateTemplateFromCategory: View {
                         
                         do {
                             for itom in self.items {
-                                let item = Item(context: self.context)
-                                
-                                item.name = itom.name
-                                item.index = try Item.generateItemIndex(category: pendingTemplate, context: self.context)
-                                pendingTemplate.addToItems(item)
+                                if !self.excluded.contains(itom) {
+                                    let item = Item(context: self.context)
+                                    
+                                    item.name = itom.name
+                                    item.index = try Item.generateItemIndex(category: pendingTemplate, context: self.context)
+                                    pendingTemplate.addToItems(item)
+                                }
                             }
                         } catch {
                             print(error)
