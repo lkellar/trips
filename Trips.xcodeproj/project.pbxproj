@@ -36,6 +36,7 @@
 		A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BE157123E0949E000F8542 /* EditTemplate.swift */; };
 		A0C28148244D33AA00012372 /* AddExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C28147244D33AA00012372 /* AddExpander.swift */; };
 		A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C9210023B0191700A3493E /* TripDateSelector.swift */; };
+		A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */; };
 		A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0E7811A233E8579007974CD /* Trips.xcdatamodeld */; };
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
 		A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */; };
@@ -77,6 +78,7 @@
 		A0BE157123E0949E000F8542 /* EditTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplate.swift; sourceTree = "<group>"; };
 		A0C28147244D33AA00012372 /* AddExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpander.swift; sourceTree = "<group>"; };
 		A0C9210023B0191700A3493E /* TripDateSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDateSelector.swift; sourceTree = "<group>"; };
+		A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTemplateFromCategory.swift; sourceTree = "<group>"; };
 		A0E7811B233E8579007974CD /* Trips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trips.xcdatamodel; sourceTree = "<group>"; };
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
 		A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				A091C10D243BF22500804B61 /* IntegratedStepper.swift */,
 				A0C28147244D33AA00012372 /* AddExpander.swift */,
 				A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */,
+				A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */,
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
 				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
+				A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */,
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Category.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,

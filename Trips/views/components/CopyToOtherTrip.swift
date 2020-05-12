@@ -12,23 +12,25 @@ struct CopyToOtherTrip: View {
     @Environment(\.managedObjectContext) var context
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
     var trip: Trip?
     var category: Category
     
+    @Binding var showSelf: Bool
+    
     var body: some View {
-        NavigationView {
-            Form {
-                ForEach(self.trips.filter {$0 != self.trip}, id: \.self) { trip in
+        // For some reason, maybe the filter? it presents backwards
+        List {
+            if self.showSelf {
+                ForEach(self.trips.filter {$0 != self.trip}.reversed(), id: \.self) { trip in
                     Button(action:{
                         self.copyToOther(category: self.category, trip: trip)
                     }) {
                         TripHomeRow(trip: trip)
                     }
                 }
-            }.navigationBarTitle(Text("Copy To Other Trip"))
+            }
         }
+        
     }
     
     func copyToOther(category: Category, trip: Trip) {
@@ -49,11 +51,11 @@ struct CopyToOtherTrip: View {
             
             trip.addToCategories(newCategory)
             saveContext(self.context)
+            
+            self.showSelf = false
         } catch {
             print("Error while copying category")
         }
-        
-        self.presentationMode.wrappedValue.dismiss()
         
     }
 }

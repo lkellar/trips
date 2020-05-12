@@ -17,6 +17,7 @@ struct EditCategory: View {
     @State var updatedName: String = ""
     @State var showCopyToOther: Bool = false
     @State var showNoTripsAlert = false
+    @State var showCreateTemplate: Bool = false
     
     var body: some View {
         Form {
@@ -31,24 +32,28 @@ struct EditCategory: View {
                 
             Section(footer: Text("This will create a copy of this category in another Trip")) {
                 Button(action: {
-                    if self.trips.count > 1 {
-                        self.showCopyToOther = true
+                    if self.trips.count > 1  || self.showCopyToOther {
+                        self.showCopyToOther.toggle()
                     } else {
                         self.showNoTripsAlert = true
                     }
                 }) {
                     Text("Copy to Other Trip")
-                }.sheet(isPresented: $showCopyToOther, content: {
-                    CopyToOtherTrip(trip: self.category.trip, category: self.category).environment(\.managedObjectContext, self.context)
-                })
+                }
+                
+                if self.showCopyToOther {
+                    CopyToOtherTrip(trip: self.category.trip, category: self.category, showSelf: self.$showCopyToOther)
+                }
             }
             
-            Section(footer: Text("This will create a template containing all items from this categor")) {
+            Section(footer: Text("This will create a template containing all items from this category")) {
                 Button(action: {
-                    print("create template not implemented yet")
+                    self.showCreateTemplate.toggle()
                 }) {
                     Text("Create Template from Category")
-                }
+                }.sheet(isPresented: $showCreateTemplate, content: {
+                    CreateTemplateFromCategory(category: self.category).environment(\.managedObjectContext, self.context)
+                })
             }
             
             Section {

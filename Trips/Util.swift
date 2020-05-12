@@ -102,3 +102,19 @@ func increturn(_ num: inout Int) -> Int {
     num += 1
     return num
 }
+    
+func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Item] {
+    let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
+    
+    request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
+    
+    request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category), category)
+    
+    do {
+        return try context.fetch(request)
+    } catch {
+        print(error)
+        return []
+    }
+    
+}

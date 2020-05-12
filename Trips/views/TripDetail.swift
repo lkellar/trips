@@ -160,26 +160,10 @@ struct TripDetail: View {
                 self.refreshing.toggle()
             })
     }
-        
-    func fetchItems(_ category: Category) -> [Item] {
-        let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "index", ascending: true)]
-        
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Item.category), category)
-        
-        do {
-            return try self.context.fetch(request)
-        } catch {
-            print(error)
-            return []
-        }
-        
-    }
     
     func getDeleteFunction(category: Category) -> (IndexSet) -> Void {
         func delete(at offsets: IndexSet) {
-            let items = self.fetchItems(category)
+            let items = fetchItems(category, context)
             
             for offset in offsets {
                 category.removeFromItems(items[offset])
@@ -204,12 +188,12 @@ struct TripDetail: View {
         func moveItem(from source: IndexSet, to destination: Int) {
             var items: [Item] = []
             for index in source {
-                items.append(fetchItems(category)[index])
+                items.append(fetchItems(category, self.context)[index])
             }
             
             for item in items {
                 Item.adjustItemIndex(source: item.index, index: destination, category: category, context: self.context)
-                item.index = (self.fetchItems(category).count != destination ? destination : destination - 1)
+                item.index = (fetchItems(category, self.context).count != destination ? destination : destination - 1)
             }
             
             saveContext(self.context)
