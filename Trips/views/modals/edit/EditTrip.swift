@@ -95,7 +95,7 @@ struct EditTrip: View {
                 if (self.categories.count > 0) {
                     Section(header: Text("Categories")) {
                         ForEach(self.categories, id: \.self) { category in
-                            NavigationLink(destination: EditCategory(category: category)) {
+                            NavigationLink(destination: EditCategory(category: category, accent: self.accent)) {
                                 Text(category.name)
                             }
                        }.onDelete(perform: self.deleteCategory)

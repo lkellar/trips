@@ -14,10 +14,14 @@ struct EditCategory: View {
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     var category: Category
+    var accent: Color
+    
     @State var updatedName: String = ""
     @State var showCopyToOther: Bool = false
     @State var showNoTripsAlert = false
     @State var showCreateTemplate: Bool = false
+    @State var showDeleteAlert: Bool = false
+    @State var showDuplicateAlert: Bool = false
     
     var body: some View {
         Form {
@@ -52,21 +56,39 @@ struct EditCategory: View {
                 }) {
                     Text("Create Template from Category")
                 }.sheet(isPresented: $showCreateTemplate, content: {
-                    CreateTemplateFromCategory(category: self.category).environment(\.managedObjectContext, self.context)
+                    CreateTemplateFromCategory(category: self.category, accent: self.accent).environment(\.managedObjectContext, self.context)
                 })
             }
             
             Section {
                 Button(action: {
-                    print("noo duplicate yet")
+                    copyToOther(category: self.category, trip: self.category.trip!, context: self.context)
+                    self.showDuplicateAlert = true
                 }) {
                     Text("Duplicate")
-                }
+                }.alert(isPresented: self.$showDuplicateAlert, content: {
+                    Alert(title: Text("Category \(self.updatedName) Duplicated"),
+                          dismissButton: .default(Text("Dismiss")))
+                })
+                
                 Button(action: {
-                    print("no deleteet t")
+                    self.showDeleteAlert = true
                 }) {
                     Text("Delete")
                 }.foregroundColor(.red)
+                    .alert(isPresented: self.$showDeleteAlert, content: {
+                    Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
+                          message: Text("This cannot be undone."),
+                          primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                        do {
+                            self.context.delete(self.category)
+                            try self.context.save()
+                        } catch {
+                            print(error)
+                        }
+                          }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
+                })
+                
             }
         }.navigationBarTitle(Text("Edit Category"))
             .navigationBarItems(leading: HStack {

@@ -118,3 +118,29 @@ func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Ite
     }
     
 }
+
+
+func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext) {
+    do {
+        let newCategory = Category(context: context)
+        newCategory.items = NSOrderedSet()
+        newCategory.name = category.name
+        
+        newCategory.index =  try Category.generateCategoryIndex(trip: trip, context: context)
+        for item in category.items {
+            let newItem = Item(context: context)
+            newItem.completed = false
+            newItem.name = (item as! Item).name
+            newItem.index = try Item.generateItemIndex(category: newCategory, context: context)
+            
+            newCategory.addToItems(newItem)
+        }
+        
+        trip.addToCategories(newCategory)
+        saveContext(context)
+        
+    } catch {
+        print("Error while copying category")
+    }
+    
+}
