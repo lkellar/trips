@@ -18,7 +18,18 @@ struct EditItem: View {
     var accent: Color
     
     @State var updatedName: String = ""
-    // @State var refreshing: Bool = false
+    @State var selectedCategory: Int = -1
+    
+    var categoryRequest : FetchRequest<Category>
+    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
+    
+    init(item: Item, accent: Color, trip: Trip) {
+        self.item = item
+        self.accent = accent
+        
+        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+    }
    
     var body: some View {
         NavigationView {
@@ -32,6 +43,18 @@ struct EditItem: View {
                     }
                     //Text((self.refreshing ? "" : ""))
                 }
+                Section {
+                    Picker(selection: self.$selectedCategory, label: Text("Category"),
+                           content: {
+                            ForEach(0 ..< categories.count, id:\.self) { index in
+                                Text(self.categories[index].name).tag(index)
+                            }
+                    }).onAppear {
+                        if self.selectedCategory == -1 {
+                            self.selectedCategory = self.categories.firstIndex(of: self.item.category!) ?? 0
+                        }
+                    }
+                }
             }
             .navigationBarTitle("Edit Item")
             .navigationBarItems(trailing:
@@ -44,6 +67,7 @@ struct EditItem: View {
         .accentColor(self.accent)
         .onDisappear {
             self.item.name = self.updatedName
+            self.item.category = self.categories[self.selectedCategory]
             saveContext(self.context)
         }
     }

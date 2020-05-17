@@ -58,7 +58,7 @@ struct TripDetail: View {
                                             Button(action: {self.itemModalDisplayed = true}) {
                                                 Text(item.name)
                                             }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                                EditItem(item: item, accent: self.accent).environment(\.managedObjectContext, self.context)
+                                                EditItem(item: item, accent: self.accent, trip: self.trip).environment(\.managedObjectContext, self.context)
                                             })
                                             Spacer()
                                             Button(action: {
