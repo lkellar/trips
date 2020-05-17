@@ -10,14 +10,31 @@ import SwiftUI
 
 struct AddExpander: View {
     var color: Color
+    var addCategory: Bool
     @State var width: CGFloat = 64
     @State var height: CGFloat = 64
     @State var radius: CGFloat = 90
     @State var expand: Bool = false
     @State var showExpandedText: Bool = false
+
     
     @Binding var showAddItem: Bool
     @Binding var showAddCategory: Bool
+    
+    init(color: Color, showAddItem: Binding<Bool>, showAddCategory: Binding<Bool>) {
+        self.color = color
+        self.addCategory = true
+        self._showAddItem = showAddItem
+        self._showAddCategory = showAddCategory
+    }
+    
+    init(color: Color, showAddItem: Binding<Bool>) {
+        self.color = color
+        self._showAddItem = showAddItem
+        self._showAddCategory = Binding.constant(false)
+        self.addCategory = false
+        
+    }
     
     var body: some View {
         RoundedRectangle(cornerRadius: self.radius)
@@ -59,14 +76,18 @@ struct AddExpander: View {
                         }
                     } else {
                         Button(action: {
-                            self.expand.toggle()
-                            withAnimation() {
-                                self.width = 210
-                                self.height = 150
-                                self.radius = 15
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
-                                self.showExpandedText.toggle()
+                            if self.addCategory {
+                                self.expand.toggle()
+                                withAnimation() {
+                                    self.width = 210
+                                    self.height = 150
+                                    self.radius = 15
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
+                                    self.showExpandedText.toggle()
+                                }
+                            } else {
+                                self.showAddItem = true
                             }
                         }) {
                         Image(systemName: "plus")
