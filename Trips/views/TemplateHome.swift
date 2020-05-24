@@ -8,6 +8,12 @@
 
 import SwiftUI
 
+//let iconBlue = Color(UIColor(red: 0.46, green: 0.79, blue: 0.99, alpha: 1.00))
+let iconGreen = Color(UIColor(red: 0.30, green: 0.86, blue: 0.75, alpha: 1.00))
+
+//let iconGreen = Color.green
+let iconBlue = Color.blue
+
 struct TemplatePair: Hashable {
     var first: Category
     var second: Category?
@@ -73,13 +79,13 @@ struct TemplatePairView: View {
             Spacer()
         
             NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
-                CategoryRectangular(title: pair.first.name, color: (index % 2 == 0 ? .blue : .pink), sneaky: false)
+                CategoryRectangular(title: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), sneaky: false)
         }.buttonStyle(PlainButtonStyle())
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
             NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
-                CategoryRectangular(title: pair.second!.name, color: (index % 2 == 0 ? .pink : .blue), sneaky: false)
+                CategoryRectangular(title: pair.second!.name, color: (index % 2 == 0 ? iconBlue : iconGreen), sneaky: false)
             }.buttonStyle(PlainButtonStyle())
         } else {
             CategoryRectangular(title: "", color: Color.white, sneaky: true)

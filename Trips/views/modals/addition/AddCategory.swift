@@ -37,45 +37,47 @@ struct AddCategory: View {
     var body: some View {
         NavigationView {
             Form {
-                Section(header: Text("Templates")) {
-                    ForEach(self.templates, id:\.self) {template in
-                        Button(action: {
-                            if self.selected == template {
-                                self.selected = nil
-                            } else {
-                               self.selected = template
-                                return
-                            }
-                            
-                        }) {
-                            HStack {
-                                Text(template.name)
-                                    .foregroundColor(.primary)
-                                Spacer()
+                if self.templates.count > 0 {
+                    Section(header: Text("Templates")) {
+                        ForEach(self.templates, id:\.self) {template in
+                            Button(action: {
                                 if self.selected == template {
-                                    Image(systemName: "checkmark")
-                                        .foregroundColor(.blue)
+                                    self.selected = nil
+                                } else {
+                                   self.selected = template
+                                    return
+                                }
+                                
+                            }) {
+                                HStack {
+                                    Text(template.name)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                    if self.selected == template {
+                                        Image(systemName: "checkmark")
+                                            .foregroundColor(.blue)
+                                    }
                                 }
                             }
                         }
                     }
-                }
                 
-                Section {
-                Button(action: {
-                    do {
-                        if let tomplate = self.selected {
-                            try copyTemplateToTrip(template: tomplate, trip: self.trip, context: self.context)
-                        } else {
-                            print("Template is null. Lol")
-                        }
-                    } catch {
-                        print(error)
+                    Section {
+                        Button(action: {
+                            do {
+                                if let tomplate = self.selected {
+                                    try copyTemplateToTrip(template: tomplate, trip: self.trip, context: self.context)
+                                } else {
+                                    print("Template is null. Lol")
+                                }
+                            } catch {
+                                print(error)
+                            }
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Save Template")
+                        }.disabled(self.selected == nil)
                     }
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    Text("Save Template")
-                }.disabled(self.selected == nil)
                 }
                 
                 Section(header: Text("Create Custom Category")) {

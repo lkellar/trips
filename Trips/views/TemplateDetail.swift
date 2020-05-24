@@ -50,7 +50,6 @@ struct TemplateDetail: View {
         }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
         .navigationBarItems(trailing:
             HStack {
-                if (.active == self.editMode?.wrappedValue) {
                 Button(action: {
                     self.editTemplateDisplayed = true
                 }, label: {
@@ -59,18 +58,6 @@ struct TemplateDetail: View {
                     .sheet(isPresented: $editTemplateDisplayed, content: {
                         EditTemplate(template: self.template, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                     })
-                } else {
-                    Button(action: {
-                        self.addItemModalDisplayed = true
-                    }, label: {
-                        Image(systemName: "plus")
-                    }
-                        // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                        )
-                        .sheet(isPresented: $addItemModalDisplayed, content: {
-                            AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing, accent: Color.accentColor).environment(\.managedObjectContext, self.context)
-                }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                }
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
         })
