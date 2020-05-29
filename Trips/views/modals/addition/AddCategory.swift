@@ -111,7 +111,7 @@ struct AddCategory: View {
         }.accentColor(self.accent)
         .onDisappear(perform: {
             self.refreshing.toggle()
-        })
+        }).navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

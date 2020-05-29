@@ -62,6 +62,7 @@ struct TemplateHome: View {
                 .sheet(isPresented: $addTemplateModalDisplayed, content: {
                     AddTemplate().environment(\.managedObjectContext, self.context)
                 }))
+                Text("No Template Selected").font(.subheadline)
             }
         }
     }

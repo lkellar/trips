@@ -98,7 +98,8 @@ struct CreateTemplateFromCategory: View {
                 }, label: {
                     Text("Cancel")
                 }))
-        }.accentColor(self.accent)
+        }.navigationViewStyle(StackNavigationViewStyle())
+        .accentColor(self.accent)
     }
 }
 

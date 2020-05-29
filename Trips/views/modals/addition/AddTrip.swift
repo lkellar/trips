@@ -66,7 +66,7 @@ struct AddTrip: View {
                 }, label: {
                     Text("Cancel")
                 }))
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
     
     func checkTripValidity() -> Bool {

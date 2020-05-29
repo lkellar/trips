@@ -69,7 +69,7 @@ struct EditItem: View {
             self.item.name = self.updatedName
             self.item.category = self.categories[self.selectedCategory]
             saveContext(self.context)
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

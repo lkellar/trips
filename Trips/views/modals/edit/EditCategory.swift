@@ -91,13 +91,13 @@ struct EditCategory: View {
                 
             }
         }.navigationBarTitle(Text("Edit Category"))
-            .navigationBarItems(leading: HStack {
+            .navigationBarItems(trailing: HStack {
                 Text("").alert(isPresented: self.$showNoTripsAlert, content:{
                     Alert(title: Text("There are no other Trips"),
                         message: Text("Please go create another Trip first"),
                         dismissButton: .default(Text("Dismiss")))
                 })
-        })
+        }).navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

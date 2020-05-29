@@ -43,7 +43,7 @@ struct AddTemplate: View {
             }, label: {
                 Text("Cancel")
             }))
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

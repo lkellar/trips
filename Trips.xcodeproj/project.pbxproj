@@ -457,14 +457,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
-				DEVELOPMENT_TEAM = NW3S65A6Q9;
+				DEVELOPMENT_TEAM = 27888865CT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Trips/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.lkellar.Trips;
+				MARKETING_VERSION = 2020.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -478,14 +480,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
-				DEVELOPMENT_TEAM = NW3S65A6Q9;
+				DEVELOPMENT_TEAM = 27888865CT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Trips/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.lkellar.Trips;
+				MARKETING_VERSION = 2020.1;
+				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

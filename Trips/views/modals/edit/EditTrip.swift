@@ -149,7 +149,8 @@ struct EditTrip: View {
                     Text("Close")
                 })
             )
-        }.accentColor(self.accent)
+        }.navigationViewStyle(StackNavigationViewStyle())
+        .accentColor(self.accent)
         .onDisappear {
             self.trip.name = self.updatedTitle
             if self.validDates {

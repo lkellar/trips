@@ -20,7 +20,7 @@ struct TripHomeRow: View {
         HStack {
             ZStack {
                 Circle().frame(width: CGFloat(42.0), height: CGFloat(42.0)).foregroundColor(Color.fromString(color: trip.color ?? "primary"))
-                Image(systemName: "house.fill").foregroundColor(Color.white).font(.system(size: 24))
+                Image(systemName: trip.icon ?? "house.fill").foregroundColor(Color.white).font(.system(size: 24))
                 
             }
             VStack {

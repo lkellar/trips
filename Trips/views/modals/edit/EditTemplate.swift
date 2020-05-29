@@ -54,7 +54,7 @@ struct EditTemplate: View {
             self.template.name = self.updatedName
             saveContext(self.context)
             self.refreshing.toggle()
-        }
+        }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

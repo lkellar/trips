@@ -63,6 +63,8 @@ struct TripDetail: View {
                                             Spacer()
                                             Button(action: {
                                                 self.toggleItemCompleted(item)
+                                                let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                                                impactMed.impactOccurred()
                                                 
                                                 // If there are no uncompleted items
                                                 if (self.items.filter {$0.completed == false}).count == 0 {
@@ -81,7 +83,20 @@ struct TripDetail: View {
                                                 }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
                                                 .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
                                             }.buttonStyle(BorderlessButtonStyle())
-                                        }
+                                        }.contextMenu(menuItems: {
+                                            Button(action: {
+                                                self.itemModalDisplayed = true
+                                            }) {
+                                                Text("Edit Item")
+                                                Image(systemName: "pencil.circle")
+                                            }
+                                            Button(action: {
+                                                self.toggleItemCompleted(item)
+                                            }) {
+                                                Text(item.completed ? "Uncheck Item" : "Check Item")
+                                                Image(systemName: "checkmark.circle")
+                                            }
+                                        })
                                     }
                                 }.onDelete(perform: self.getDeleteFunction(category: category))
                                     .onMove(perform: self.getMoveFunction(category: category))
@@ -156,8 +171,9 @@ struct TripDetail: View {
             }).onAppear(perform: {
                 self.accent = Color.fromString(color: self.trip.color ?? "blue")
             }).onDisappear(perform: {
-                self.accent = Color.blue
-                self.refreshing.toggle()
+                if (UIDevice.current.userInterfaceIdiom == .phone) {
+                    self.accent = Color.blue
+                }
             })
     }
     

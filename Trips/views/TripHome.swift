@@ -71,7 +71,15 @@ struct TripHome: View {
                     AddTrip().environment(\.managedObjectContext, self.context)
                 })
             )
-        }
+            
+            Text("No Trip Selected").font(.subheadline).onAppear(perform: {
+                self.accent = Color.blue
+            })
+        }.accentColor(self.accent)
+        .onDisappear(perform: {
+            self.accent = Color.blue
+        })
+
     }
     
     func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
