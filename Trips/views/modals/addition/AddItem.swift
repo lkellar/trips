@@ -48,8 +48,12 @@ struct AddItem: View {
                     Section {
                         Picker(selection: $selectedCategory, label: Text("Category"),
                                content: {
-                                ForEach(0 ..< categories.count, id:\.self) { index in
-                                    Text(self.categories[index].name).tag(index)
+                                if categories.count > 0 {
+                                    ForEach(0 ..< categories.count, id:\.self) { index in
+                                        Text(self.categories[index].name).tag(index)
+                                    }
+                                } else {
+                                    Text("No Categories for this Trip. Please create a category before adding an Item.")
                                 }
                         })
                     }
@@ -68,9 +72,9 @@ struct AddItem: View {
                         self.quantity = 1
                     }) {
                         Text("Add Another")
-                    }.disabled(self.title.count == 0 ? true : false)
+                    }.disabled(checkForSave() ? false : true)
                 }
-                Section {
+                Section(footer: Text(selectCategory && categories.count == 0 ? "No Categories in Trip. Please create a Category before adding an Item." : "")) {
                     Button(action: {
                         for _ in 1...self.quantity {
                             self.saveItem(title: self.title)
@@ -78,7 +82,7 @@ struct AddItem: View {
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save!")
-                    }.disabled(self.title.count == 0 ? true : false)
+                    }.disabled(checkForSave() ? false : true)
                 }
             }.navigationBarTitle("Add Item")
             .navigationBarItems(trailing:
@@ -91,6 +95,16 @@ struct AddItem: View {
             .onDisappear(perform: {
             self.refreshing.toggle()
         }).navigationViewStyle(StackNavigationViewStyle())
+    }
+    
+    func checkForSave() -> Bool {
+        if self.title.count == 0 {
+            return false
+        }
+        if selectCategory && categories.count == 0 {
+            return false
+        }
+        return true
     }
     
     func saveItem(title: String) {

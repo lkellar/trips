@@ -53,7 +53,7 @@ struct TemplateDetail: View {
                 Button(action: {
                     print("Hidden what?")
                 }) {
-                    Spacer()
+                    Text("")
                 }.sheet(isPresented: $addItemModalDisplayed, content: {
                             AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing, accent: Color.accentColor).environment(\.managedObjectContext, self.context)
                 }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
