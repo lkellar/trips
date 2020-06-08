@@ -157,7 +157,7 @@ struct TripDetail: View {
                     Spacer()
                 }
                 .sheet(isPresented: $modalDisplayed, content: {
-                    AddItem(categories: self.trip.categories.array as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    AddItem(categories: self.trip.categories.allObjects as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
                 })
                 Button(action: {
                     print("Hidden 2")

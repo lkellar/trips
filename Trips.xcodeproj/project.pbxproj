@@ -23,6 +23,7 @@
 		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
 		A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleTrips.swift */; };
 		A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564377240FF9F10032217A /* AddTemplateToExisting.swift */; };
+		A05C7CA92484481A006A791A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05C7CA82484481A006A791A /* CloudKit.framework */; };
 		A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */; };
 		A07B6C8F234798FA00578CDC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C8E234798FA00578CDC /* Util.swift */; };
 		A07B6C952347994D00578CDC /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C912347994D00578CDC /* Category.swift */; };
@@ -64,6 +65,8 @@
 		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
 		A04D80E82342BC08004EE95F /* sampleTrips.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleTrips.swift; sourceTree = "<group>"; };
 		A0564377240FF9F10032217A /* AddTemplateToExisting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplateToExisting.swift; sourceTree = "<group>"; };
+		A05C7CA624844818006A791A /* Trips.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Trips.entitlements; sourceTree = "<group>"; };
+		A05C7CA82484481A006A791A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetail.swift; sourceTree = "<group>"; };
 		A07B6C8E234798FA00578CDC /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		A07B6C912347994D00578CDC /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A05C7CA92484481A006A791A /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +108,7 @@
 				A08E15722375C7DB00DB454E /* README.md */,
 				A01FB8BE2331CE48008062A1 /* Trips */,
 				A01FB8BD2331CE48008062A1 /* Products */,
+				A05C7CA72484481A006A791A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -118,6 +123,7 @@
 		A01FB8BE2331CE48008062A1 /* Trips */ = {
 			isa = PBXGroup;
 			children = (
+				A05C7CA624844818006A791A /* Trips.entitlements */,
 				A033D3E5234273010065C3A4 /* core data */,
 				A0877C5623326DD20006F902 /* views */,
 				A01FB8BF2331CE48008062A1 /* AppDelegate.swift */,
@@ -159,6 +165,14 @@
 				A0A8A69823A97B1100E3AC04 /* addition */,
 			);
 			path = modals;
+			sourceTree = "<group>";
+		};
+		A05C7CA72484481A006A791A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A05C7CA82484481A006A791A /* CloudKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		A0877C5623326DD20006F902 /* views */ = {
@@ -454,7 +468,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -477,7 +493,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;

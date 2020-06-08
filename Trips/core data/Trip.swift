@@ -20,7 +20,7 @@ public class Trip: NSManagedObject, Identifiable {
     @NSManaged public var startDate: Date?
     @NSManaged public var completed: Bool
     @NSManaged public var showCompleted: Bool
-    @NSManaged public var categories: NSOrderedSet
+    @NSManaged public var categories: NSSet
 
 }
 

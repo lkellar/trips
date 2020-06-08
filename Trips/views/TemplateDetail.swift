@@ -51,6 +51,14 @@ struct TemplateDetail: View {
         .navigationBarItems(trailing:
             HStack {
                 Button(action: {
+                    print("Hidden what?")
+                }) {
+                    Spacer()
+                }.sheet(isPresented: $addItemModalDisplayed, content: {
+                            AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing, accent: Color.accentColor).environment(\.managedObjectContext, self.context)
+                }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+
+                Button(action: {
                     self.editTemplateDisplayed = true
                 }, label: {
                     Image(systemName: "info.circle")

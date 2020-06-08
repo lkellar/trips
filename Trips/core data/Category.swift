@@ -14,7 +14,7 @@ import CoreData
 public class Category: NSManagedObject, Identifiable {
 
     @NSManaged public var name: String
-    @NSManaged public var items: NSOrderedSet
+    @NSManaged public var items: NSSet
     @NSManaged public var completed: Bool
     @NSManaged public var isTemplate: Bool
     @NSManaged public var trip: Trip?

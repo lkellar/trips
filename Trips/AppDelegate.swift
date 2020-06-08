@@ -34,15 +34,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Trips")
-        container.loadPersistentStores { description, error in
-            if let error = error {
-                fatalError("Unable to load persistent stores: \(error)")
+        let container = NSPersistentCloudKitContainer(name: "Trips")
+        
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
-        }
+        })
+        
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        
+        // Observe Core Data remote change notifications.
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(self.storeRemoteChange(_:)),
+            name: .NSPersistentStoreRemoteChange, object: nil)
+        
         return container
+        
     }()
+    
+
+    @objc func storeRemoteChange(_ notification: Notification) {
+        print(notification)
+    }
 
 
 }
-

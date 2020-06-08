@@ -123,7 +123,7 @@ func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Ite
 func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext) {
     do {
         let newCategory = Category(context: context)
-        newCategory.items = NSOrderedSet()
+        newCategory.items = NSSet()
         newCategory.name = category.name
         
         newCategory.index =  try Category.generateCategoryIndex(trip: trip, context: context)

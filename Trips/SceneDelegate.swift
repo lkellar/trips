@@ -26,7 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
              // ❇️ Get the managedObjectContext from the persistent container
             let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
-            #if DEBUG
+            #if TARGET_IPHONE_SIMULATOR
             addSampleData(context: managedObjectContext)
             #endif
             
