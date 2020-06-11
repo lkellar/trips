@@ -7,45 +7,57 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct CategoryRectangular: View {
-    var title: String
+    var category: Category
     var color: Color
     
-    // if sneaky is true, make an invisible box
-    var sneaky: Bool
+    var size: Int
+    
+    @Binding var selection: NSManagedObjectID?
+    
+    init(category: Category, color: Color,  width: Int, selection: Binding<NSManagedObjectID?>) {
+        self.category = category
+        self.color = color
+        // If we have a smaller view, set the Rectangle size smaller
+        self.size = width < 375 ? 125 : 150
+        self._selection = selection
+    }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            RoundedRectangle(cornerRadius: 30)
-                .fill(self.color)
-                .frame(width: 150, height: 150)
-                .padding()
-            
-            if !sneaky {
+        Button(action: {
+            self.selection = self.category.objectID
+        }) {
+            ZStack(alignment: .bottom) {
+                RoundedRectangle(cornerRadius: 30)
+                    .fill(self.color)
+                    .frame(width: CGFloat(self.size), height: CGFloat(self.size))
+                    .padding()
+                
                 RoundedRectangle(cornerRadius: 30)
                     .fill(Color.secondary)
-                    .frame(width: 150, height: 75)
+                    .frame(width: CGFloat(self.size), height: CGFloat(self.size / 2))
                     .padding()
                 Rectangle()
                     .fill(self.color)
-                    .frame(width: 150, height: 30)
+                    .frame(width: CGFloat(self.size), height: CGFloat(self.size / 5))
                     .padding()
-                    .offset(y: -50)
-                Text(title).font(.title)
-                    .offset(y: -25)
+                    .offset(y: CGFloat(-(self.size / 3)))
+                Text(self.category.name).font(.title)
+                    .offset(y: CGFloat(-(self.size / 6)))
                     .foregroundColor(Color(UIColor.systemGray5))
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .allowsTightening(true)
-                    .frame(width: 140)
+                    .frame(width: CGFloat(Double(self.size) * 0.93))
             }
-        }
+        }.buttonStyle(PlainButtonStyle())
     }
 }
 
 struct CategoryRectangular_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryRectangular(title: "Test 123", color: .red, sneaky: false)
+        Text("Now even the rectangle is too complicated for the preview")
     }
 }

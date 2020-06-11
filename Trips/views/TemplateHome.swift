@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 //let iconBlue = Color(UIColor(red: 0.46, green: 0.79, blue: 0.99, alpha: 1.00))
 let iconGreen = Color(UIColor(red: 0.30, green: 0.86, blue: 0.75, alpha: 1.00))
@@ -23,6 +24,7 @@ struct TemplateHome: View {
     @State var addTemplateModalDisplayed = false
     
     @State var refreshing = false
+    @State var selection: NSManagedObjectID? = nil
     
     @Environment(\.managedObjectContext) var context
     
@@ -38,18 +40,18 @@ struct TemplateHome: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                if (self.templates.count > 0) {
-                    ScrollView {
-                        ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+            GeometryReader { geo in
+                VStack {
+                    if (self.templates.count > 0) {
+                            ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
+                                TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection).environment(\.managedObjectContext, self.context)
+                            }
+                            Spacer()
+                    } else {
+                        AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
                         }
-                        Spacer()
                     }
-                } else {
-                    AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
-                    }
-                }
+            }
             .navigationBarTitle("Templates" + (self.refreshing ? "" : ""))
             .navigationBarItems(trailing:
             Button(action: {
@@ -72,24 +74,33 @@ struct TemplatePairView: View {
     var index: Int
     
     @Environment(\.managedObjectContext) var context
+    @Environment(\.colorScheme) var colorScheme
     
     @Binding var refreshing: Bool
+    
+    var width: Int
+    
+    @Binding var selection: NSManagedObjectID?
     
     var body: some View {
         HStack {
             Spacer()
         
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
-                CategoryRectangular(title: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), sneaky: false)
-        }.buttonStyle(PlainButtonStyle())
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context), tag: pair.first.objectID, selection: $selection) {
+                CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: self.width, selection: $selection)
+        }
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)) {
-                CategoryRectangular(title: pair.second!.name, color: (index % 2 == 0 ? iconBlue : iconGreen), sneaky: false)
-            }.buttonStyle(PlainButtonStyle())
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context), tag: pair.second!.objectID, selection: $selection) {
+                CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: self.width, selection: $selection)
+            }
         } else {
-            CategoryRectangular(title: "", color: Color.white, sneaky: true)
+            // Invisible box, to make it even, so an odd row (just one box) doesn't center
+            RoundedRectangle(cornerRadius: 30)
+                .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
+                .frame(width: CGFloat(self.width < 375 ? 125 : 150), height: CGFloat(self.width < 375 ? 125 : 150))
+                .padding()
         }
         Spacer()
         }
