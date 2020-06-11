@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct AddExpander: View {
+    @Environment(\.colorScheme) var colorScheme
     var color: Color
     var addCategory: Bool
     @State var width: CGFloat = 64
@@ -95,7 +96,7 @@ struct AddExpander: View {
                         }
                     }
                 }
-                .foregroundColor(Color.white)
+                .foregroundColor(colorScheme == .dark && self.color == Color.primary ? Color.black : Color.white)
                 .font(.system(size: 23))
         )
     }

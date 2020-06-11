@@ -14,7 +14,7 @@ enum TripError : Error {
 
 struct AddTrip: View {
     @State var title: String = ""
-    @State var color: String = ""
+    @State var color: Color = Color.blue
     @State var startDate: Date = Date()
     @State var showStartDate: Bool = false
     @State var endDate: Date = Date()
@@ -89,7 +89,7 @@ struct AddTrip: View {
         if self.showEndDate {
             pendingTrip.endDate = self.endDate
         }
-        pendingTrip.color = self.color.count > 0 ? self.color : nil
+        pendingTrip.color = self.color.description
         
         for tomplate in self.includedTemplates {
             do {

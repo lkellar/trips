@@ -149,7 +149,7 @@ struct TripDetail: View {
                     Image(systemName: "info.circle")
                     }).padding()
                     .sheet(isPresented: $editTripDisplayed, content: {
-                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent).environment(\.managedObjectContext, self.context)
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 Button(action: {
                     print("Hidden 1")

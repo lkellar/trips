@@ -10,18 +10,20 @@ import SwiftUI
 
 struct ColorPickerCircle: View {
     var circleSize: CGFloat
-    var color: String
-    @Binding var updatedColor: String
+    var color: Color
+    @Binding var updatedColor: Color
+    
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         ZStack {
             Button(action: {
                 self.updatedColor = self.color
             }) {
-                Circle().frame(width: self.circleSize, height: self.circleSize).foregroundColor(Color.fromString(color: self.color))
+                Circle().frame(width: self.circleSize, height: self.circleSize).foregroundColor(self.color)
             }.buttonStyle(BorderlessButtonStyle())
             if updatedColor == self.color {
-                Image(systemName: "checkmark").foregroundColor(.white).font(.system(size: circleSize/3))
+                Image(systemName: "checkmark").foregroundColor(colorScheme == .dark && self.color == Color.primary ? .black : .white).font(.system(size: circleSize/3))
             }
         }
     }

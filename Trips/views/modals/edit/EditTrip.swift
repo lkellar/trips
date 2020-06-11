@@ -34,7 +34,7 @@ struct EditTrip: View {
     @State var showAddTemplateExisting: Bool = false
     @Binding var refreshing: Bool
     
-    var accent: Color
+    @Binding var accent: Color
     
     var validDates: Bool {
         get {
@@ -43,7 +43,7 @@ struct EditTrip: View {
     }
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Color) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -70,7 +70,7 @@ struct EditTrip: View {
         
         self._refreshing = refreshing
         
-        self.accent = accent
+        self._accent = accent
     }
     
     var body: some View {
@@ -89,7 +89,7 @@ struct EditTrip: View {
                 TripDateSelector(date: self.$updatedEndDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
                 
                 Section(header: Text("Color")) {
-                    ColorPicker(updatedColor: $updatedColor)
+                    ColorPicker(updatedColor: $accent)
                 }
                 
                 if (self.categories.count > 0) {
@@ -166,7 +166,7 @@ struct EditTrip: View {
                 }
             }
             self.trip.showCompleted = self.showCompleted
-            self.trip.color = self.updatedColor
+            self.trip.color = self.accent.description
             
             saveContext(self.context)
         }

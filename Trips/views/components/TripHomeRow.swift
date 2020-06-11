@@ -12,6 +12,7 @@ import CoreData
 struct TripHomeRow: View {
     var trip: Trip
     @Environment(\.managedObjectContext) var context
+    @Environment(\.colorScheme) var colorScheme
     
     @State var refreshing = false
     var didSave =  NotificationCenter.default.publisher(for: .NSManagedObjectContextDidSave)
@@ -19,8 +20,8 @@ struct TripHomeRow: View {
     var body: some View {
         HStack {
             ZStack {
-                Circle().frame(width: CGFloat(42.0), height: CGFloat(42.0)).foregroundColor(Color.fromString(color: trip.color ?? "primary"))
-                Image(systemName: trip.icon ?? "house.fill").foregroundColor(Color.white).font(.system(size: 24))
+                Circle().frame(width: CGFloat(42.0), height: CGFloat(42.0)).foregroundColor(Color.fromString(color: trip.color ?? "blue"))
+                Image(systemName: trip.icon ?? "house.fill").foregroundColor(colorScheme == .dark && trip.color == "primary" ? Color.black : Color.white).font(.system(size: 24))
                 
             }
             VStack {
