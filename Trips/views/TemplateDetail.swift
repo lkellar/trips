@@ -16,6 +16,7 @@ struct TemplateDetail: View {
     var template: Category
     
     @Binding var refreshing: Bool
+    @Binding var selection: NSManagedObjectID?
     
     var itemRequest : FetchRequest<Item>
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
@@ -23,12 +24,13 @@ struct TemplateDetail: View {
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
     
-    init(template: Category, refreshing: Binding<Bool>) {
+    init(template: Category, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>) {
         self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.category), template))
         
         self.template = template
         self._refreshing = refreshing
+        self._selection = selection
     }
     
     var body: some View {
@@ -68,6 +70,9 @@ struct TemplateDetail: View {
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
+        })
+        .onDisappear(perform: {
+            self.selection = nil
         })
     }
     

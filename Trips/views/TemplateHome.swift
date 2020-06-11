@@ -86,13 +86,13 @@ struct TemplatePairView: View {
         HStack {
             Spacer()
         
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context), tag: pair.first.objectID, selection: $selection) {
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context), tag: pair.first.objectID, selection: $selection) {
                 CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: self.width, selection: $selection)
         }
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context), tag: pair.second!.objectID, selection: $selection) {
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context), tag: pair.second!.objectID, selection: $selection) {
                 CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: self.width, selection: $selection)
             }
         } else {
