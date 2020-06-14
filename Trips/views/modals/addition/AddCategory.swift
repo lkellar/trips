@@ -55,7 +55,7 @@ struct AddCategory: View {
                                     Spacer()
                                     if self.selected == template {
                                         Image(systemName: "checkmark")
-                                            .foregroundColor(.blue)
+                                            .foregroundColor(self.accent)
                                     }
                                 }
                             }
