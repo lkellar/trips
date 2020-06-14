@@ -42,6 +42,8 @@
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
 		A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */; };
 		A0EC86C423E9C7AB0081DFD5 /* IncludeTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EC86C323E9C7AB0081DFD5 /* IncludeTemplates.swift */; };
+		A0F6837F2496BA5600139D74 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6837E2496BA5600139D74 /* IconPicker.swift */; };
+		A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F683802496BAB300139D74 /* IconPickerCircle.swift */; };
 		A0F756FF237B0B9700DCBC77 /* AddCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F756FE237B0B9700DCBC77 /* AddCategory.swift */; };
 		A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE956423C8D8FD007400BC /* PackRectangular.swift */; };
 /* End PBXBuildFile section */
@@ -86,6 +88,8 @@
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
 		A0EBEF48234CDF6D0099FEC2 /* AddItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddItem.swift; sourceTree = "<group>"; };
 		A0EC86C323E9C7AB0081DFD5 /* IncludeTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncludeTemplates.swift; sourceTree = "<group>"; };
+		A0F6837E2496BA5600139D74 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
+		A0F683802496BAB300139D74 /* IconPickerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerCircle.swift; sourceTree = "<group>"; };
 		A0F756FE237B0B9700DCBC77 /* AddCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategory.swift; sourceTree = "<group>"; };
 		A0FE956423C8D8FD007400BC /* PackRectangular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackRectangular.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -202,6 +206,8 @@
 				A0C28147244D33AA00012372 /* AddExpander.swift */,
 				A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */,
 				A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */,
+				A0F6837E2496BA5600139D74 /* IconPicker.swift */,
+				A0F683802496BAB300139D74 /* IconPickerCircle.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -308,10 +314,12 @@
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
 				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
 				A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */,
+				A0F6837F2496BA5600139D74 /* IconPicker.swift in Sources */,
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Category.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
 				A0F756FF237B0B9700DCBC77 /* AddCategory.swift in Sources */,
+				A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */,
 				A024932023BE7A60009AF5EF /* AppView.swift in Sources */,
 				A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */,
 				A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */,
@@ -470,7 +478,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -495,7 +503,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;

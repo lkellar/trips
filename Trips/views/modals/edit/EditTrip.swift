@@ -29,7 +29,7 @@ struct EditTrip: View {
     @State var showEndDate: Bool = false
     
     @State var showDeleteAlert: Bool = false
-    @State var updatedColor: String
+    @State var updatedIcon: String
     
     @State var showAddTemplateExisting: Bool = false
     @Binding var refreshing: Bool
@@ -48,11 +48,6 @@ struct EditTrip: View {
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         self._showCompleted = State.init(initialValue: trip.showCompleted)
-        if let color = trip.color {
-            self._updatedColor = State.init(initialValue: color)
-        } else {
-            self._updatedColor = State.init(initialValue: "none")
-        }
         
         if let startDate = trip.startDate {
             self._updatedStartDate = State.init(initialValue: startDate)
@@ -71,6 +66,12 @@ struct EditTrip: View {
         self._refreshing = refreshing
         
         self._accent = accent
+        
+        if let icon = trip.icon {
+            self._updatedIcon = State.init(initialValue: icon)
+        } else {
+            self._updatedIcon = State.init(initialValue: "house.fill")
+        }
     }
     
     var body: some View {
@@ -90,6 +91,10 @@ struct EditTrip: View {
                 
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $accent)
+                }
+
+                Section(header: Text("Icon")) {
+                    IconPicker(selectedIcon: self.$updatedIcon)
                 }
                 
                 if (self.categories.count > 0) {
@@ -167,6 +172,7 @@ struct EditTrip: View {
             }
             self.trip.showCompleted = self.showCompleted
             self.trip.color = self.accent.description
+            self.trip.icon = self.updatedIcon
             
             saveContext(self.context)
         }

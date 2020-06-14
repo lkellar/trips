@@ -15,6 +15,7 @@ enum TripError : Error {
 struct AddTrip: View {
     @State var title: String = ""
     @State var color: Color = Color.blue
+    @State var icon: String = "house.fill"
     @State var startDate: Date = Date()
     @State var showStartDate: Bool = false
     @State var endDate: Date = Date()
@@ -48,8 +49,12 @@ struct AddTrip: View {
                     }
                 }
                 
-                Section {
+                Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $color)
+                }
+                
+                Section(header: Text("Icon")) {
+                    IconPicker(selectedIcon: self.$icon)
                 }
                 
                 Section {
@@ -90,6 +95,7 @@ struct AddTrip: View {
             pendingTrip.endDate = self.endDate
         }
         pendingTrip.color = self.color.description
+        pendingTrip.icon = self.icon
         
         for tomplate in self.includedTemplates {
             do {
