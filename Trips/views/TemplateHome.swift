@@ -65,9 +65,11 @@ struct TemplateHome: View {
                     AddTemplate().environment(\.managedObjectContext, self.context)
                 }))
                 Text("No Template Selected").font(.subheadline)
-            }
-        }
+            }.onDisappear(perform: {
+                self.selection = nil
+            })
     }
+}
     
 struct TemplatePairView: View {
     var pair: TemplatePair

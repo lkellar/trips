@@ -35,33 +35,7 @@ struct TripHome: View {
                 }
             }
             .navigationBarTitle("Trips")
-        .navigationBarItems(leading:
-            Button(action: {
-                    do {
-                        let trips = try self.context.fetch(Trip.allTripsFetchRequest())
-                        for obj in trips {
-                            self.context.delete(obj)
-                        }
-
-                        let categories = try self.context.fetch(Category.allCategoriesFetchRequest())
-                        for obj in categories {
-                            self.context.delete(obj)
-                        }
-                        
-                        let items = try self.context.fetch(Item.allItemsFetchRequest())
-                        for obj in items {
-                            self.context.delete(obj)
-                        }
-                        
-                        addSampleData(context: self.context)
-                        
-                    } catch {
-                        print(error)
-                    }
-                }, label: {
-                    Image(systemName: "trash")
-                }
-                ).padding(),
+        .navigationBarItems(
              trailing: Button(action: {
                     self.showAddTrip = true
                  }) {

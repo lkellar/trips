@@ -35,18 +35,22 @@ struct TemplateDetail: View {
     
     var body: some View {
         ZStack {
-            List {
-                ForEach(self.items) { item in
-                    Text(item.name)
-                }.onDelete(perform: removeItem)
-                    .onMove(perform: moveItem)
-            }
-            
-            VStack {
-                Spacer()
-                HStack {
-                    AddExpander(color: .accentColor, showAddItem: self.$addItemModalDisplayed).padding()
+            if (self.items.count > 0) {
+                List {
+                    ForEach(self.items) { item in
+                        Text(item.name)
+                    }.onDelete(perform: removeItem)
+                        .onMove(perform: moveItem)
                 }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        AddExpander(color: .accentColor, showAddItem: self.$addItemModalDisplayed).padding()
+                    }
+                }
+            } else {
+                AddButton(action: {self.addItemModalDisplayed = true}, text: "Add an Item!")
             }
                 
         }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
