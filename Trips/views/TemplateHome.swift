@@ -41,16 +41,24 @@ struct TemplateHome: View {
     var body: some View {
         NavigationView {
             GeometryReader { geo in
-                ScrollView {
-                    if (self.templates.count > 0) {
-                            ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                                TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection).environment(\.managedObjectContext, self.context)
-                            }
-                            Spacer()
-                    } else {
-                        AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
+                if (self.templates.count > 0) {
+                    ScrollView {
+                        ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
+                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection).environment(\.managedObjectContext, self.context)
                         }
+                        Spacer()
                     }
+                } else {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                }
             }
             .navigationBarTitle("Templates" + (self.refreshing ? "" : ""))
             .navigationBarItems(trailing:
