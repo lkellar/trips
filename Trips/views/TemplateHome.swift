@@ -41,7 +41,7 @@ struct TemplateHome: View {
     var body: some View {
         NavigationView {
             GeometryReader { geo in
-                VStack {
+                ScrollView {
                     if (self.templates.count > 0) {
                             ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
                                 TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection).environment(\.managedObjectContext, self.context)

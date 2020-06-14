@@ -85,7 +85,12 @@ struct AddExpander: View {
                                     self.radius = 15
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
-                                    self.showExpandedText.toggle()
+                                    self.showExpandedText = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                    if !self.expand {
+                                        self.unExpand();
+                                    }
                                 }
                             } else {
                                 self.showAddItem = true

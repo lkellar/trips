@@ -16,6 +16,8 @@ struct EditTemplate: View {
     var template: Category
     @Binding var refreshing: Bool
     
+    @State var showDeleteAlert: Bool = false
+    
     @State var updatedName: String = ""
    
     var body: some View {
@@ -31,17 +33,22 @@ struct EditTemplate: View {
                     //Text((self.refreshing ? "" : ""))
                 }
                 Button(action: {
-                    do {
-                        self.context.delete(self.template)
-                        try self.context.save()
-                    } catch {
-                        print(error)
-                    }
-                    
-                    self.presentationMode.wrappedValue.dismiss()
+                    self.showDeleteAlert = true;
                 }) {
                     Text("Delete").foregroundColor(.red)
-                }
+                }.alert(isPresented: self.$showDeleteAlert, content: {
+                    Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
+                          message: Text("This cannot be undone."),
+                          primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                            do {
+                                self.context.delete(self.template)
+                                try self.context.save()
+                            } catch {
+                                print(error)
+                            }
+                        self.presentationMode.wrappedValue.dismiss()
+                          }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
+                })
             }
             .navigationBarTitle("Edit Template")
             .navigationBarItems(trailing:
