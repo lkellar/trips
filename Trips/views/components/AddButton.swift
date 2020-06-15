@@ -26,7 +26,7 @@ struct AddButton: View {
                     .font(.title)
                     .padding()
                     .background(self.accent)
-                    .foregroundColor(Color(UIColor.systemGray6))
+                    .foregroundColor(.white)
                     .cornerRadius(40)
                     .padding(20)
         }
