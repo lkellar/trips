@@ -81,7 +81,11 @@ struct TemplateDetail: View {
     }
     
     func removeItem(at offsets: IndexSet) {
-        self.template.removeFromItems(at: NSIndexSet(indexSet: offsets))
+        for offset in offsets {
+            let item = self.items[offset]
+            self.template.removeFromItems(item)
+            self.context.delete(item)
+        }
     }
     
     func moveItem(from source: IndexSet, to destination: Int) {

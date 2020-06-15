@@ -180,7 +180,9 @@ struct EditTrip: View {
     
     func deleteCategory(at offsets: IndexSet) {
         for offset in offsets {
-            self.trip.removeFromCategories(self.categories[offset])
+            let category = self.categories[offset]
+            self.trip.removeFromCategories(category)
+            self.context.delete(category)
         }
             
         saveContext(self.context)

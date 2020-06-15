@@ -169,8 +169,9 @@ struct TripDetail: View {
             let items = fetchItems(category, context)
             
             for offset in offsets {
-                category.removeFromItems(items[offset])
-                //self.context.delete(items[offset])
+                let item = items[offset]
+                category.removeFromItems(item)
+                self.context.delete(item)
             }
                         
             saveContext(self.context)

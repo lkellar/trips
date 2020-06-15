@@ -96,6 +96,11 @@ struct EditCategory: View {
                     Alert(title: Text("There are no other Trips"),
                         message: Text("Please go create another Trip first"),
                         dismissButton: .default(Text("Dismiss")))
+                    })
+                .onDisappear(perform: {
+                    self.category.name = self.updatedName
+                    
+                    saveContext(self.context)
                 })
         }).navigationViewStyle(StackNavigationViewStyle())
     }
