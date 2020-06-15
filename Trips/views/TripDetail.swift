@@ -25,6 +25,7 @@ struct TripDetail: View {
     @State var completedAlert = false
     
     @Binding var accent: Color
+    @Binding var selection: NSManagedObjectID?
     
     var trip: Trip
 
@@ -34,7 +35,7 @@ struct TripDetail: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip, accent: Binding<Color>) {
+    init(trip: Trip, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -42,6 +43,7 @@ struct TripDetail: View {
         self.itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
         
         self._accent = accent
+        self._selection = selection
     }
     
     var body: some View {
@@ -136,7 +138,7 @@ struct TripDetail: View {
                     Image(systemName: "info.circle")
                     }).padding()
                     .sheet(isPresented: $editTripDisplayed, content: {
-                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent).environment(\.managedObjectContext, self.context)
+                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent, selection: self.$selection).environment(\.managedObjectContext, self.context)
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 Button(action: {
                     print("Hidden 1")

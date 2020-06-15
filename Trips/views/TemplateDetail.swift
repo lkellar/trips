@@ -70,7 +70,7 @@ struct TemplateDetail: View {
                     Image(systemName: "info.circle")
                     })
                     .sheet(isPresented: $editTemplateDisplayed, content: {
-                        EditTemplate(template: self.template, refreshing: self.$refreshing).environment(\.managedObjectContext, self.context)
+                        EditTemplate(template: self.template, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context)
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 

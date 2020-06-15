@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct EditTrip: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -35,6 +36,7 @@ struct EditTrip: View {
     @Binding var refreshing: Bool
     
     @Binding var accent: Color
+    @Binding var selection: NSManagedObjectID?
     
     var validDates: Bool {
         get {
@@ -43,7 +45,7 @@ struct EditTrip: View {
     }
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -72,6 +74,8 @@ struct EditTrip: View {
         } else {
             self._updatedIcon = State.init(initialValue: "house.fill")
         }
+        
+        self._selection = selection
     }
     
     var body: some View {
@@ -137,6 +141,8 @@ struct EditTrip: View {
                             } catch {
                                 print(error)
                             }
+                                
+                            self.selection = nil
                             
                             self.presentationMode.wrappedValue.dismiss()
                               }), secondaryButton: Alert.Button.cancel(Text("Cancel")))

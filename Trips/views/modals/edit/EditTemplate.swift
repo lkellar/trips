@@ -19,6 +19,8 @@ struct EditTemplate: View {
     @State var showDeleteAlert: Bool = false
     
     @State var updatedName: String = ""
+    
+    @Binding var selection: NSManagedObjectID?
    
     var body: some View {
         NavigationView {
@@ -46,6 +48,8 @@ struct EditTemplate: View {
                             } catch {
                                 print(error)
                             }
+                            
+                            self.selection = nil
                         self.presentationMode.wrappedValue.dismiss()
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })

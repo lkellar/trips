@@ -15,6 +15,8 @@ struct TripHome: View {
     
     @Binding var accent: Color
     
+    @State var selection: NSManagedObjectID? = nil
+    
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     @State var showAddTrip = false
@@ -25,8 +27,12 @@ struct TripHome: View {
                 if (self.trips.count > 0) {
                     List {
                         ForEach(sortTrips(self.trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent)) {
-                                TripHomeRow(trip: trip)
+                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent, selection: self.$selection), tag:trip.objectID, selection: self.$selection) {
+                                    Button(action: {
+                                        self.selection = trip.objectID
+                                    }) {
+                                        TripHomeRow(trip: trip)
+                                    }
                                 }
                             }
                     }
