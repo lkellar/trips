@@ -21,7 +21,6 @@ struct AddItem: View {
     
     @State var quantity: Int = 1
     
-    @State var showTextField: Bool = true
     @Binding var refreshing: Bool
     var accent: Color
     
@@ -29,17 +28,7 @@ struct AddItem: View {
         NavigationView {
             Form {
                 Section {
-                    if showTextField {
-                        TextField("Item Name", text: $title)
-                            .id("primary")
-                            .animation(Animation.default)
-                            .transition(.move(edge: .bottom))
-                    } else {
-                        TextField("Item Name", text: $title)
-                            .id("secondary")
-                            .animation(Animation.default)
-                            .transition(.move(edge: .bottom))
-                    }
+                    TextField("Item Name", text: $title)
                     
                     IntegratedStepper(quantity: self.$quantity, upperLimit: 20, lowerLimit: 1)
                     
@@ -66,9 +55,6 @@ struct AddItem: View {
                             self.saveItem(title: localTitle)
                         }
                         
-                        withAnimation {
-                            self.showTextField.toggle()
-                        }
                         self.quantity = 1
                     }) {
                         Text("Add Another")
