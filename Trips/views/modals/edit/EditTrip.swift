@@ -116,7 +116,6 @@ struct EditTrip: View {
                     Button(action: {
                         do {
                             try self.trip.beginNextLeg(context: self.context)
-                            self.presentationMode.wrappedValue.dismiss()
                         } catch {
                             print(error)
                         }

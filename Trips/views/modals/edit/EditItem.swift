@@ -40,8 +40,16 @@ struct EditItem: View {
                             if self.item.name.count > 0 {
                                 self.updatedName = self.item.name
                             }
-                    }
-                    //Text((self.refreshing ? "" : ""))
+                        }
+                        .onDisappear {
+                            if item.name != updatedName {
+                                item.name = updatedName
+                            }
+                            if self.selectedCategory != -1 && item.category != categories[selectedCategory] {
+                                item.category = categories[selectedCategory]
+                            }
+                            saveContext(context)
+                        }
                 }
                 Section {
                     Picker(selection: self.$selectedCategory, label: Text("Category"),
@@ -65,11 +73,7 @@ struct EditItem: View {
             }))
         }
         .accentColor(self.accent)
-        .onDisappear {
-            self.item.name = self.updatedName
-            self.item.category = self.categories[self.selectedCategory]
-            saveContext(self.context)
-        }.navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

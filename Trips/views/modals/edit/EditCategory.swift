@@ -28,10 +28,15 @@ struct EditCategory: View {
             Section {
                 TextField("Category Name", text: $updatedName)
                     .onAppear {
-                        if self.category.name.count > 0 {
-                            self.updatedName = self.category.name
+                        updatedName = category.name
+                    }
+                    .onDisappear(perform: {
+                        if updatedName.count > 0 && updatedName != category.name {
+                            category.name = updatedName
+                            saveContext(context)
                         }
-                }
+                        
+                    })
             }
                 
             Section(footer: Text("This will create a copy of this category in another Trip")) {
@@ -97,11 +102,6 @@ struct EditCategory: View {
                         message: Text("Please go create another Trip first"),
                         dismissButton: .default(Text("Dismiss")))
                     })
-                .onDisappear(perform: {
-                    self.category.name = self.updatedName
-                    
-                    saveContext(self.context)
-                })
         }).navigationViewStyle(StackNavigationViewStyle())
     }
 }
