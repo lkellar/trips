@@ -16,24 +16,26 @@ struct IncludeTemplates: View {
     @Binding var included: [Category]
     
     var body: some View {
-        List {
-            Section(footer: Text("A copy of selected Templates will be added to your Trip")) {
-                ForEach(self.templates, id:\.self) { template in
-                    Button(action: {
-                        guard let index = self.included.firstIndex(of: template) else {
-                           self.included.append(template)
-                            return
-                        }
-                        self.included.remove(at: index)
-                        
-                    }) {
-                        HStack {
-                            Text(template.name)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            if self.included.contains(template) {
-                                Image(systemName: "checkmark")
-                                    .foregroundColor(.blue)
+        Form {
+            List {
+                Section(footer: Text("A copy of selected Templates will be added to your Trip")) {
+                    ForEach(self.templates, id:\.self) { template in
+                        Button(action: {
+                            guard let index = self.included.firstIndex(of: template) else {
+                               self.included.append(template)
+                                return
+                            }
+                            self.included.remove(at: index)
+                            
+                        }) {
+                            HStack {
+                                Text(template.name)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                if self.included.contains(template) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.blue)
+                                }
                             }
                         }
                     }
