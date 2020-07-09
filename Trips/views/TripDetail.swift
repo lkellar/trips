@@ -59,6 +59,7 @@ struct TripDetail: View {
                                         HStack {
                                             Button(action: {self.itemModalDisplayed = true}) {
                                                 Text(item.name)
+                                                    .accentColor(.primary)
                                             }.sheet(isPresented: self.$itemModalDisplayed, content: {
                                                 EditItem(item: item, accent: self.accent, trip: self.trip).environment(\.managedObjectContext, self.context)
                                             })
@@ -91,9 +92,7 @@ struct TripDetail: View {
                                     .onMove(perform: self.getMoveFunction(category: category))
                             }
                         }
-                        Text("")
-                        Text("")
-                    }
+                    }.listStyle(GroupedListStyle())
                 //Text(refreshing ? "" : "")
                 } else {
                     if self.trip.categories.count > 0 && self.items.count > 0 {

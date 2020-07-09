@@ -11,15 +11,15 @@ import SwiftUI
 import CoreData
 
 func addSampleData(context: NSManagedObjectContext) {
-    let defaults = UserDefaults.standard
+    let defaults = NSUbiquitousKeyValueStore.default
     do {
         let dater = try context.fetch(Trip.allTripsFetchRequest())
-        guard dater.count == 0 else {
-            defaults.set(true, forKey: "hasRunBefore")
-            return
-        }
         // on first run only
         guard defaults.bool(forKey: "hasRunBefore") == false else {
+            return
+        }
+        guard dater.count == 0 else {
+            defaults.set(true, forKey: "hasRunBefore")
             return
         }
     } catch {

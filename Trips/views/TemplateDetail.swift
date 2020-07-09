@@ -41,7 +41,8 @@ struct TemplateDetail: View {
                         Text(item.name)
                     }.onDelete(perform: removeItem)
                         .onMove(perform: moveItem)
-                }
+                    // using grouped style here, even though there's no grouping, just because it looks better and matches TripDetail
+                }.listStyle(GroupedListStyle())
                 
                 VStack {
                     Spacer()

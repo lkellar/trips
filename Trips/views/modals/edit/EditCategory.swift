@@ -28,12 +28,12 @@ struct EditCategory: View {
             Section {
                 TextField("Category Name", text: $updatedName)
                     .onAppear {
-                        updatedName = category.name
+                        self.updatedName = self.category.name
                     }
                     .onDisappear(perform: {
-                        if updatedName.count > 0 && updatedName != category.name {
-                            category.name = updatedName
-                            saveContext(context)
+                        if self.updatedName.count > 0 && self.updatedName != self.category.name {
+                            self.category.name = self.updatedName
+                            saveContext(self.context)
                         }
                         
                     })
