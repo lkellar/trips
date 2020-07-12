@@ -20,14 +20,12 @@ struct CopyToOtherTrip: View {
     var body: some View {
         // For some reason, maybe the filter? it presents backwards
         List {
-            if self.showSelf {
-                ForEach(self.trips.filter {$0 != self.trip}.reversed(), id: \.self) { trip in
-                    Button(action:{
-                        copyToOther(category: self.category, trip: trip, context: self.context)
-                        self.showSelf = false
-                    }) {
-                        TripHomeRow(trip: trip)
-                    }
+            ForEach(self.trips.filter {$0 != self.trip}.reversed(), id: \.self) { trip in
+                Button(action:{
+                    self.showSelf = false
+                    copyToOther(category: self.category, trip: trip, context: self.context)
+                }) {
+                    TripHomeRow(trip: trip)
                 }
             }
         }
