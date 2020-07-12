@@ -49,7 +49,6 @@ struct EditCategory: View {
                 }) {
                     Text("Copy to Other Trip")
                 }
-                
                 if self.showCopyToOther {
                     CopyToOtherTrip(trip: self.category.trip, category: self.category, showSelf: self.$showCopyToOther)
                 }

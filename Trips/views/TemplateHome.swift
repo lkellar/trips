@@ -56,6 +56,15 @@ struct TemplateHome: View {
                             AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
                             Spacer()
                         }
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                SampleDataFactory(context: self.context).addSampleTemplates()
+                            }) {
+                                Text("Or add example Templates.")
+                            }
+                            Spacer()
+                        }
                         Spacer()
                     }
                 }

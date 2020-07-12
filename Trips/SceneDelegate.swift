@@ -26,8 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
              // ❇️ Get the managedObjectContext from the persistent container
             let managedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
             
-            addSampleData(context: managedObjectContext)
-            
             // ❇️ Pass it to the ContentView through the managedObjectContext @Environment variable
             let contentView = AppView()
                 .environment(\.managedObjectContext, managedObjectContext)

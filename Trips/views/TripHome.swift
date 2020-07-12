@@ -38,6 +38,12 @@ struct TripHome: View {
                     }.listStyle(DefaultListStyle())
                 } else {
                     AddButton(action: {self.showAddTrip = true}, text: "Add a Trip!")
+                    Button(action: {
+                        SampleDataFactory(context: self.context).addSampleTrips()
+                    }) {
+                        Text("Or add example Trips.")
+                    }
+                    
                 }
             }
             .navigationBarTitle("Trips")

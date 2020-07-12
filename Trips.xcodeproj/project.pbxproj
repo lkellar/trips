@@ -21,7 +21,7 @@
 		A034F74A24536C980025EA62 /* EditCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74924536C980025EA62 /* EditCategory.swift */; };
 		A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */; };
 		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
-		A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleTrips.swift */; };
+		A04D80E92342BC08004EE95F /* sampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleData.swift */; };
 		A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564377240FF9F10032217A /* AddTemplateToExisting.swift */; };
 		A05C7CA92484481A006A791A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05C7CA82484481A006A791A /* CloudKit.framework */; };
 		A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */; };
@@ -65,7 +65,7 @@
 		A034F74924536C980025EA62 /* EditCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategory.swift; sourceTree = "<group>"; };
 		A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyToOtherTrip.swift; sourceTree = "<group>"; };
 		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
-		A04D80E82342BC08004EE95F /* sampleTrips.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleTrips.swift; sourceTree = "<group>"; };
+		A04D80E82342BC08004EE95F /* sampleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleData.swift; sourceTree = "<group>"; };
 		A0564377240FF9F10032217A /* AddTemplateToExisting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplateToExisting.swift; sourceTree = "<group>"; };
 		A05C7CA624844818006A791A /* Trips.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Trips.entitlements; sourceTree = "<group>"; };
 		A05C7CA82484481A006A791A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
@@ -131,7 +131,7 @@
 				A033D3E5234273010065C3A4 /* core data */,
 				A0877C5623326DD20006F902 /* views */,
 				A01FB8BF2331CE48008062A1 /* AppDelegate.swift */,
-				A04D80E82342BC08004EE95F /* sampleTrips.swift */,
+				A04D80E82342BC08004EE95F /* sampleData.swift */,
 				A01FB8C12331CE48008062A1 /* SceneDelegate.swift */,
 				A01FB8C52331CE4A008062A1 /* Assets.xcassets */,
 				A01FB8CA2331CE4A008062A1 /* LaunchScreen.storyboard */,
@@ -340,7 +340,7 @@
 				A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */,
 				A034F74A24536C980025EA62 /* EditCategory.swift in Sources */,
 				A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */,
-				A04D80E92342BC08004EE95F /* sampleTrips.swift in Sources */,
+				A04D80E92342BC08004EE95F /* sampleData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
