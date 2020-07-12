@@ -31,8 +31,11 @@ struct EditCategory: View {
                         self.updatedName = self.category.name
                     }
                     .onDisappear(perform: {
-                        if self.updatedName.count > 0 && self.updatedName != self.category.name {
+                        if self.updatedName.count > 0 && self.updatedName != self.category.name && !self.category.isDeleted{
                             self.category.name = self.updatedName
+                        }
+                        
+                        if (self.category.hasChanges) {
                             saveContext(self.context)
                         }
                         
@@ -84,12 +87,7 @@ struct EditCategory: View {
                     Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                        do {
                             self.context.delete(self.category)
-                            try self.context.save()
-                        } catch {
-                            print(error)
-                        }
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })
                 

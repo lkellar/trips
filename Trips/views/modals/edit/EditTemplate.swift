@@ -42,15 +42,12 @@ struct EditTemplate: View {
                     Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                            do {
+                            self.presentationMode.wrappedValue.dismiss()
+
+                            DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
                                 self.context.delete(self.template)
-                                try self.context.save()
-                            } catch {
-                                print(error)
-                            }
-                            
-                            self.selection = nil
-                        self.presentationMode.wrappedValue.dismiss()
+                                self.selection = nil
+                            })
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })
             }
@@ -62,9 +59,13 @@ struct EditTemplate: View {
                 Text("Close")
             }))
         }.onDisappear {
-            self.template.name = self.updatedName
-            saveContext(self.context)
-            self.refreshing.toggle()
+            if !self.template.isDeleted && self.template.name != self.updatedName {
+                self.template.name = self.updatedName
+            }
+            if self.template.hasChanges {
+                saveContext(self.context)
+                self.refreshing.toggle()
+            }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }

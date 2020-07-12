@@ -6,7 +6,7 @@ Built with SwiftUI and Core Data
 # Installation
  
  To build and run the app, the following requirements are needed
-  *  [Xcode 11](https://developer.apple.com/xcode/)
+  *  [Xcode](https://developer.apple.com/xcode/)
 
 Then, clone the repo, (easiest way is via the [Open In Xcode button on Github](https://github.blog/2017-06-05-clone-in-xcode/))
 

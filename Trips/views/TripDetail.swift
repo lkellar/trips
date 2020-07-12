@@ -25,7 +25,7 @@ struct TripDetail: View {
     @State var completedAlert = false
     
     @Binding var accent: Color
-    @Binding var selection: NSManagedObjectID?
+    @Binding var selection: Int?
     
     var trip: Trip
 
@@ -35,7 +35,7 @@ struct TripDetail: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
+    init(trip: Trip, accent: Binding<Color>, selection: Binding<Int?>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -47,122 +47,131 @@ struct TripDetail: View {
     }
     
     var body: some View {
-        ZStack {
-            VStack {
-                if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0 && self.items.count > 0) {
-                    List {
-                        ForEach(self.categories, id: \.self) {category in
-                            // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                            Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
-                                ForEach(self.items.filter {$0.category == category}) { item in
-                                    if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
-                                        HStack {
-                                            Button(action: {self.itemModalDisplayed = true}) {
-                                                Text(item.name)
-                                                    .accentColor(.primary)
-                                            }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                                EditItem(item: item, accent: self.accent, trip: self.trip).environment(\.managedObjectContext, self.context)
-                                            })
-                                            Spacer()
-                                            Button(action: {
-                                                self.toggleItemCompleted(item)
-                                                let impactMed = UIImpactFeedbackGenerator(style: .medium)
-                                                impactMed.impactOccurred()
-                                                
-                                                // If there are no uncompleted items
-                                                if (self.items.filter {$0.completed == false}).count == 0 {
-                                                    self.completedAlert = true
-                                                }
-                                            }) {
-                                                ZStack {
-                                                RoundedRectangle(cornerRadius: CGFloat(15))
-                                                .stroke(Color.secondary, lineWidth: CGFloat(3))
+        if self.trip.isDeleted {
+            Text("No Trip Selected").font(.subheadline)
+                .onAppear(perform: {
+                    self.accent = Color.blue
+                })
+                .navigationBarTitle("No Trip Selected")
+                .navigationBarItems(trailing: EmptyView())
+        } else {
+            ZStack {
+                VStack {
+                    if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0 && self.items.count > 0) {
+                        List {
+                            ForEach(self.categories, id: \.self) {category in
+                                // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
+                                Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
+                                    ForEach(self.items.filter {$0.category == category}) { item in
+                                        if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
+                                            HStack {
+                                                Button(action: {self.itemModalDisplayed = true}) {
+                                                    Text(item.name)
+                                                        .accentColor(.primary)
+                                                }.sheet(isPresented: self.$itemModalDisplayed, content: {
+                                                    EditItem(item: item, accent: self.accent, trip: self.trip).environment(\.managedObjectContext, self.context)
+                                                })
+                                                Spacer()
+                                                Button(action: {
+                                                    self.toggleItemCompleted(item)
+                                                    let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                                                    impactMed.impactOccurred()
                                                     
-                                                    if item.completed {
-                                                        Circle().fill(Color.secondary)
-                                                            .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                                    // If there are no uncompleted items
+                                                    if (self.items.filter {$0.completed == false}).count == 0 {
+                                                        self.completedAlert = true
                                                     }
-                                                    
-                                                }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
-                                                .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
-                                            }.buttonStyle(BorderlessButtonStyle())
+                                                }) {
+                                                    ZStack {
+                                                    RoundedRectangle(cornerRadius: CGFloat(15))
+                                                    .stroke(Color.secondary, lineWidth: CGFloat(3))
+                                                        
+                                                        if item.completed {
+                                                            Circle().fill(Color.secondary)
+                                                                .frame(width: CGFloat(16.0), height: CGFloat(16.0))
+                                                        }
+                                                        
+                                                    }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
+                                                    .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                                }.buttonStyle(BorderlessButtonStyle())
+                                            }
                                         }
-                                    }
-                                }.onDelete(perform: self.getDeleteFunction(category: category))
-                                    .onMove(perform: self.getMoveFunction(category: category))
+                                    }.onDelete(perform: self.getDeleteFunction(category: category))
+                                        .onMove(perform: self.getMoveFunction(category: category))
+                                }
                             }
+                        }.listStyle(GroupedListStyle())
+                    //Text(refreshing ? "" : "")
+                    } else {
+                        if self.trip.categories.count > 0 && self.items.count > 0 {
+                            AddButton(action: {
+                                do {
+                                    try self.trip.beginNextLeg(context: self.context)
+                                } catch {
+                                    print(error)
+                                }
+                            }, text: "Begin Next Leg", accent: self.accent)
+                            Text("This will uncheck all items.").font(.callout)
                         }
-                    }.listStyle(GroupedListStyle())
-                //Text(refreshing ? "" : "")
-                } else {
-                    if self.trip.categories.count > 0 && self.items.count > 0 {
-                        AddButton(action: {
-                            do {
-                                try self.trip.beginNextLeg(context: self.context)
-                            } catch {
-                                print(error)
-                            }
-                        }, text: "Begin Next Leg", accent: self.accent)
-                        Text("This will uncheck all items.").font(.callout)
+                    }
+                }
+                VStack {
+                    Spacer()
+                    HStack {
+                        AddExpander(color: self.accent, showAddItem: self.$modalDisplayed, showAddCategory: self.$categoryModalDisplayed).padding()
                     }
                 }
             }
-            VStack {
-                Spacer()
-                HStack {
-                    AddExpander(color: self.accent, showAddItem: self.$modalDisplayed, showAddCategory: self.$categoryModalDisplayed).padding()
-                }
-            }
+            .navigationBarTitle(trip.name)
+                .navigationBarItems(trailing: HStack {
+                    Button(action: {
+                        print("Hidden 0.5")
+                    }) {
+                        Spacer()
+                    }.alert(isPresented: $completedAlert, content: {
+                        Alert(title: Text("All Items Checked"),
+                              message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
+                              primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
+                                do {
+                                    try self.trip.beginNextLeg(context: self.context)
+                                } catch {
+                                    print(error)
+                                }
+                              }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
+                    })
+                    Button(action: {
+                        self.editTripDisplayed = true
+                    }, label: {
+                        Image(systemName: "info.circle")
+                        }).padding()
+                        .sheet(isPresented: $editTripDisplayed, content: {
+                            EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent, selection: self.$selection).environment(\.managedObjectContext, self.context)
+                        }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    Button(action: {
+                        print("Hidden 1")
+                    }) {
+                        Spacer()
+                    }
+                    .sheet(isPresented: $modalDisplayed, content: {
+                        AddItem(categories: self.trip.categories.allObjects as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    })
+                    Button(action: {
+                        print("Hidden 2")
+                    }) {
+                        Spacer()
+                    }
+                    .sheet(isPresented: $categoryModalDisplayed, content: {
+                        AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    })
+                    EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                }).onAppear(perform: {
+                    self.accent = Color.fromString(color: self.trip.color ?? "blue")
+                }).onDisappear(perform: {
+                    if (UIDevice.current.userInterfaceIdiom == .phone) {
+                        self.accent = Color.blue
+                    }
+                })
         }
-        .navigationBarTitle(trip.name)
-            .navigationBarItems(trailing: HStack {
-                Button(action: {
-                    print("Hidden 0.5")
-                }) {
-                    Spacer()
-                }.alert(isPresented: $completedAlert, content: {
-                    Alert(title: Text("All Items Checked"),
-                          message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
-                          primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
-                            do {
-                                try self.trip.beginNextLeg(context: self.context)
-                            } catch {
-                                print(error)
-                            }
-                          }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
-                })
-                Button(action: {
-                    self.editTripDisplayed = true
-                }, label: {
-                    Image(systemName: "info.circle")
-                    }).padding()
-                    .sheet(isPresented: $editTripDisplayed, content: {
-                        EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent, selection: self.$selection).environment(\.managedObjectContext, self.context)
-                    }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                Button(action: {
-                    print("Hidden 1")
-                }) {
-                    Spacer()
-                }
-                .sheet(isPresented: $modalDisplayed, content: {
-                    AddItem(categories: self.trip.categories.allObjects as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
-                })
-                Button(action: {
-                    print("Hidden 2")
-                }) {
-                    Spacer()
-                }
-                .sheet(isPresented: $categoryModalDisplayed, content: {
-                    AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
-                })
-                EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-            }).onAppear(perform: {
-                self.accent = Color.fromString(color: self.trip.color ?? "blue")
-            }).onDisappear(perform: {
-                if (UIDevice.current.userInterfaceIdiom == .phone) {
-                    self.accent = Color.blue
-                }
-            })
     }
     
     func getDeleteFunction(category: Category) -> (IndexSet) -> Void {

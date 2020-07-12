@@ -36,7 +36,7 @@ struct EditTrip: View {
     @Binding var refreshing: Bool
     
     @Binding var accent: Color
-    @Binding var selection: NSManagedObjectID?
+    @Binding var selection: Int?
     
     var validDates: Bool {
         get {
@@ -45,7 +45,7 @@ struct EditTrip: View {
     }
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>, selection: Binding<Int?>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -134,16 +134,10 @@ struct EditTrip: View {
                         Alert(title: Text("Are you sure you want to delete \(self.updatedTitle)?"),
                               message: Text("This cannot be undone."),
                               primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                            do {
                                 self.context.delete(self.trip)
-                                try self.context.save()
-                            } catch {
-                                print(error)
-                            }
                                 
-                            self.selection = nil
-                            
-                            self.presentationMode.wrappedValue.dismiss()
+                                self.selection = nil
+                                self.presentationMode.wrappedValue.dismiss()
                               }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                     })
                 }
@@ -162,24 +156,28 @@ struct EditTrip: View {
         }.navigationViewStyle(StackNavigationViewStyle())
         .accentColor(self.accent)
         .onDisappear {
-            self.trip.name = self.updatedTitle
-            if self.validDates {
-                if self.showStartDate {
-                    self.trip.startDate = self.updatedStartDate
-                } else {
-                    self.trip.startDate = nil
+            if !self.trip.isDeleted {
+                self.trip.name = self.updatedTitle
+                if self.validDates {
+                    if self.showStartDate {
+                        self.trip.startDate = self.updatedStartDate
+                    } else {
+                        self.trip.startDate = nil
+                    }
+                    if self.showEndDate {
+                        self.trip.endDate = self.updatedEndDate
+                    } else {
+                        self.trip.endDate = nil
+                    }
                 }
-                if self.showEndDate {
-                    self.trip.endDate = self.updatedEndDate
-                } else {
-                    self.trip.endDate = nil
-                }
+                self.trip.showCompleted = self.showCompleted
+                self.trip.color = self.accent.description
+                self.trip.icon = self.updatedIcon
             }
-            self.trip.showCompleted = self.showCompleted
-            self.trip.color = self.accent.description
-            self.trip.icon = self.updatedIcon
             
-            saveContext(self.context)
+            if self.trip.hasChanges {
+                saveContext(self.context)
+            }
         }
     }
     

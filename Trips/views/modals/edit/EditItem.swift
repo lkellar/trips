@@ -42,13 +42,18 @@ struct EditItem: View {
                             }
                         }
                         .onDisappear {
-                            if self.item.name != self.updatedName {
-                                self.item.name = self.updatedName
+                            if !self.item.isDeleted {
+                                if self.item.name != self.updatedName {
+                                    self.item.name = self.updatedName
+                                }
+                                if self.selectedCategory != -1 && self.item.category != self.categories[self.selectedCategory] {
+                                    self.item.category = self.categories[self.selectedCategory]
+                                }
                             }
-                            if self.selectedCategory != -1 && self.item.category != self.categories[self.selectedCategory] {
-                                self.item.category = self.categories[self.selectedCategory]
+                            if self.item.hasChanges {
+                                
+                                saveContext(self.context)
                             }
-                            saveContext(self.context)
                         }
                 }
                 Section {
