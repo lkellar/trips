@@ -25,7 +25,7 @@ struct TripDetail: View {
     @State var completedAlert = false
     
     @Binding var accent: Color
-    @Binding var selection: Int?
+    @Binding var selection: NSManagedObjectID?
     
     var trip: Trip
 
@@ -35,7 +35,7 @@ struct TripDetail: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip, accent: Binding<Color>, selection: Binding<Int?>) {
+    init(trip: Trip, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
         self.trip = trip
         self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
