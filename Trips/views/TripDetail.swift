@@ -46,6 +46,7 @@ struct TripDetail: View {
         self._selection = selection
     }
     
+    @ViewBuilder
     var body: some View {
         if self.trip.isDeleted {
             Text("No Trip Selected").font(.subheadline)
