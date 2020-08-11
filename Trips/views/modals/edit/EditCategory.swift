@@ -6,6 +6,7 @@
 //  Copyright © 2020 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 struct EditCategory: View {
@@ -87,6 +88,9 @@ struct EditCategory: View {
                     Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                            self.category.items.forEach {item in
+                                self.context.delete(item as! NSManagedObject)
+                            }
                             self.context.delete(self.category)
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })

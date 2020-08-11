@@ -21,6 +21,9 @@ struct TemplatePair: Hashable {
 }
 
 struct TemplateHome: View {
+    @Binding var selectionType: SelectionType
+    @Binding var viewSelection: NSManagedObjectID?
+
     @State var addTemplateModalDisplayed = false
     
     @State var refreshing = false
@@ -44,7 +47,7 @@ struct TemplateHome: View {
                 if (self.templates.count > 0) {
                     ScrollView {
                         ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection).environment(\.managedObjectContext, self.context)
+                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection, selectionType: $selectionType).environment(\.managedObjectContext, self.context)
                         }
                         Spacer()
                     }
@@ -77,10 +80,7 @@ struct TemplateHome: View {
                 Image(systemName: "plus")
             }
                 // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                ).padding()
-                .sheet(isPresented: $addTemplateModalDisplayed, content: {
-                    AddTemplate().environment(\.managedObjectContext, self.context)
-                }))
+                ).padding())
                 Text("No Template Selected").font(.subheadline)
             }.onDisappear(perform: {
                 self.selection = nil
@@ -100,18 +100,19 @@ struct TemplatePairView: View {
     var width: Int
     
     @Binding var selection: NSManagedObjectID?
+    @Binding var selectionType: SelectionType
     
     var body: some View {
         HStack {
             Spacer()
         
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context), tag: pair.first.objectID, selection: $selection) {
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing, selection: self.$selection).onAppear(perform: {selectionType = .template}), tag: pair.first.objectID, selection: $selection) {
                 CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: self.width, selection: $selection)
         }
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context), tag: pair.second!.objectID, selection: $selection) {
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing, selection: self.$selection).onAppear(perform: {selectionType = .template}), tag: pair.second!.objectID, selection: $selection) {
                 CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: self.width, selection: $selection)
             }
         } else {
@@ -128,6 +129,6 @@ struct TemplatePairView: View {
 
 struct TemplateHome_Previews: PreviewProvider {
     static var previews: some View {
-        TemplateHome()
+        NoPreview()
     }
 }

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 enum TripError : Error {
@@ -21,6 +22,9 @@ struct AddTrip: View {
     @State var endDate: Date = Date()
     @State var showEndDate: Bool = false
     @State var includedTemplates: [Category] = []
+
+    @Binding var selectionType: SelectionType
+    @Binding var viewSelection: NSManagedObjectID?
     
     @Environment(\.managedObjectContext) var context
     
@@ -33,45 +37,40 @@ struct AddTrip: View {
     }
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Trip Name", text: $title)
+        Form {
+            Section {
+                TextField("Trip Name", text: $title)
+            }
+            
+            TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
+            
+            TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
+            
+            Section {
+                NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
+                    Text("Templates")
                 }
-                
-                TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
-                
-                TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
-                
-                Section {
-                    NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
-                        Text("Templates")
-                    }
-                }
-                
-                Section(header: Text("Color")) {
-                    ColorPicker(updatedColor: $color)
-                }
-                
-                Section(header: Text("Icon")) {
-                    IconPicker(selectedIcon: self.$icon)
-                }
-                
-                Section {
-                    Button(action: {
-                        self.saveTrip()
-                    }) {
-                        Text("Save")
-                    }.disabled(!self.checkTripValidity())
-                }
-            }.navigationBarTitle("Add Trip")
-            .navigationBarItems(trailing:
+            }
+            
+            Section(header: Text("Color")) {
+                ColorPicker(updatedColor: $color)
+            }
+            
+            Section(header: Text("Icon")) {
+                IconPicker(selectedIcon: self.$icon)
+            }
+            
+            Section {
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Text("Cancel")
-                }))
-        }.navigationViewStyle(StackNavigationViewStyle())
+                    let objectId = self.saveTrip()
+                    
+                    selectionType = .trip
+                    viewSelection = objectId
+                }) {
+                    Text("Save")
+                }.disabled(!self.checkTripValidity())
+            }
+        }.navigationBarTitle("Add Trip")
     }
     
     func checkTripValidity() -> Bool {
@@ -84,7 +83,7 @@ struct AddTrip: View {
         return true
     }
     
-    func saveTrip() {
+    func saveTrip() -> NSManagedObjectID {
         let pendingTrip = Trip(context: self.context)
         
         pendingTrip.name = self.title
@@ -107,7 +106,7 @@ struct AddTrip: View {
         
         saveContext(self.context)
         
-        self.presentationMode.wrappedValue.dismiss()
+        return pendingTrip.objectID
     }
 }
 

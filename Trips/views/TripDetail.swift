@@ -46,7 +46,6 @@ struct TripDetail: View {
         self._selection = selection
     }
     
-    @ViewBuilder
     var body: some View {
         if self.trip.isDeleted {
             Text("No Trip Selected").font(.subheadline)
@@ -165,13 +164,12 @@ struct TripDetail: View {
                         AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
                     })
                     EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                }).onAppear(perform: {
-                    self.accent = Color.fromString(color: self.trip.color ?? "blue")
-                }).onDisappear(perform: {
-                    if (UIDevice.current.userInterfaceIdiom == .phone) {
-                        self.accent = Color.blue
-                    }
                 })
+            .onDisappear(perform: {
+                if (UIDevice.current.userInterfaceIdiom == .phone) {
+                    self.accent = Color.blue
+                }
+            })
         }
     }
     

@@ -57,6 +57,19 @@ extension Trip {
     @objc(removeCategories:)
     @NSManaged public func removeFromCategories(_ values: NSOrderedSet)
     
+    static func fetchOneTrip(context: NSManagedObjectContext) -> Trip? {
+        let request: NSFetchRequest<Trip> = Trip.fetchRequest() as! NSFetchRequest<Trip>
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "startDate", ascending: true)]
+        request.fetchLimit = 1
+
+        do {
+            return try context.fetch(request)[0]
+        } catch {
+            return nil
+        }
+    }
+    
     static func allTripsFetchRequest() -> NSFetchRequest<Trip> {
         let request: NSFetchRequest<Trip> = Trip.fetchRequest() as! NSFetchRequest<Trip>
         

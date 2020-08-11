@@ -6,33 +6,36 @@
 //  Copyright © 2020 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 struct AppView: View {
     @Environment(\.managedObjectContext) var context
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #endif
+    
+    @State var viewSelection: NSManagedObjectID? = nil
+    @State var selectionType: SelectionType = .trip
     
     @State var accentColor: Color = Color.blue
     
-    var body: some View {
-        TabView {
-            TripHome(accent: $accentColor)
-                .environment(\.managedObjectContext, context)
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Trips")
-                }
-            TemplateHome()
-                .environment(\.managedObjectContext, context)
-                .tabItem {
-                    Image(systemName: "tray.full.fill")
-                    Text("Templates")
-                 }
-        }.accentColor(self.accentColor)
+    @ViewBuilder var body: some View {
+        #if os(iOS)
+        if horizontalSizeClass == .compact {
+            TabController(selectionType: $selectionType, viewSelection: $viewSelection, accent: $accentColor)
+        } else {
+            SidebarController(accent: $accentColor, viewSelection: $viewSelection, selectionType: $selectionType)
+        }
+        #else
+        SidebarController()
+        #endif
+        
     }
 }
 
 struct AppView_Previews: PreviewProvider {
     static var previews: some View {
-        Text("My Macintosh Can't do PReviews very well")
+        NoPreview()
     }
 }

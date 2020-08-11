@@ -13,9 +13,9 @@ struct TripHome: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var context
     
+    @Binding var selectionType: SelectionType
+    @Binding var viewSelection: NSManagedObjectID?
     @Binding var accent: Color
-    
-    @State var selection: NSManagedObjectID? = nil
     
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
@@ -27,9 +27,9 @@ struct TripHome: View {
                 if (self.trips.count > 0) {
                     List {
                         ForEach(sortTrips(self.trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent, selection: self.$selection), tag:trip.objectID, selection: self.$selection) {
+                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent, selection: $viewSelection).onAppear(perform: {selectionType = .trip}), tag:trip.objectID, selection: $viewSelection) {
                                     Button(action: {
-                                        self.selection = trip.objectID
+                                        viewSelection = trip.objectID
                                     }) {
                                         TripHomeRow(trip: trip)
                                     }
@@ -53,9 +53,6 @@ struct TripHome: View {
                  }) {
                     Image(systemName: "plus")
                 }.padding()
-                .sheet(isPresented: $showAddTrip, content: {
-                    AddTrip().environment(\.managedObjectContext, self.context)
-                })
             )
             
             Text("No Trip Selected").font(.subheadline).onAppear(perform: {
@@ -66,13 +63,6 @@ struct TripHome: View {
             self.accent = Color.blue
         })
 
-    }
-    
-    func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
-        var newTrips = trips.filter {$0.startDate != nil}
-        newTrips = newTrips.sorted(by: {$0.startDate! < $1.startDate!})
-        newTrips.append(contentsOf: trips.filter {$0.startDate == nil})
-        return newTrips
     }
 }
 

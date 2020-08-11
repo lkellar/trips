@@ -45,6 +45,9 @@ struct EditTemplate: View {
                             self.presentationMode.wrappedValue.dismiss()
 
                             DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+                                self.template.items.forEach {item in
+                                    self.context.delete(item as! NSManagedObject)
+                                }
                                 self.context.delete(self.template)
                                 self.selection = nil
                             })
