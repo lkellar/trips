@@ -11,7 +11,7 @@ import SwiftUI
 
 struct Sidebar: View {
     @Binding var selection: NSManagedObjectID?
-    @Binding var selectionType: SelectionType
+    @Binding var selectionType: PrimarySelectionType
     @State var tripsExpanded: Bool = true
     @State var templatesExpanded: Bool = true
     
@@ -24,8 +24,8 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $tripsExpanded) {
                 ForEach(sortTrips(trips)) { trip in
                     Button(action: {
-                        self.selection = trip.objectID
-                        self.selectionType = .trip
+                        selection = trip.objectID
+                        selectionType = .trip
                     }) {
                         Label(trip.name, systemImage: trip.icon?.replacingOccurrences(of: ".fill", with: "") ?? "house").accentColor(Color.fromString(color: trip.color ?? "default"))
                     } 
@@ -36,8 +36,8 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $templatesExpanded) {
                 ForEach(templates) { template in
                     Button(action: {
-                        self.selection = template.objectID
-                        self.selectionType = .template
+                        selection = template.objectID
+                        selectionType = .template
                     }) {
                         Text(template.name)
                     }

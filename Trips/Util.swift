@@ -158,9 +158,15 @@ func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
     return newTrips
 }
 
-enum SelectionType {
+enum PrimarySelectionType {
     case trip
     case template
     case addTrip
     case addTemplate
+}
+
+enum SecondarySelectionType {
+    case editItem
+    case editTrip
+    case none
 }

@@ -16,19 +16,19 @@ struct IconPicker: View {
     var body: some View {
         VStack {
             HStack {
-                IconPickerCircle(icon: "house.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-                IconPickerCircle(icon: "airplane", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-                IconPickerCircle(icon: "briefcase.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-                IconPickerCircle(icon: "map.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-                IconPickerCircle(icon: "gamecontroller.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
+                IconPickerCircle(icon: "house.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "airplane", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "briefcase.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "map.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "gamecontroller.fill", selectedColor: $selectedIcon, iconSize: iconSize)
             }
             HStack {
             
-            IconPickerCircle(icon: "gift.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-            IconPickerCircle(icon: "studentdesk", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-            IconPickerCircle(icon: "cart.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-            IconPickerCircle(icon: "car.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
-            IconPickerCircle(icon: "person.2.fill", selectedColor: self.$selectedIcon, iconSize: self.iconSize)
+            IconPickerCircle(icon: "gift.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+            IconPickerCircle(icon: "studentdesk", selectedColor: $selectedIcon, iconSize: iconSize)
+            IconPickerCircle(icon: "cart.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+            IconPickerCircle(icon: "car.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+            IconPickerCircle(icon: "person.2.fill", selectedColor: $selectedIcon, iconSize: iconSize)
             }
         }
     }

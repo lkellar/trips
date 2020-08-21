@@ -47,35 +47,35 @@ struct EditTrip: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
         self.trip = trip
-        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
-        self._showCompleted = State.init(initialValue: trip.showCompleted)
+        _showCompleted = State.init(initialValue: trip.showCompleted)
         
         if let startDate = trip.startDate {
-            self._updatedStartDate = State.init(initialValue: startDate)
-            self._showStartDate = State.init(initialValue: true)
+            _updatedStartDate = State.init(initialValue: startDate)
+            _showStartDate = State.init(initialValue: true)
         } else {
-            self._updatedStartDate = State.init(initialValue: Date())
+            _updatedStartDate = State.init(initialValue: Date())
         }
         
         if let endDate = trip.endDate {
-            self._updatedEndDate = State.init(initialValue: endDate)
-            self._showEndDate = State.init(initialValue: true)
+            _updatedEndDate = State.init(initialValue: endDate)
+            _showEndDate = State.init(initialValue: true)
         } else {
-            self._updatedEndDate = State.init(initialValue: Date())
+            _updatedEndDate = State.init(initialValue: Date())
         }
         
-        self._refreshing = refreshing
+        _refreshing = refreshing
         
-        self._accent = accent
+        _accent = accent
         
         if let icon = trip.icon {
-            self._updatedIcon = State.init(initialValue: icon)
+            _updatedIcon = State.init(initialValue: icon)
         } else {
-            self._updatedIcon = State.init(initialValue: "house.fill")
+            _updatedIcon = State.init(initialValue: "house.fill")
         }
         
-        self._selection = selection
+        _selection = selection
     }
     
     var body: some View {
@@ -84,38 +84,38 @@ struct EditTrip: View {
                 Section {
                     TextField("Trip Name", text: $updatedTitle)
                         .onAppear {
-                            self.updatedTitle = self.trip.name
+                            updatedTitle = trip.name
                     }
                 }
                 Toggle("Show Completed Items", isOn: $showCompleted)
                 
-                TripDateSelector(date: self.$updatedStartDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
+                TripDateSelector(date: $updatedStartDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
                 
-                TripDateSelector(date: self.$updatedEndDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
+                TripDateSelector(date: $updatedEndDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
                 
                 Section(header: Text("Color")) {
                     ColorPicker(updatedColor: $accent)
                 }
 
                 Section(header: Text("Icon")) {
-                    IconPicker(selectedIcon: self.$updatedIcon)
+                    IconPicker(selectedIcon: $updatedIcon)
                 }
                 
-                if (self.categories.count > 0) {
+                if (categories.count > 0) {
                     Section(header: Text("Categories")) {
-                        ForEach(self.categories, id: \.self) { category in
-                            NavigationLink(destination: EditCategory(category: category, accent: self.accent)) {
+                        ForEach(categories, id: \.self) { category in
+                            NavigationLink(destination: EditCategory(category: category, accent: accent)) {
                                 Text(category.name)
                             }
-                       }.onDelete(perform: self.deleteCategory)
-                            .onMove(perform: self.moveCategory)
+                       }.onDelete(perform: deleteCategory)
+                            .onMove(perform: moveCategory)
                     }
                 }
                 
                 Section(footer: Text("This will uncheck all items")) {
                     Button(action: {
                         do {
-                            try self.trip.beginNextLeg(context: self.context)
+                            try trip.beginNextLeg(context: context)
                         } catch {
                             print(error)
                         }
@@ -127,23 +127,23 @@ struct EditTrip: View {
                 Section {
                 
                     Button(action: {
-                        self.showDeleteAlert = true;
+                        showDeleteAlert = true;
                     }) {
                         Text("Delete").foregroundColor(.red)
-                    }.alert(isPresented: self.$showDeleteAlert, content: {
-                        Alert(title: Text("Are you sure you want to delete \(self.updatedTitle)?"),
+                    }.alert(isPresented: $showDeleteAlert, content: {
+                        Alert(title: Text("Are you sure you want to delete \(updatedTitle)?"),
                               message: Text("This cannot be undone."),
                               primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                                self.trip.categories.forEach {category in
+                                trip.categories.forEach {category in
                                     (category as! Category).items.forEach { item in
-                                        self.context.delete(item as! NSManagedObject)
+                                        context.delete(item as! NSManagedObject)
                                     }
-                                    self.context.delete(category as! NSManagedObject)
+                                    context.delete(category as! NSManagedObject)
                                 }
-                                self.context.delete(self.trip)
+                                context.delete(trip)
                                 
-                                self.selection = nil
-                                self.presentationMode.wrappedValue.dismiss()
+                                selection = nil
+                                presentationMode.wrappedValue.dismiss()
                               }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                     })
                 }
@@ -154,65 +154,65 @@ struct EditTrip: View {
                 EditButton(), trailing:
                 
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Close")
                 })
             )
         }.navigationViewStyle(StackNavigationViewStyle())
-        .accentColor(self.accent)
+        .accentColor(accent)
         .onDisappear {
-            if !self.trip.isDeleted {
-                self.trip.name = self.updatedTitle
-                if self.validDates {
-                    if self.showStartDate {
-                        self.trip.startDate = self.updatedStartDate
+            if !trip.isDeleted {
+                trip.name = updatedTitle
+                if validDates {
+                    if showStartDate {
+                        trip.startDate = updatedStartDate
                     } else {
-                        self.trip.startDate = nil
+                        trip.startDate = nil
                     }
-                    if self.showEndDate {
-                        self.trip.endDate = self.updatedEndDate
+                    if showEndDate {
+                        trip.endDate = updatedEndDate
                     } else {
-                        self.trip.endDate = nil
+                        trip.endDate = nil
                     }
                 }
-                self.trip.showCompleted = self.showCompleted
-                self.trip.color = self.accent.description
-                self.trip.icon = self.updatedIcon
+                trip.showCompleted = showCompleted
+                trip.color = accent.description
+                trip.icon = updatedIcon
             }
             
-            if self.trip.hasChanges {
-                saveContext(self.context)
+            if trip.hasChanges {
+                saveContext(context)
             }
         }
     }
     
     func deleteCategory(at offsets: IndexSet) {
         for offset in offsets {
-            let category = self.categories[offset]
-            self.trip.removeFromCategories(category)
+            let category = categories[offset]
+            trip.removeFromCategories(category)
             
             category.items.forEach {item in
-                self.context.delete(item as! NSManagedObject)
+                context.delete(item as! NSManagedObject)
             }
-            self.context.delete(category)
+            context.delete(category)
         }
             
-        saveContext(self.context)
+        saveContext(context)
     }
     
     func moveCategory(from source: IndexSet, to destination: Int) {
         var items: [Category] = []
         for index in source {
-            items.append(self.categories[index])
+            items.append(categories[index])
         }
         
         for item in items {
-            Category.adjustCategoryIndex(source: item.index, index: destination, trip: self.trip, context: self.context)
-            item.index = (self.categories.count != destination ? destination : destination - 1)
+            Category.adjustCategoryIndex(source: item.index, index: destination, trip: trip, context: context)
+            item.index = (categories.count != destination ? destination : destination - 1)
         }
         
-        saveContext(self.context)
+        saveContext(context)
     }
 }
 

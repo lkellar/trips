@@ -15,17 +15,17 @@ struct AppView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     
-    @State var viewSelection: NSManagedObjectID? = nil
-    @State var selectionType: SelectionType = .trip
+    @State var primaryViewSelection: NSManagedObjectID? = nil
+    @State var primarySelectionType: PrimarySelectionType = .trip
     
     @State var accentColor: Color = Color.blue
     
     @ViewBuilder var body: some View {
         #if os(iOS)
         if horizontalSizeClass == .compact {
-            TabController(selectionType: $selectionType, viewSelection: $viewSelection, accent: $accentColor)
+            TabController(primarySelectionType: $primarySelectionType, primaryViewSelection: $primaryViewSelection, accent: $accentColor)
         } else {
-            SidebarController(accent: $accentColor, viewSelection: $viewSelection, selectionType: $selectionType)
+            SidebarController(accent: $accentColor, primarySelectionType: $primarySelectionType, primaryViewSelection: $primaryViewSelection)
         }
         #else
         SidebarController()

@@ -12,7 +12,7 @@ import SwiftUI
 struct AddTemplate: View {
     @State var title: String = ""
     
-    @Binding var selectionType: SelectionType
+    @Binding var selectionType: PrimarySelectionType
     @Binding var viewSelection: NSManagedObjectID?
     
     @Environment(\.managedObjectContext) var context
@@ -26,12 +26,12 @@ struct AddTemplate: View {
             
             Section {
                 Button(action: {
-                    let pendingTemplate = Category(context: self.context)
+                    let pendingTemplate = Category(context: context)
                     
-                    pendingTemplate.name = self.title
+                    pendingTemplate.name = title
                     pendingTemplate.isTemplate = true
                     
-                    saveContext(self.context)
+                    saveContext(context)
                     
                     viewSelection = pendingTemplate.objectID
                     selectionType = .template

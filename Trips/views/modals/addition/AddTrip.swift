@@ -23,7 +23,7 @@ struct AddTrip: View {
     @State var showEndDate: Bool = false
     @State var includedTemplates: [Category] = []
 
-    @Binding var selectionType: SelectionType
+    @Binding var selectionType: PrimarySelectionType
     @Binding var viewSelection: NSManagedObjectID?
     
     @Environment(\.managedObjectContext) var context
@@ -42,9 +42,9 @@ struct AddTrip: View {
                 TextField("Trip Name", text: $title)
             }
             
-            TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
+            TripDateSelector(date: $startDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
             
-            TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
+            TripDateSelector(date: $endDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
             
             Section {
                 NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
@@ -57,54 +57,54 @@ struct AddTrip: View {
             }
             
             Section(header: Text("Icon")) {
-                IconPicker(selectedIcon: self.$icon)
+                IconPicker(selectedIcon: $icon)
             }
             
             Section {
                 Button(action: {
-                    let objectId = self.saveTrip()
+                    let objectId = saveTrip()
                     
                     selectionType = .trip
                     viewSelection = objectId
                 }) {
                     Text("Save")
-                }.disabled(!self.checkTripValidity())
+                }.disabled(!checkTripValidity())
             }
         }.navigationBarTitle("Add Trip")
     }
     
     func checkTripValidity() -> Bool {
-        if !self.validDates {
+        if !validDates {
             return false
         }
-        if self.title.count == 0 {
+        if title.count == 0 {
             return false
         }
         return true
     }
     
     func saveTrip() -> NSManagedObjectID {
-        let pendingTrip = Trip(context: self.context)
+        let pendingTrip = Trip(context: context)
         
-        pendingTrip.name = self.title
-        if self.showStartDate {
-            pendingTrip.startDate = self.startDate
+        pendingTrip.name = title
+        if showStartDate {
+            pendingTrip.startDate = startDate
         }
-        if self.showEndDate {
-            pendingTrip.endDate = self.endDate
+        if showEndDate {
+            pendingTrip.endDate = endDate
         }
-        pendingTrip.color = self.color.description
-        pendingTrip.icon = self.icon
+        pendingTrip.color = color.description
+        pendingTrip.icon = icon
         
-        for tomplate in self.includedTemplates {
+        for tomplate in includedTemplates {
             do {
-                try copyTemplateToTrip(template: tomplate, trip: pendingTrip, context: self.context)
+                try copyTemplateToTrip(template: tomplate, trip: pendingTrip, context: context)
             } catch {
                 print(error)
             }
         }
         
-        saveContext(self.context)
+        saveContext(context)
         
         return pendingTrip.objectID
     }

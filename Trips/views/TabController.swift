@@ -12,24 +12,25 @@ import SwiftUI
 struct TabController: View {
     @Environment(\.managedObjectContext) var context
     
-    @Binding var selectionType: SelectionType
-    @Binding var viewSelection: NSManagedObjectID?
+    @Binding var primarySelectionType: PrimarySelectionType
+    @Binding var primaryViewSelection: NSManagedObjectID?
+    
     @Binding var accent: Color
     var body: some View {
         TabView {
-            TripHome(selectionType: $selectionType, viewSelection: $viewSelection, accent: $accent)
+            TripHome(primarySelectionType: $primarySelectionType, primaryViewSelection: $primaryViewSelection, accent: $accent)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Trips")
                 }
-            TemplateHome(selectionType: $selectionType, viewSelection: $viewSelection)
+            TemplateHome(selectionType: $primarySelectionType, viewSelection: $primaryViewSelection)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "tray.full.fill")
                     Text("Templates")
                  }
-        }.accentColor(self.accent)
+        }.accentColor(accent)
     }
 }
 

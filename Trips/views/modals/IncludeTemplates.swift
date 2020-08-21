@@ -19,20 +19,20 @@ struct IncludeTemplates: View {
         Form {
             List {
                 Section(footer: Text("A copy of selected Templates will be added to your Trip")) {
-                    ForEach(self.templates, id:\.self) { template in
+                    ForEach(templates, id:\.self) { template in
                         Button(action: {
-                            guard let index = self.included.firstIndex(of: template) else {
-                               self.included.append(template)
+                            guard let index = included.firstIndex(of: template) else {
+                               included.append(template)
                                 return
                             }
-                            self.included.remove(at: index)
+                            included.remove(at: index)
                             
                         }) {
                             HStack {
                                 Text(template.name)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                if self.included.contains(template) {
+                                if included.contains(template) {
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.blue)
                                 }

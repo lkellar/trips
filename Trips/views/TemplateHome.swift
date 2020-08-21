@@ -21,13 +21,12 @@ struct TemplatePair: Hashable {
 }
 
 struct TemplateHome: View {
-    @Binding var selectionType: SelectionType
+    @Binding var selectionType: PrimarySelectionType
     @Binding var viewSelection: NSManagedObjectID?
 
     @State var addTemplateModalDisplayed = false
     
     @State var refreshing = false
-    @State var selection: NSManagedObjectID? = nil
     
     @Environment(\.managedObjectContext) var context
     
@@ -44,10 +43,10 @@ struct TemplateHome: View {
     var body: some View {
         NavigationView {
             GeometryReader { geo in
-                if (self.templates.count > 0) {
+                if (templates.count > 0) {
                     ScrollView {
-                        ForEach (Array(self.pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: self.$refreshing, width: Int(geo.size.width), selection: self.$selection, selectionType: $selectionType).environment(\.managedObjectContext, self.context)
+                        ForEach (Array(pairs.enumerated()), id:\.element) { index, pair in
+                            TemplatePairView(pair: pair, index: index, refreshing: $refreshing, width: Int(geo.size.width), selection: $viewSelection, selectionType: $selectionType).environment(\.managedObjectContext, context)
                         }
                         Spacer()
                     }
@@ -56,13 +55,13 @@ struct TemplateHome: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            AddButton(action: {self.addTemplateModalDisplayed = true}, text: "Add a Template!")
+                            AddButton(action: {addTemplateModalDisplayed = true}, text: "Add a Template!")
                             Spacer()
                         }
                         HStack {
                             Spacer()
                             Button(action: {
-                                SampleDataFactory(context: self.context).addSampleTemplates()
+                                SampleDataFactory(context: context).addSampleTemplates()
                             }) {
                                 Text("Or add example Templates.")
                             }
@@ -72,19 +71,17 @@ struct TemplateHome: View {
                     }
                 }
             }
-            .navigationBarTitle("Templates" + (self.refreshing ? "" : ""))
+            .navigationBarTitle("Templates" + (refreshing ? "" : ""))
             .navigationBarItems(trailing:
             Button(action: {
-                self.addTemplateModalDisplayed = true
+                addTemplateModalDisplayed = true
             }, label: {
                 Image(systemName: "plus")
             }
                 // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
                 ).padding())
                 Text("No Template Selected").font(.subheadline)
-            }.onDisappear(perform: {
-                self.selection = nil
-            })
+            }
     }
 }
     
@@ -100,26 +97,26 @@ struct TemplatePairView: View {
     var width: Int
     
     @Binding var selection: NSManagedObjectID?
-    @Binding var selectionType: SelectionType
+    @Binding var selectionType: PrimarySelectionType
     
     var body: some View {
         HStack {
             Spacer()
         
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: self.$refreshing, selection: self.$selection).onAppear(perform: {selectionType = .template}), tag: pair.first.objectID, selection: $selection) {
-                CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: self.width, selection: $selection)
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection).onAppear(perform: {selectionType = .template}), tag: pair.first.objectID, selection: $selection) {
+                CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width, selection: $selection)
         }
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: self.$refreshing, selection: self.$selection).onAppear(perform: {selectionType = .template}), tag: pair.second!.objectID, selection: $selection) {
-                CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: self.width, selection: $selection)
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection).onAppear(perform: {selectionType = .template}), tag: pair.second!.objectID, selection: $selection) {
+                CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: width, selection: $selection)
             }
         } else {
             // Invisible box, to make it even, so an odd row (just one box) doesn't center
             RoundedRectangle(cornerRadius: 30)
                 .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
-                .frame(width: CGFloat(self.width < 375 ? 125 : 150), height: CGFloat(self.width < 375 ? 125 : 150))
+                .frame(width: CGFloat(width < 375 ? 125 : 150), height: CGFloat(width < 375 ? 125 : 150))
                 .padding()
         }
         Spacer()

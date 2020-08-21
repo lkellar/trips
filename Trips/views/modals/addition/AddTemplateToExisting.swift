@@ -24,31 +24,31 @@ struct AddTemplateToExisting: View {
     var trip: Trip
     
     init(trip: Trip, refreshing: Binding<Bool>) {
-        self.templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
+        templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
-        self._refreshing = refreshing
+        _refreshing = refreshing
     }
     
     var body: some View {
         NavigationView {
             Form {
                 List {
-                    ForEach(self.templates, id:\.self) { template in
+                    ForEach(templates, id:\.self) { template in
                         Button(action: {
-                            guard let index = self.included.firstIndex(of: template) else {
-                               self.included.append(template)
+                            guard let index = included.firstIndex(of: template) else {
+                               included.append(template)
                                 return
                             }
-                            self.included.remove(at: index)
+                            included.remove(at: index)
                             
                         }) {
                             HStack {
                                 Text(template.name)
                                     .foregroundColor(.primary)
                                 Spacer()
-                                if self.included.contains(template) {
+                                if included.contains(template) {
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.blue)
                                 }
@@ -58,15 +58,15 @@ struct AddTemplateToExisting: View {
                 }
                 Section(footer: Text("A copy of selected Templates will be added to your Trip")) {
                     Button(action: {
-                        for tomplate in self.included {
+                        for tomplate in included {
                             do {
-                                try copyTemplateToTrip(template: tomplate, trip: self.trip, context: self.context)
+                                try copyTemplateToTrip(template: tomplate, trip: trip, context: context)
                             } catch {
                                 print(error)
                             }
                         }
-                        self.refreshing.toggle()
-                        self.presentationMode.wrappedValue.dismiss()
+                        refreshing.toggle()
+                        presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Text("Save")
                     })
@@ -74,7 +74,7 @@ struct AddTemplateToExisting: View {
             }.navigationBarTitle("Templates")
             .navigationBarItems(trailing:
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel")
             }))

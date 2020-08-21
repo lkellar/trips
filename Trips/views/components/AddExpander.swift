@@ -24,28 +24,28 @@ struct AddExpander: View {
     
     init(color: Color, showAddItem: Binding<Bool>, showAddCategory: Binding<Bool>) {
         self.color = color
-        self.addCategory = true
-        self._showAddItem = showAddItem
-        self._showAddCategory = showAddCategory
+        addCategory = true
+        _showAddItem = showAddItem
+        _showAddCategory = showAddCategory
     }
     
     init(color: Color, showAddItem: Binding<Bool>) {
         self.color = color
-        self._showAddItem = showAddItem
-        self._showAddCategory = Binding.constant(false)
-        self.addCategory = false
+        _showAddItem = showAddItem
+        _showAddCategory = Binding.constant(false)
+        addCategory = false
         
     }
     
     var body: some View {
-        RoundedRectangle(cornerRadius: self.radius)
-            .frame(width: self.width, height: self.height)
-            .foregroundColor(self.color).overlay(
+        RoundedRectangle(cornerRadius: radius)
+            .frame(width: width, height: height)
+            .foregroundColor(color).overlay(
                 VStack {
-                    if self.showExpandedText {
+                    if showExpandedText {
                         Button(action: {
-                            self.showAddItem = true
-                            self.unExpand()
+                            showAddItem = true
+                            unExpand()
                         }) {
                             HStack {
                                 Image(systemName: "plus")
@@ -55,8 +55,8 @@ struct AddExpander: View {
                             .padding(.leading, 15)
                         }
                         Button(action: {
-                            self.showAddCategory = true
-                            self.unExpand()
+                            showAddCategory = true
+                            unExpand()
                         }) {
                             HStack {
                                 Image(systemName: "plus.square.fill.on.square.fill")
@@ -66,7 +66,7 @@ struct AddExpander: View {
                             .padding(.leading, 15)
                         }
                         Button(action: {
-                            self.unExpand()
+                            unExpand()
                         }) {
                             HStack {
                                 Image(systemName: "xmark.circle.fill")
@@ -77,23 +77,23 @@ struct AddExpander: View {
                         }
                     } else {
                         Button(action: {
-                            if self.addCategory {
-                                self.expand.toggle()
+                            if addCategory {
+                                expand.toggle()
                                 withAnimation() {
-                                    self.width = 210
-                                    self.height = 150
-                                    self.radius = 15
+                                    width = 210
+                                    height = 150
+                                    radius = 15
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
-                                    self.showExpandedText = true
+                                    showExpandedText = true
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                    if !self.expand {
-                                        self.unExpand();
+                                    if !expand {
+                                        unExpand();
                                     }
                                 }
                             } else {
-                                self.showAddItem = true
+                                showAddItem = true
                             }
                         }) {
                         Image(systemName: "plus")
@@ -101,18 +101,18 @@ struct AddExpander: View {
                         }
                     }
                 }
-                .foregroundColor(colorScheme == .dark && self.color == Color.primary ? Color.black : Color.white)
+                .foregroundColor(colorScheme == .dark && color == Color.primary ? Color.black : Color.white)
                 .font(.system(size: 23))
         )
     }
     
     func unExpand() {
-        self.expand = false
-        self.showExpandedText = false
+        expand = false
+        showExpandedText = false
         withAnimation() {
-            self.width = 64
-            self.height = 64
-            self.radius = 90
+            width = 64
+            height = 64
+            radius = 90
         }
     }
 }

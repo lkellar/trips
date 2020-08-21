@@ -27,8 +27,7 @@ struct EditItem: View {
         self.item = item
         self.accent = accent
         
-        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate: NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
     }
    
     var body: some View {
@@ -37,34 +36,34 @@ struct EditItem: View {
                 Section {
                     TextField("Item Name", text: $updatedName)
                         .onAppear {
-                            if self.item.name.count > 0 {
-                                self.updatedName = self.item.name
+                            if item.name.count > 0 {
+                                updatedName = item.name
                             }
                         }
                         .onDisappear {
-                            if !self.item.isDeleted {
-                                if self.item.name != self.updatedName {
-                                    self.item.name = self.updatedName
+                            if !item.isDeleted {
+                                if item.name != updatedName {
+                                    item.name = updatedName
                                 }
-                                if self.selectedCategory != -1 && self.item.category != self.categories[self.selectedCategory] {
-                                    self.item.category = self.categories[self.selectedCategory]
+                                if selectedCategory != -1 && item.category != categories[selectedCategory] {
+                                    item.category = categories[selectedCategory]
                                 }
                             }
-                            if self.item.hasChanges {
+                            if item.hasChanges {
                                 
-                                saveContext(self.context)
+                                saveContext(context)
                             }
                         }
                 }
                 Section {
-                    Picker(selection: self.$selectedCategory, label: Text("Category"),
+                    Picker(selection: $selectedCategory, label: Text("Category"),
                            content: {
                             ForEach(0 ..< categories.count, id:\.self) { index in
-                                Text(self.categories[index].name).tag(index)
+                                Text(categories[index].name).tag(index)
                             }
                     }).onAppear {
-                        if self.selectedCategory == -1 {
-                            self.selectedCategory = self.categories.firstIndex(of: self.item.category!) ?? 0
+                        if selectedCategory == -1 {
+                            selectedCategory = categories.firstIndex(of: item.category!) ?? 0
                         }
                     }
                 }
@@ -72,12 +71,12 @@ struct EditItem: View {
             .navigationBarTitle("Edit Item")
             .navigationBarItems(trailing:
             Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("Close")
             }))
         }
-        .accentColor(self.accent)
+        .accentColor(accent)
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

@@ -42,8 +42,8 @@ struct TripHomeRow: View {
                 }
             }.layoutPriority(1.0)
             Spacer()
-        }.onReceive(self.didSave, perform: { _ in
-            self.refreshing.toggle()
+        }.onReceive(didSave, perform: { _ in
+            refreshing.toggle()
         })
     }
 }

@@ -25,19 +25,19 @@ struct TemplateDetail: View {
     @State var editTemplateDisplayed = false;
     
     init(template: Category, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>) {
-        self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+        itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.category), template))
         
         self.template = template
-        self._refreshing = refreshing
-        self._selection = selection
+        _refreshing = refreshing
+        _selection = selection
     }
     
     var body: some View {
         ZStack {
-            if (self.items.count > 0) {
+            if (items.count > 0) {
                 List {
-                    ForEach(self.items) { item in
+                    ForEach(items) { item in
                         Text(item.name)
                     }.onDelete(perform: removeItem)
                         .onMove(perform: moveItem)
@@ -47,14 +47,14 @@ struct TemplateDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: .accentColor, showAddItem: self.$addItemModalDisplayed).padding()
+                        AddExpander(color: .accentColor, showAddItem: $addItemModalDisplayed).padding()
                     }
                 }
             } else {
-                AddButton(action: {self.addItemModalDisplayed = true}, text: "Add an Item!")
+                AddButton(action: {addItemModalDisplayed = true}, text: "Add an Item!")
             }
                 
-        }.navigationBarTitle(self.template.name + (self.refreshing ? "" : ""))
+        }.navigationBarTitle(template.name + (refreshing ? "" : ""))
         .navigationBarItems(trailing:
             HStack {
                 Button(action: {
@@ -62,45 +62,45 @@ struct TemplateDetail: View {
                 }) {
                     Text("")
                 }.sheet(isPresented: $addItemModalDisplayed, content: {
-                            AddItem(categories: [self.template], selectCategory: false, refreshing: self.$refreshing, accent: Color.accentColor).environment(\.managedObjectContext, self.context)
+                            AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor).environment(\.managedObjectContext, context)
                 }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
 
                 Button(action: {
-                    self.editTemplateDisplayed = true
+                    editTemplateDisplayed = true
                 }, label: {
                     Image(systemName: "info.circle")
                     })
                     .sheet(isPresented: $editTemplateDisplayed, content: {
-                        EditTemplate(template: self.template, refreshing: self.$refreshing, selection: self.$selection).environment(\.managedObjectContext, self.context)
+                        EditTemplate(template: template, refreshing: $refreshing, selection: $selection).environment(\.managedObjectContext, context)
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
         })
         .onDisappear(perform: {
-            self.selection = nil
+            selection = nil
         })
     }
     
     func removeItem(at offsets: IndexSet) {
         for offset in offsets {
-            let item = self.items[offset]
-            self.template.removeFromItems(item)
-            self.context.delete(item)
+            let item = items[offset]
+            template.removeFromItems(item)
+            context.delete(item)
         }
     }
     
     func moveItem(from source: IndexSet, to destination: Int) {
         var items: [Item] = []
         for index in source {
-            items.append(self.items[index])
+            items.append(items[index])
         }
         
         for item in items {
-            Item.adjustItemIndex(source: item.index, index: destination, category: self.template, context: self.context)
-            item.index = (self.items.count != destination ? destination : destination - 1)
+            Item.adjustItemIndex(source: item.index, index: destination, category: template, context: context)
+            item.index = (items.count != destination ? destination : destination - 1)
         }
         
-        saveContext(self.context)
+        saveContext(context)
     }
 }
 

@@ -21,36 +21,36 @@ struct CategoryRectangular: View {
         self.category = category
         self.color = color
         // If we have a smaller view, set the Rectangle size smaller
-        self.size = width < 375 ? 125 : 150
-        self._selection = selection
+        size = width < 375 ? 125 : 150
+        _selection = selection
     }
     
     var body: some View {
         Button(action: {
-            self.selection = self.category.objectID
+            selection = category.objectID
         }) {
             ZStack(alignment: .bottom) {
                 RoundedRectangle(cornerRadius: 30)
-                    .fill(self.color)
-                    .frame(width: CGFloat(self.size), height: CGFloat(self.size))
+                    .fill(color)
+                    .frame(width: CGFloat(size), height: CGFloat(size))
                     .padding()
                 
                 RoundedRectangle(cornerRadius: 30)
                     .fill(Color.secondary)
-                    .frame(width: CGFloat(self.size), height: CGFloat(self.size / 2))
+                    .frame(width: CGFloat(size), height: CGFloat(size / 2))
                     .padding()
                 Rectangle()
-                    .fill(self.color)
-                    .frame(width: CGFloat(self.size), height: CGFloat(self.size / 5))
+                    .fill(color)
+                    .frame(width: CGFloat(size), height: CGFloat(size / 5))
                     .padding()
-                    .offset(y: CGFloat(-(self.size / 3)))
-                Text(self.category.name).font(.title)
-                    .offset(y: CGFloat(-(self.size / 6)))
+                    .offset(y: CGFloat(-(size / 3)))
+                Text(category.name).font(.title)
+                    .offset(y: CGFloat(-(size / 6)))
                     .foregroundColor(Color(UIColor.systemGray5))
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .allowsTightening(true)
-                    .frame(width: CGFloat(Double(self.size) * 0.93))
+                    .frame(width: CGFloat(Double(size) * 0.93))
             }
         }.buttonStyle(PlainButtonStyle())
     }
