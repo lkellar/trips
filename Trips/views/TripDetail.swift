@@ -20,6 +20,7 @@ struct TripDetail: View {
     @State var itemModalDisplayed = false
     @State var categoryModalDisplayed = false
     @State var editTripDisplayed = false
+    @State var templateModalDisplayed = false
     
     @State var addActionSheet = false
     @State var completedAlert = false
@@ -121,7 +122,7 @@ struct TripDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: accent, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed).padding()
+                        AddExpander(color: accent, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed, showAddTemplate: $templateModalDisplayed).padding()
                     }
                 }
             }
@@ -165,6 +166,14 @@ struct TripDetail: View {
                     }
                     .sheet(isPresented: $categoryModalDisplayed, content: {
                         AddCategory(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                    })
+                    Button(action: {
+                        print("Hidden 3")
+                    }) {
+                        Spacer()
+                    }
+                    .sheet(isPresented: $templateModalDisplayed, content: {
+                        AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
                     })
                     EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 })

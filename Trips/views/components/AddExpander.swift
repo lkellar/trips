@@ -17,22 +17,24 @@ struct AddExpander: View {
     @State var radius: CGFloat = 90
     @State var expand: Bool = false
     @State var showExpandedText: Bool = false
-
     
     @Binding var showAddItem: Bool
     @Binding var showAddCategory: Bool
+    @Binding var showAddTemplate: Bool
     
-    init(color: Color, showAddItem: Binding<Bool>, showAddCategory: Binding<Bool>) {
+    init(color: Color, showAddItem: Binding<Bool>, showAddCategory: Binding<Bool>, showAddTemplate: Binding<Bool>) {
         self.color = color
         addCategory = true
         _showAddItem = showAddItem
         _showAddCategory = showAddCategory
+        _showAddTemplate = showAddTemplate
     }
     
     init(color: Color, showAddItem: Binding<Bool>) {
         self.color = color
         _showAddItem = showAddItem
         _showAddCategory = Binding.constant(false)
+        _showAddTemplate = Binding.constant(false)
         addCategory = false
         
     }
@@ -43,45 +45,61 @@ struct AddExpander: View {
             .foregroundColor(color).overlay(
                 VStack {
                     if showExpandedText {
-                        Button(action: {
-                            showAddItem = true
-                            unExpand()
-                        }) {
-                            HStack {
-                                Image(systemName: "plus")
-                                Text("Add Item")
-                                Spacer()
+                        VStack {
+                            Button(action: {
+                                showAddItem = true
+                                unExpand()
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus")
+                                    Text("Add Item")
+                                    Spacer()
+                                }
+                                .padding(.leading, 15)
                             }
-                            .padding(.leading, 15)
-                        }
-                        Button(action: {
-                            showAddCategory = true
-                            unExpand()
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.square.fill.on.square.fill")
-                                Text("Add Category")
-                                Spacer()
+                            Spacer()
+                            Button(action: {
+                                showAddCategory = true
+                                unExpand()
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.square.fill.on.square.fill")
+                                    Text("Add Category")
+                                    Spacer()
+                                }
+                                .padding(.leading, 15)
                             }
-                            .padding(.leading, 15)
-                        }
-                        Button(action: {
-                            unExpand()
-                        }) {
-                            HStack {
-                                Image(systemName: "xmark.circle.fill")
-                                Text("Cancel")
-                                Spacer()
+                            Spacer()
+                            Button(action: {
+                                showAddTemplate = true
+                                unExpand()
+                            }) {
+                                HStack {
+                                    Image(systemName: "plus.square.fill.on.square.fill")
+                                    Text("Add Template")
+                                    Spacer()
+                                }
+                                .padding(.leading, 15)
                             }
-                            .padding(.leading, 15)
-                        }
+                            Spacer()
+                            Button(action: {
+                                unExpand()
+                            }) {
+                                HStack {
+                                    Image(systemName: "xmark.circle.fill")
+                                    Text("Cancel")
+                                    Spacer()
+                                }
+                                .padding(.leading, 15)
+                            }
+                        }.padding(.vertical, 20)
                     } else {
                         Button(action: {
                             if addCategory {
                                 expand.toggle()
                                 withAnimation() {
                                     width = 210
-                                    height = 150
+                                    height = 200
                                     radius = 15
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
