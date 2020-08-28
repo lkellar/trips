@@ -37,49 +37,6 @@ struct AddCategory: View {
     var body: some View {
         NavigationView {
             Form {
-                if templates.count > 0 {
-                    Section(header: Text("Templates")) {
-                        ForEach(templates, id:\.self) {template in
-                            Button(action: {
-                                if selected == template {
-                                    selected = nil
-                                } else {
-                                   selected = template
-                                    return
-                                }
-                                
-                            }) {
-                                HStack {
-                                    Text(template.name)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                    if selected == template {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(accent)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                
-                    Section {
-                        Button(action: {
-                            do {
-                                if let tomplate = selected {
-                                    try copyTemplateToTrip(template: tomplate, trip: trip, context: context)
-                                } else {
-                                    print("Template is null. Lol")
-                                }
-                            } catch {
-                                print(error)
-                            }
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Text("Save Template")
-                        }.disabled(selected == nil)
-                    }
-                }
-                
                 Section(header: Text("Create Custom Category")) {
                     TextField("Category Name", text: $title)
                 }
@@ -98,7 +55,7 @@ struct AddCategory: View {
                     }
                     presentationMode.wrappedValue.dismiss()
                 }) {
-                    Text("Save Custom Category")
+                    Text("Save Category")
                 }.disabled(title.count == 0 ? true : false)
             }.navigationBarTitle("Add Category")
                 .navigationBarItems(trailing:

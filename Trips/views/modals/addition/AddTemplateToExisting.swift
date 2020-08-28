@@ -82,8 +82,8 @@ struct AddTemplateToExisting: View {
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text("Cancel")
-                })).accentColor(accent)
+                    Text("Cancel").foregroundColor(accent)
+                }))
         }
     }
 }

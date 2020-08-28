@@ -26,7 +26,7 @@ struct SidebarController: View {
             switch primarySelectionType {
             case .trip:
                 if let trip = fetchEntityByExisting(id: primaryViewSelection, entityType: Trip.self) {
-                    TripDetail(trip: trip, accent: $accent, primaryViewSelection: $primaryViewSelection).accentColor(Color.fromString(color: trip.color ?? "blue"))
+                    TripDetail(trip: trip, primaryViewSelection: $primaryViewSelection)
                 } else {
                     Text("No Trip Selected")
                 }

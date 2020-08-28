@@ -28,7 +28,7 @@ struct TripHome: View {
                 if (trips.count > 0) {
                     List {
                         ForEach(sortTrips(trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip, accent: $accent, primaryViewSelection: $primaryViewSelection).onAppear(perform: {primarySelectionType = .trip}), tag:trip.objectID, selection: $primaryViewSelection) {
+                            NavigationLink(destination: TripDetail(trip: trip, primaryViewSelection: $primaryViewSelection, globalAccent: $accent).onAppear(perform: {primarySelectionType = .trip}), tag:trip.objectID, selection: $primaryViewSelection) {
                                     Button(action: {
                                         primaryViewSelection = trip.objectID
                                     }) {

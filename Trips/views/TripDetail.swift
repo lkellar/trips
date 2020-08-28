@@ -25,8 +25,8 @@ struct TripDetail: View {
     @State var addActionSheet = false
     @State var completedAlert = false
     
-    @Binding var accent: Color
     @Binding var primaryViewSelection: NSManagedObjectID?
+    @Binding var globalAccent: Color
     
     var trip: Trip
 
@@ -36,23 +36,40 @@ struct TripDetail: View {
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip, accent: Binding<Color>, primaryViewSelection: Binding<NSManagedObjectID?>) {
+    var accent: Color {
+        get {
+            return Color.fromString(color: trip.color ?? "blue")
+        }
+    }
+    
+    init(trip: Trip, primaryViewSelection: Binding<NSManagedObjectID?>) {
         self.trip = trip
         categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
         itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
         
-        _accent = accent
         _primaryViewSelection = primaryViewSelection
+        _globalAccent = Binding.constant(.blue)
         
+    }
+    
+    init(trip: Trip, primaryViewSelection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
+        self.trip = trip
+        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        
+        itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
+        
+        _primaryViewSelection = primaryViewSelection
+        _globalAccent = globalAccent
     }
         
     var body: some View {
         if trip.isDeleted {
             Text("No Trip Selected").font(.subheadline)
                 .onAppear(perform: {
-                    accent = Color.blue
+                    globalAccent = .blue
                 })
                 .navigationBarTitle("No Trip Selected")
                 .navigationBarItems(trailing: EmptyView())
@@ -73,7 +90,7 @@ struct TripDetail: View {
                                                     Text(item.name)
                                                         .accentColor(.primary)
                                                 }.sheet(isPresented: $itemModalDisplayed, content: {
-                                                    EditItem(item: item, accent: accent, trip: trip).environment(\.managedObjectContext, context)
+                                                    EditItem(item: item, accent: .accentColor, trip: trip).environment(\.managedObjectContext, context)
                                                 })
                                                 Spacer()
                                                 Button(action: {
@@ -105,7 +122,6 @@ struct TripDetail: View {
                                 }
                             }
                         }.listStyle(GroupedListStyle())
-                    //Text(refreshing ? "" : "")
                     } else {
                         if trip.categories.count > 0 && items.count > 0 {
                             AddButton(action: {
@@ -114,7 +130,7 @@ struct TripDetail: View {
                                 } catch {
                                     print(error)
                                 }
-                            }, text: "Begin Next Leg", accent: accent)
+                            }, text: "Begin Next Leg", accent: .accentColor)
                             Text("This will uncheck all items.").font(.callout)
                         }
                     }
@@ -122,16 +138,17 @@ struct TripDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: accent, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed, showAddTemplate: $templateModalDisplayed).padding()
+                        AddExpander(color: .accentColor, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed, showAddTemplate: $templateModalDisplayed).padding()
                     }
                 }
             }
+            .accentColor(accent)
             .navigationBarTitle(trip.name)
                 .navigationBarItems(trailing: HStack {
                     Button(action: {
                         print("Hidden 0.5")
                     }) {
-                        Spacer()
+                        Text(refreshing ? "" : "")
                     }.alert(isPresented: $completedAlert, content: {
                         Alert(title: Text("All Items Checked"),
                               message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
@@ -146,10 +163,10 @@ struct TripDetail: View {
                     Button(action: {
                         editTripDisplayed = true
                     }, label: {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "info.circle").foregroundColor(accent)
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: trip, refreshing: $refreshing, accent: $accent, selection: $primaryViewSelection).environment(\.managedObjectContext, context)
+                            EditTrip(trip: trip, refreshing: $refreshing, selection: $primaryViewSelection, globalAccent: $globalAccent).environment(\.managedObjectContext, context)
                         }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                     Button(action: {
                         print("Hidden 1")
@@ -175,11 +192,19 @@ struct TripDetail: View {
                     .sheet(isPresented: $templateModalDisplayed, content: {
                         AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
                     })
-                    EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    EditButton().foregroundColor(accent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 })
+            .onAppear(perform: {
+                if (UIDevice.current.userInterfaceIdiom == .phone) {
+                    globalAccent = accent
+                }
+            })
+            .onChange(of: accent) { newAccent in
+                globalAccent = accent
+            }
             .onDisappear(perform: {
                 if (UIDevice.current.userInterfaceIdiom == .phone) {
-                    accent = Color.blue
+                    globalAccent = Color.blue
                 }
             })
         }

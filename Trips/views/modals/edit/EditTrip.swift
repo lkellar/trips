@@ -35,7 +35,9 @@ struct EditTrip: View {
     @State var showAddTemplateExisting: Bool = false
     @Binding var refreshing: Bool
     
-    @Binding var accent: Color
+    @State var updatedColor: Color
+    @Binding var globalAccent: Color
+    
     @Binding var selection: NSManagedObjectID?
     
     var validDates: Bool {
@@ -45,7 +47,7 @@ struct EditTrip: View {
     }
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
+    init(trip: Trip, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
         self.trip = trip
         categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
@@ -66,8 +68,9 @@ struct EditTrip: View {
         }
         
         _refreshing = refreshing
+        _globalAccent = globalAccent
         
-        _accent = accent
+        _updatedColor = State.init(initialValue: Color.fromString(color: trip.color ?? "blue"))
         
         if let icon = trip.icon {
             _updatedIcon = State.init(initialValue: icon)
@@ -94,7 +97,7 @@ struct EditTrip: View {
                 TripDateSelector(date: $updatedEndDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
                 
                 Section(header: Text("Color")) {
-                    ColorPicker(updatedColor: $accent)
+                    ColorPicker(updatedColor: $updatedColor)
                 }
 
                 Section(header: Text("Icon")) {
@@ -104,7 +107,7 @@ struct EditTrip: View {
                 if (categories.count > 0) {
                     Section(header: Text("Categories")) {
                         ForEach(categories, id: \.self) { category in
-                            NavigationLink(destination: EditCategory(category: category, accent: accent)) {
+                            NavigationLink(destination: EditCategory(category: category, accent: updatedColor)) {
                                 Text(category.name)
                             }
                        }.onDelete(perform: deleteCategory)
@@ -150,17 +153,18 @@ struct EditTrip: View {
             }
             .navigationBarTitle("Edit Trip")
             .navigationBarItems(leading:
-
-                EditButton(), trailing:
-                
+                EditButton()
+                  .foregroundColor(updatedColor),
+            trailing:
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Close")
+                        .foregroundColor(updatedColor)
                 })
             )
-        }.navigationViewStyle(StackNavigationViewStyle())
-        .accentColor(accent)
+        }.accentColor(updatedColor)
+        .navigationViewStyle(StackNavigationViewStyle())
         .onDisappear {
             if !trip.isDeleted {
                 trip.name = updatedTitle
@@ -177,13 +181,15 @@ struct EditTrip: View {
                     }
                 }
                 trip.showCompleted = showCompleted
-                trip.color = accent.description
+                trip.color = updatedColor.description
+                globalAccent = updatedColor
                 trip.icon = updatedIcon
             }
             
             if trip.hasChanges {
                 saveContext(context)
             }
+            refreshing.toggle()
         }
     }
     
