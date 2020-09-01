@@ -22,6 +22,8 @@ struct TripDetail: View {
     @State var editTripDisplayed = false
     @State var templateModalDisplayed = false
     
+    @State var selectedItemToEdit: Item? = nil
+    
     @State var addActionSheet = false
     @State var completedAlert = false
     
@@ -85,13 +87,14 @@ struct TripDetail: View {
                                         if (!item.completed || trip.showCompleted) && !editTripDisplayed {
                                             HStack {
                                                 Button(action: {
+                                                    selectedItemToEdit = item
+                                                    // For some reason if the view isn't updated, the first time one opens edititem, it won't work
+                                                    refreshing.toggle()
                                                     itemModalDisplayed = true
                                                 }) {
                                                     Text(item.name)
                                                         .accentColor(.primary)
-                                                }.sheet(isPresented: $itemModalDisplayed, content: {
-                                                    EditItem(item: item, accent: .accentColor, trip: trip).environment(\.managedObjectContext, context)
-                                                })
+                                                }
                                                 Spacer()
                                                 Button(action: {
                                                     toggleItemCompleted(item)
@@ -175,6 +178,17 @@ struct TripDetail: View {
                     }
                     .sheet(isPresented: $modalDisplayed, content: {
                         AddItem(categories: trip.categories.allObjects as! [Category], refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                    })
+                    Button(action: {
+                        print("Hidedn 1.5")
+                    }) {
+                        Spacer()
+                    }.sheet(isPresented: $itemModalDisplayed, content: {
+                        if let item = selectedItemToEdit {
+                            EditItem(item: item, accent: accent, trip: trip).environment(\.managedObjectContext, context)
+                        } else {
+                            Text("No Item Selected")
+                        }
                     })
                     Button(action: {
                         print("Hidden 2")

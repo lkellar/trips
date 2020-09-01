@@ -14,20 +14,25 @@ struct EditItem: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var item: Item
+    var trip: Trip?
     
     var accent: Color
     
     @State var updatedName: String = ""
     @State var selectedCategory: Int = -1
     
-    var categoryRequest : FetchRequest<Category>
-    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    
     init(item: Item, accent: Color, trip: Trip) {
         self.item = item
         self.accent = accent
-        
-        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate: NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        self.trip = trip
+        print("Initiazing EditItem with \(item.name)")
+    }
+    
+    init(item: Item) {
+        self.item = item
+        self.accent = Color.accentColor
+        self.trip = nil
+        print("Initiazing EditItem with \(item.name)")
     }
    
     var body: some View {
@@ -45,27 +50,22 @@ struct EditItem: View {
                                 if item.name != updatedName {
                                     item.name = updatedName
                                 }
-                                if selectedCategory != -1 && item.category != categories[selectedCategory] {
-                                    item.category = categories[selectedCategory]
-                                }
                             }
                             if item.hasChanges {
-                                
                                 saveContext(context)
                             }
                         }
-                }
-                Section {
-                    Picker(selection: $selectedCategory, label: Text("Category"),
-                           content: {
-                            ForEach(0 ..< categories.count, id:\.self) { index in
-                                Text(categories[index].name).tag(index)
-                            }
-                    }).onAppear {
-                        if selectedCategory == -1 {
-                            selectedCategory = categories.firstIndex(of: item.category!) ?? 0
-                        }
+                    if let trip = trip {
+                        EditItemCategorySelector(item: item, trip: trip, selectedCategory: $selectedCategory)
                     }
+                }
+                
+                Section {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Save")
+                    })
                 }
             }
             .navigationBarTitle("Edit Item")

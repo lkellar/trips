@@ -27,6 +27,7 @@
 		A0475FF924BFE0D60046026D /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0475FF524BFE0D60046026D /* TabController.swift */; };
 		A04D80E92342BC08004EE95F /* sampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleData.swift */; };
 		A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564377240FF9F10032217A /* AddTemplateToExisting.swift */; };
+		A059DF4024F964B0009908BE /* EditItemCategorySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */; };
 		A05C7CA92484481A006A791A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05C7CA82484481A006A791A /* CloudKit.framework */; };
 		A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */; };
 		A07B6C8F234798FA00578CDC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C8E234798FA00578CDC /* Util.swift */; };
@@ -75,6 +76,7 @@
 		A0475FF524BFE0D60046026D /* TabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		A04D80E82342BC08004EE95F /* sampleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleData.swift; sourceTree = "<group>"; };
 		A0564377240FF9F10032217A /* AddTemplateToExisting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplateToExisting.swift; sourceTree = "<group>"; };
+		A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemCategorySelector.swift; sourceTree = "<group>"; };
 		A05C7CA624844818006A791A /* Trips.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Trips.entitlements; sourceTree = "<group>"; };
 		A05C7CA82484481A006A791A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetail.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 				A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */,
 				A0F6837E2496BA5600139D74 /* IconPicker.swift */,
 				A0F683802496BAB300139D74 /* IconPickerCircle.swift */,
+				A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
+				A059DF4024F964B0009908BE /* EditItemCategorySelector.swift in Sources */,
 				A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */,
 				A0EC86C423E9C7AB0081DFD5 /* IncludeTemplates.swift in Sources */,
 				A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */,

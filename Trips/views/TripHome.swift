@@ -36,7 +36,7 @@ struct TripHome: View {
                                     }
                                 }
                             }
-                    }.listStyle(DefaultListStyle())
+                    }.listStyle(InsetGroupedListStyle())
                 } else {
                     AddButton(action: {showAddTrip = true}, text: "Add a Trip!")
                     Button(action: {

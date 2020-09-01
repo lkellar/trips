@@ -18,9 +18,12 @@ struct TemplateDetail: View {
     @Binding var refreshing: Bool
     @Binding var selection: NSManagedObjectID?
     
+    @State var selectedItemToEdit: Item? = nil
+    
     var itemRequest : FetchRequest<Item>
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
-    
+
+    @State var editItemModalDisplayed = false
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
     
@@ -38,7 +41,15 @@ struct TemplateDetail: View {
             if (items.count > 0) {
                 List {
                     ForEach(items) { item in
+                        Button(action: {
+                            selectedItemToEdit = item
+                            // For some reason if the view isn't updated, the first time one opens edititem, it won't work
+                            refreshing.toggle()
+                            editItemModalDisplayed = true
+                    }) {
                         Text(item.name)
+                            .accentColor(.primary)
+                    }
                     }.onDelete(perform: removeItem)
                         .onMove(perform: moveItem)
                     // using grouped style here, even though there's no grouping, just because it looks better and matches TripDetail
@@ -64,7 +75,18 @@ struct TemplateDetail: View {
                 }.sheet(isPresented: $addItemModalDisplayed, content: {
                             AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor).environment(\.managedObjectContext, context)
                 }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-
+                
+                Button(action: {
+                    print("Hidedn 1.5")
+                }) {
+                    Spacer()
+                }.sheet(isPresented: $editItemModalDisplayed, content: {
+                    if let item = selectedItemToEdit {
+                        EditItem(item: item).environment(\.managedObjectContext, context)
+                    } else {
+                        Text("No Item Selected")
+                    }
+                })
                 Button(action: {
                     editTemplateDisplayed = true
                 }, label: {
