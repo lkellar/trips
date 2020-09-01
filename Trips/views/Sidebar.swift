@@ -10,14 +10,30 @@ import CoreData
 import SwiftUI
 
 struct Sidebar: View {
+    @Environment(\.managedObjectContext) var context
+
     @Binding var selection: NSManagedObjectID?
     @Binding var selectionType: PrimarySelectionType
     @State var tripsExpanded: Bool = true
     @State var templatesExpanded: Bool = true
+    @State var addTripExpanded: Bool = false
+    @State var addTemplateExpanded: Bool = false
     
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     @FetchRequest(fetchRequest: Category.allTemplatesFetchRequest()) var templates: FetchedResults<Category>
+    
+    var templateCount: Int {
+        get {
+            return templates.count
+        }
+    }
+    
+    var tripCount: Int {
+        get {
+            return trips.count
+        }
+    }
     
     var body: some View {
         List {
@@ -43,18 +59,60 @@ struct Sidebar: View {
                     }
                 }
             } label: {
-                Label("Templates", systemImage: "tray.full")
+                Label("Templates", systemImage: "square.grid.2x2")
             }
             Spacer()
-            Button(action: {
-                selectionType = .addTrip
-            }) {
-                Label("Add Trip", systemImage: "plus")
+            DisclosureGroup(isExpanded: $addTripExpanded) {
+                Button(action: {
+                    SampleDataFactory(context: context).addSampleTrips()
+                }) {
+                    Label("Add Example Trips", systemImage: "plus.rectangle.on.rectangle")
+                }
+            } label: {
+                Button(action: {
+                    selectionType = .addTrip
+                }) {
+                    Label("Add Trip", systemImage: "plus")
+                }
+            }.onAppear {
+                if (tripCount == 0) {
+                    addTripExpanded = true
+                } else {
+                    addTripExpanded = false
+                }
             }
-            Button(action: {
-                selectionType = .addTemplate
-            }) {
-                Label("Add Template", systemImage: "plus")
+            .onChange(of: tripCount) { newTripCount in
+                if (newTripCount == 0) {
+                    addTripExpanded = true
+                } else {
+                    addTemplateExpanded = false
+                }
+            }
+            DisclosureGroup(isExpanded: $addTemplateExpanded) {
+                Button(action: {
+                    SampleDataFactory(context: context).addSampleTemplates()
+                }) {
+                    Label("Add Example Templates", systemImage: "plus.rectangle.on.rectangle")
+                }
+            } label: {
+                Button(action: {
+                    selectionType = .addTemplate
+                }) {
+                    Label("Add Template", systemImage: "plus")
+                }
+            }.onAppear {
+                if (templateCount == 0) {
+                    addTemplateExpanded = true
+                } else {
+                    addTemplateExpanded = false
+                }
+            }
+            .onChange(of: templateCount) { newTemplateCount in
+                if (newTemplateCount == 0) {
+                    addTemplateExpanded = true
+                } else {
+                    addTemplateExpanded = false
+                }
             }
         }
         .listStyle(SidebarListStyle())

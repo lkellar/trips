@@ -27,7 +27,7 @@ struct TabController: View {
             TemplateHome(selectionType: $primarySelectionType, viewSelection: $primaryViewSelection)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
-                    Image(systemName: "tray.full.fill")
+                    Image(systemName: "square.grid.2x2.fill")
                     Text("Templates")
                  }
         }.accentColor(accent)
