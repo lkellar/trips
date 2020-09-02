@@ -68,10 +68,13 @@ struct AddTemplateToExisting: View {
                                     print(error)
                                 }
                             }
+                            if context.hasChanges {
+                                saveContext(context)
+                            }
                             refreshing.toggle()
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
-                            Text("Save")
+                            Text("Save").foregroundColor(accent)
                         })
                     }
                 } else {

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AddItem: View {
     var categories: [Category]
-    var selectCategory = true
+    var selectCategory: Bool
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -23,6 +23,19 @@ struct AddItem: View {
     
     @Binding var refreshing: Bool
     var accent: Color
+    
+    init(categories: [Category], selectCategory: Bool, refreshing: Binding<Bool>, accent: Color) {
+        if (categories.count > 1) {
+            self.categories = categories.sorted { first, second in
+                return first.index < second.index
+            }
+        } else {
+            self.categories = categories
+        }
+        self.selectCategory = selectCategory
+        _refreshing = refreshing
+        self.accent = accent
+    }
     
     var body: some View {
         NavigationView {
