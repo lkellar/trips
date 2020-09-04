@@ -31,7 +31,7 @@ struct TripDetail: View {
     @Binding var globalAccent: Color
     
     var trip: Trip
-
+    
     var categoryRequest : FetchRequest<Category>
     var itemRequest: FetchRequest<Item>
     
@@ -53,7 +53,6 @@ struct TripDetail: View {
         
         _primaryViewSelection = primaryViewSelection
         _globalAccent = Binding.constant(.blue)
-        
     }
     
     init(trip: Trip, primaryViewSelection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
@@ -209,17 +208,13 @@ struct TripDetail: View {
                     EditButton().foregroundColor(accent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 })
             .onAppear(perform: {
-                if (UIDevice.current.userInterfaceIdiom == .phone) {
-                    globalAccent = accent
-                }
+                globalAccent = accent
             })
             .onChange(of: accent) { newAccent in
                 globalAccent = accent
             }
             .onDisappear(perform: {
-                if (UIDevice.current.userInterfaceIdiom == .phone) {
-                    globalAccent = Color.blue
-                }
+                globalAccent = Color.blue
             })
         }
     }

@@ -74,12 +74,6 @@ struct Sidebar: View {
                 }) {
                     Label("Add Trip", systemImage: "plus")
                 }
-            }.onAppear {
-                if (tripCount == 0) {
-                    addTripExpanded = true
-                } else {
-                    addTripExpanded = false
-                }
             }
             .onChange(of: tripCount) { newTripCount in
                 if (newTripCount == 0) {
@@ -100,12 +94,6 @@ struct Sidebar: View {
                 }) {
                     Label("Add Template", systemImage: "plus")
                 }
-            }.onAppear {
-                if (templateCount == 0) {
-                    addTemplateExpanded = true
-                } else {
-                    addTemplateExpanded = false
-                }
             }
             .onChange(of: templateCount) { newTemplateCount in
                 if (newTemplateCount == 0) {
@@ -113,6 +101,18 @@ struct Sidebar: View {
                 } else {
                     addTemplateExpanded = false
                 }
+            }
+        }.onAppear {
+            if (tripCount == 0) {
+                addTripExpanded = true
+            } else {
+                addTripExpanded = false
+            }
+
+            if (templateCount == 0) {
+                addTemplateExpanded = true
+            } else {
+                addTemplateExpanded = false
             }
         }
         .listStyle(SidebarListStyle())
