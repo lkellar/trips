@@ -50,6 +50,7 @@
 		A0F6837F2496BA5600139D74 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6837E2496BA5600139D74 /* IconPicker.swift */; };
 		A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F683802496BAB300139D74 /* IconPickerCircle.swift */; };
 		A0F756FF237B0B9700DCBC77 /* AddCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F756FE237B0B9700DCBC77 /* AddCategory.swift */; };
+		A0FB049F25029EAE00433AA5 /* CategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FB049E25029EAE00433AA5 /* CategoryList.swift */; };
 		A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE956423C8D8FD007400BC /* PackRectangular.swift */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +102,7 @@
 		A0F6837E2496BA5600139D74 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
 		A0F683802496BAB300139D74 /* IconPickerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerCircle.swift; sourceTree = "<group>"; };
 		A0F756FE237B0B9700DCBC77 /* AddCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategory.swift; sourceTree = "<group>"; };
+		A0FB049E25029EAE00433AA5 /* CategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryList.swift; sourceTree = "<group>"; };
 		A0FE956423C8D8FD007400BC /* PackRectangular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackRectangular.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -223,6 +225,7 @@
 				A0F6837E2496BA5600139D74 /* IconPicker.swift */,
 				A0F683802496BAB300139D74 /* IconPickerCircle.swift */,
 				A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */,
+				A0FB049E25029EAE00433AA5 /* CategoryList.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -337,6 +340,7 @@
 				A0475FF924BFE0D60046026D /* TabController.swift in Sources */,
 				A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */,
 				A024932023BE7A60009AF5EF /* AppView.swift in Sources */,
+				A0FB049F25029EAE00433AA5 /* CategoryList.swift in Sources */,
 				A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */,
 				A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,

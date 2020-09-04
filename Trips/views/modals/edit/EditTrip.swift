@@ -16,7 +16,6 @@ struct EditTrip: View {
     
     @Environment(\.editMode) var editMode
     
-    var categoryRequest : FetchRequest<Category>
     
     var trip: Trip
     
@@ -46,11 +45,8 @@ struct EditTrip: View {
         }
     }
     
-    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     init(trip: Trip, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
         self.trip = trip
-        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         _showCompleted = State.init(initialValue: trip.showCompleted)
         
         if let startDate = trip.startDate {
@@ -104,14 +100,10 @@ struct EditTrip: View {
                     IconPicker(selectedIcon: $updatedIcon)
                 }
                 
-                if (categories.count > 0) {
-                    Section(header: Text("Categories")) {
-                        ForEach(categories, id: \.self) { category in
-                            NavigationLink(destination: EditCategory(category: category, accent: updatedColor)) {
-                                Text(category.name)
-                            }
-                       }.onDelete(perform: deleteCategory)
-                            .onMove(perform: moveCategory)
+                
+                if (trip.categories.count > 0) {
+                    NavigationLink(destination: CategoryList(trip: trip, accent: $updatedColor)) {
+                        Text("Categories")
                     }
                 }
                 
@@ -152,10 +144,7 @@ struct EditTrip: View {
                 }
             }
             .navigationBarTitle("Edit Trip")
-            .navigationBarItems(leading:
-                EditButton()
-                  .foregroundColor(updatedColor),
-            trailing:
+            .navigationBarItems(trailing:
                 Button(action: {
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
@@ -191,34 +180,6 @@ struct EditTrip: View {
             }
             refreshing.toggle()
         }
-    }
-    
-    func deleteCategory(at offsets: IndexSet) {
-        for offset in offsets {
-            let category = categories[offset]
-            trip.removeFromCategories(category)
-            
-            category.items.forEach {item in
-                context.delete(item as! NSManagedObject)
-            }
-            context.delete(category)
-        }
-            
-        saveContext(context)
-    }
-    
-    func moveCategory(from source: IndexSet, to destination: Int) {
-        var items: [Category] = []
-        for index in source {
-            items.append(categories[index])
-        }
-        
-        for item in items {
-            Category.adjustCategoryIndex(source: item.index, index: destination, trip: trip, context: context)
-            item.index = (categories.count != destination ? destination : destination - 1)
-        }
-        
-        saveContext(context)
     }
 }
 
