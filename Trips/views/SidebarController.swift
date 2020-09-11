@@ -16,30 +16,29 @@ struct SidebarController: View {
     @Environment(\.managedObjectContext) var context
 
     @Binding var accent: Color
-    @Binding var primarySelectionType: PrimarySelectionType
-    @Binding var primaryViewSelection: NSManagedObjectID?
+    @Binding var selection: SelectionConfig
     @State var refreshing: Bool = false
 
     var body: some View {
         NavigationView {
-            Sidebar(selection: $primaryViewSelection, selectionType: $primarySelectionType)
-            switch primarySelectionType {
+            Sidebar(selection: $selection)
+            switch selection.primaryViewSelection {
             case .trip:
-                if let trip = fetchEntityByExisting(id: primaryViewSelection, entityType: Trip.self) {
-                    TripDetail(trip: trip, primaryViewSelection: $primaryViewSelection)
+                if let trip = fetchEntityByExisting(id: selection.viewSelection, entityType: Trip.self) {
+                    TripDetail(trip: trip, selection: $selection)
                 } else {
                     Text("No Trip Selected")
                 }
             case .template:
-                if let template = fetchEntityByExisting(id: primaryViewSelection, entityType: Category.self) {
-                    TemplateDetail(template: template, refreshing: $refreshing, selection: $primaryViewSelection)
+                if let template = fetchEntityByExisting(id: selection.viewSelection, entityType: Category.self) {
+                    TemplateDetail(template: template, refreshing: $refreshing, selection: $selection)
                 } else {
                     Text ("No Template Selected")
                 }
             case .addTrip:
-                AddTrip(selectionType: $primarySelectionType, viewSelection: $primaryViewSelection)
+                AddTrip(selection: $selection)
             case .addTemplate:
-                AddTemplate(selectionType: $primarySelectionType, viewSelection: $primaryViewSelection)
+                AddTemplate(selection: $selection)
             }
         }
             
@@ -50,9 +49,14 @@ struct SidebarController: View {
             do {
                 // We can force unwrap the selection, as there is a check in the parent to only use this view if selection is valid
                 logger.info("Looking up existing entity by ID. ID is \(id, privacy: .private(mask: .hash))")
-                let trip = try context.existingObject(with: id) as! T
-                logger.info("Successfully found entity with ID:  \(id, privacy: .private(mask: .hash))")
-                return trip
+                let entity = try context.existingObject(with: id) as? T
+                if let unwrappedEntity = entity {
+                    logger.info("Successfully found entity with ID:  \(id, privacy: .private(mask: .hash))")
+                    return unwrappedEntity
+                }
+                logger.info("Couldn't found entity with ID for Given Type:  \(id, privacy: .private(mask: .hash))")
+
+                return nil
             } catch {
                 logger.error("Looking up entity with ID: \(id, privacy: .private(mask: .hash)) failed. Error: \(error.localizedDescription, privacy: .public)")
                 return nil

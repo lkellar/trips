@@ -36,8 +36,8 @@ struct EditTrip: View {
     
     @State var updatedColor: Color
     @Binding var globalAccent: Color
+    @Binding var selection: SelectionConfig
     
-    @Binding var selection: NSManagedObjectID?
     
     var validDates: Bool {
         get {
@@ -45,7 +45,7 @@ struct EditTrip: View {
         }
     }
     
-    init(trip: Trip, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
+    init(trip: Trip, refreshing: Binding<Bool>, globalAccent: Binding<Color>, selection: Binding<SelectionConfig>) {
         self.trip = trip
         _showCompleted = State.init(initialValue: trip.showCompleted)
         
@@ -65,6 +65,7 @@ struct EditTrip: View {
         
         _refreshing = refreshing
         _globalAccent = globalAccent
+        _selection = selection
         
         _updatedColor = State.init(initialValue: Color.fromString(color: trip.color ?? "blue"))
         
@@ -73,8 +74,6 @@ struct EditTrip: View {
         } else {
             _updatedIcon = State.init(initialValue: "house.fill")
         }
-        
-        _selection = selection
     }
     
     var body: some View {
@@ -137,8 +136,8 @@ struct EditTrip: View {
                                 }
                                 context.delete(trip)
                                 
-                                selection = nil
                                 presentationMode.wrappedValue.dismiss()
+                                selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
                               }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                     })
                 }

@@ -23,8 +23,7 @@ struct AddTrip: View {
     @State var showEndDate: Bool = false
     @State var includedTemplates: [Category] = []
 
-    @Binding var selectionType: PrimarySelectionType
-    @Binding var viewSelection: NSManagedObjectID?
+    @Binding var selection: SelectionConfig
     
     @Environment(\.managedObjectContext) var context
     
@@ -64,8 +63,7 @@ struct AddTrip: View {
                 Button(action: {
                     let objectId = saveTrip()
                     
-                    selectionType = .trip
-                    viewSelection = objectId
+                    selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: objectId)
                 }) {
                     Text("Save")
                 }.disabled(!checkTripValidity())

@@ -13,8 +13,7 @@ struct TripHome: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var context
     
-    @Binding var primarySelectionType: PrimarySelectionType
-    @Binding var primaryViewSelection: NSManagedObjectID?
+    @Binding var selection: SelectionConfig
 
     @Binding var accent: Color
     
@@ -28,9 +27,9 @@ struct TripHome: View {
                 if (trips.count > 0) {
                     List {
                         ForEach(sortTrips(trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip, primaryViewSelection: $primaryViewSelection, globalAccent: $accent).onAppear(perform: {primarySelectionType = .trip}), tag:trip.objectID, selection: $primaryViewSelection) {
+                            NavigationLink(destination: TripDetail(trip: trip, selection: $selection, globalAccent: $accent), tag:trip.objectID, selection: $selection.viewSelection) {
                                     Button(action: {
-                                        primaryViewSelection = trip.objectID
+                                        selection.viewSelection = trip.objectID
                                     }) {
                                         TripHomeRow(trip: trip)
                                     }

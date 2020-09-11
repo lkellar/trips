@@ -27,8 +27,8 @@ struct TripDetail: View {
     @State var addActionSheet = false
     @State var completedAlert = false
     
-    @Binding var primaryViewSelection: NSManagedObjectID?
     @Binding var globalAccent: Color
+    @Binding var selection: SelectionConfig
     
     var trip: Trip
     
@@ -44,26 +44,26 @@ struct TripDetail: View {
         }
     }
     
-    init(trip: Trip, primaryViewSelection: Binding<NSManagedObjectID?>) {
+    init(trip: Trip, selection: Binding<SelectionConfig>) {
         self.trip = trip
         categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
         itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
         
-        _primaryViewSelection = primaryViewSelection
         _globalAccent = Binding.constant(.blue)
+        _selection = selection
     }
     
-    init(trip: Trip, primaryViewSelection: Binding<NSManagedObjectID?>, globalAccent: Binding<Color>) {
+    init(trip: Trip, selection: Binding<SelectionConfig>, globalAccent: Binding<Color>) {
         self.trip = trip
         categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
             NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
         
         itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
         
-        _primaryViewSelection = primaryViewSelection
         _globalAccent = globalAccent
+        _selection = selection
     }
         
     var body: some View {
@@ -168,7 +168,7 @@ struct TripDetail: View {
                         Image(systemName: "info.circle").foregroundColor(accent)
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: trip, refreshing: $refreshing, selection: $primaryViewSelection, globalAccent: $globalAccent).environment(\.managedObjectContext, context)
+                            EditTrip(trip: trip, refreshing: $refreshing, globalAccent: $globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                         }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                     Button(action: {
                         print("Hidden 1")
@@ -209,6 +209,7 @@ struct TripDetail: View {
                 })
             .onAppear(perform: {
                 globalAccent = accent
+                selection.viewSelection = trip.objectID
             })
             .onChange(of: accent) { newAccent in
                 globalAccent = accent

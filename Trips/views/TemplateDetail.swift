@@ -16,7 +16,6 @@ struct TemplateDetail: View {
     var template: Category
     
     @Binding var refreshing: Bool
-    @Binding var selection: NSManagedObjectID?
     
     @State var selectedItemToEdit: Item? = nil
     
@@ -27,7 +26,9 @@ struct TemplateDetail: View {
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
     
-    init(template: Category, refreshing: Binding<Bool>, selection: Binding<NSManagedObjectID?>) {
+    @Binding var selection: SelectionConfig
+    
+    init(template: Category, refreshing: Binding<Bool>, selection: Binding<SelectionConfig>) {
         itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.category), template))
         
@@ -97,10 +98,7 @@ struct TemplateDetail: View {
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
-        })
-        .onDisappear(perform: {
-            selection = nil
-        })
+            })
     }
     
     func removeItem(at offsets: IndexSet) {

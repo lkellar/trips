@@ -165,8 +165,22 @@ enum PrimarySelectionType {
     case addTemplate
 }
 
-enum SecondarySelectionType {
-    case editItem
-    case editTrip
-    case none
+struct SelectionConfig: Equatable {
+    var primaryViewSelection: PrimarySelectionType
+    var viewSelection: NSManagedObjectID?
+}
+
+extension PrimarySelectionType {
+    func text() -> String {
+        switch(self) {
+        case .trip:
+            return "trip"
+        case .template:
+            return "template"
+        case .addTrip:
+            return "addTrip"
+        case .addTemplate:
+            return "addTemplate"
+        }
+    }
 }

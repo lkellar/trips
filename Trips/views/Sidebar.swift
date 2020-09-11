@@ -12,8 +12,7 @@ import SwiftUI
 struct Sidebar: View {
     @Environment(\.managedObjectContext) var context
 
-    @Binding var selection: NSManagedObjectID?
-    @Binding var selectionType: PrimarySelectionType
+    @Binding var selection: SelectionConfig
     @State var tripsExpanded: Bool = true
     @State var templatesExpanded: Bool = true
     @State var addTripExpanded: Bool = false
@@ -40,8 +39,7 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $tripsExpanded) {
                 ForEach(sortTrips(trips)) { trip in
                     Button(action: {
-                        selection = trip.objectID
-                        selectionType = .trip
+                        selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: trip.objectID)
                     }) {
                         Label(trip.name, systemImage: trip.icon?.replacingOccurrences(of: ".fill", with: "") ?? "house").accentColor(Color.fromString(color: trip.color ?? "default"))
                     } 
@@ -52,8 +50,7 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $templatesExpanded) {
                 ForEach(templates) { template in
                     Button(action: {
-                        selection = template.objectID
-                        selectionType = .template
+                        selection = SelectionConfig(primaryViewSelection: .template, viewSelection: template.objectID)
                     }) {
                         Text(template.name)
                     }
@@ -70,7 +67,7 @@ struct Sidebar: View {
                 }
             } label: {
                 Button(action: {
-                    selectionType = .addTrip
+                    selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
                 }) {
                     Label("Add Trip", systemImage: "plus")
                 }
@@ -90,7 +87,7 @@ struct Sidebar: View {
                 }
             } label: {
                 Button(action: {
-                    selectionType = .addTemplate
+                    selection = SelectionConfig(primaryViewSelection: .addTemplate, viewSelection: nil)
                 }) {
                     Label("Add Template", systemImage: "plus")
                 }

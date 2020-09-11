@@ -60,6 +60,6 @@ struct IntegratedStepper: View {
 
 struct IntegratedStepper_Previews: PreviewProvider {
     static var previews: some View {
-        Text("AAAAAAH")
+        NoPreview()
     }
 }

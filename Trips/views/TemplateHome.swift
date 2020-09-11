@@ -21,8 +21,8 @@ struct TemplatePair: Hashable {
 }
 
 struct TemplateHome: View {
-    @Binding var selectionType: PrimarySelectionType
-    @Binding var viewSelection: NSManagedObjectID?
+    @Binding var selection: SelectionConfig
+    @State var detailSelection: NSManagedObjectID? = nil
 
     @State var addTemplateModalDisplayed = false
     
@@ -46,7 +46,7 @@ struct TemplateHome: View {
                 if (templates.count > 0) {
                     ScrollView {
                         ForEach (Array(pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: $refreshing, width: Int(geo.size.width), selection: $viewSelection, selectionType: $selectionType).environment(\.managedObjectContext, context)
+                            TemplatePairView(pair: pair, index: index, refreshing: $refreshing, width: Int(geo.size.width), selection: $selection).environment(\.managedObjectContext, context)
                         }
                         Spacer()
                     }
@@ -96,21 +96,28 @@ struct TemplatePairView: View {
     
     var width: Int
     
-    @Binding var selection: NSManagedObjectID?
-    @Binding var selectionType: PrimarySelectionType
+    @Binding var selection: SelectionConfig
     
     var body: some View {
         HStack {
             Spacer()
-        
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection).onAppear(perform: {selectionType = .template}), tag: pair.first.objectID, selection: $selection) {
-                CategoryRectangular(category: pair.first, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width, selection: $selection)
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection), tag: pair.first.objectID, selection: $selection.viewSelection) {
+                Button(action: {
+                    selection.viewSelection = pair.first.objectID
+                    selection.primaryViewSelection = .template
+                }) {
+                    CategoryRectangular(name: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width)
+                }.buttonStyle(PlainButtonStyle())
         }
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection).onAppear(perform: {selectionType = .template}), tag: pair.second!.objectID, selection: $selection) {
-                CategoryRectangular(category: pair.second!, color: (index % 2 == 0 ? iconBlue : iconGreen), width: width, selection: $selection)
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection), tag: pair.second!.objectID, selection: $selection.viewSelection) {
+                Button(action: {
+                    selection.viewSelection = pair.second!.objectID
+                }) {
+                    CategoryRectangular(name: pair.second!.name, color: (index % 2 == 0 ? iconBlue : iconGreen), width: width)
+                }.buttonStyle(PlainButtonStyle())
             }
         } else {
             // Invisible box, to make it even, so an odd row (just one box) doesn't center

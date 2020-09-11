@@ -19,9 +19,8 @@ struct EditTemplate: View {
     @State var showDeleteAlert: Bool = false
     
     @State var updatedName: String = ""
+    @Binding var selection: SelectionConfig
     
-    @Binding var selection: NSManagedObjectID?
-   
     var body: some View {
         NavigationView {
             Form {
@@ -43,13 +42,13 @@ struct EditTemplate: View {
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
                             presentationMode.wrappedValue.dismiss()
+                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
 
                             DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
                                 template.items.forEach {item in
                                     context.delete(item as! NSManagedObject)
                                 }
                                 context.delete(template)
-                                selection = nil
                             })
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })

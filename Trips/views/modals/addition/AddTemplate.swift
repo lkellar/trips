@@ -12,8 +12,7 @@ import SwiftUI
 struct AddTemplate: View {
     @State var title: String = ""
     
-    @Binding var selectionType: PrimarySelectionType
-    @Binding var viewSelection: NSManagedObjectID?
+    @Binding var selection: SelectionConfig
     
     @Environment(\.managedObjectContext) var context
     
@@ -33,8 +32,7 @@ struct AddTemplate: View {
                     
                     saveContext(context)
                     
-                    viewSelection = pendingTemplate.objectID
-                    selectionType = .template
+                    selection = SelectionConfig(primaryViewSelection: .template, viewSelection: pendingTemplate.objectID)
                 }) {
                     Text("Save")
                 }.disabled(title.count == 0)
