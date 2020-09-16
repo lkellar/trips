@@ -128,16 +128,18 @@ struct EditTrip: View {
                         Alert(title: Text("Are you sure you want to delete \(updatedTitle)?"),
                               message: Text("This cannot be undone."),
                               primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                                trip.categories.forEach {category in
-                                    (category as! Category).items.forEach { item in
-                                        context.delete(item as! NSManagedObject)
-                                    }
-                                    context.delete(category as! NSManagedObject)
-                                }
-                                context.delete(trip)
-                                
                                 presentationMode.wrappedValue.dismiss()
                                 selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+                                DispatchQueue.main.async {
+                                    trip.categories.forEach {category in
+                                        (category as! Category).items.forEach { item in
+                                            context.delete(item as! NSManagedObject)
+                                        }
+                                        context.delete(category as! NSManagedObject)
+                                    }
+                                    context.delete(trip)
+                                    saveContext(context)
+                                }
                               }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                     })
                 }
