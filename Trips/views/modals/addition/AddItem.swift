@@ -80,7 +80,7 @@ struct AddItem: View {
                         }
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Save!")
+                        Text("Save")
                     }.disabled(checkForSave() ? false : true)
                 }
             }.navigationBarTitle("Add Item")
