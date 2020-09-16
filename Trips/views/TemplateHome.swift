@@ -55,7 +55,10 @@ struct TemplateHome: View {
                         Spacer()
                         HStack {
                             Spacer()
-                            AddButton(action: {addTemplateModalDisplayed = true}, text: "Add a Template!")
+                            AddButton(action: {
+                                addTemplateModalDisplayed = true
+                                selection = SelectionConfig(primaryViewSelection: .addTemplate, viewSelection: nil)
+                            }, text: "Add a Template!")
                             Spacer()
                         }
                         HStack {
@@ -75,11 +78,17 @@ struct TemplateHome: View {
             .navigationBarItems(trailing:
             Button(action: {
                 addTemplateModalDisplayed = true
+                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
             }, label: {
                 Image(systemName: "plus")
             }
                 // Learned a cool fact, .sheet gets an empty environment, so, gotta recreate it
-                ).padding())
+                ).padding()
+                .sheet(isPresented: $addTemplateModalDisplayed, content: {
+                    NavigationView {
+                        AddTemplate(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)
+                    }
+                                }))
                 Text("No Template Selected").font(.subheadline)
             }
     }

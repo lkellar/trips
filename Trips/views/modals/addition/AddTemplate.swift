@@ -13,6 +13,7 @@ struct AddTemplate: View {
     @State var title: String = ""
     
     @Binding var selection: SelectionConfig
+    var modal: Bool
     
     @Environment(\.managedObjectContext) var context
     
@@ -39,6 +40,15 @@ struct AddTemplate: View {
             }
         }
     .navigationBarTitle("Add Template")
+        .navigationBarItems(trailing:
+                        Button(action: {
+                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
+                            self.presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            if (modal) {
+                                Text("Cancel")
+                            }
+                        }))
     }
 }
 

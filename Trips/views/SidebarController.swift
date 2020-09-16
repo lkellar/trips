@@ -36,9 +36,9 @@ struct SidebarController: View {
                     Text ("No Template Selected")
                 }
             case .addTrip:
-                AddTrip(selection: $selection)
+                AddTrip(selection: $selection, modal: false)
             case .addTemplate:
-                AddTemplate(selection: $selection)
+                AddTemplate(selection: $selection, modal: false)
             }
         }
             

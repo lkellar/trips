@@ -12,6 +12,7 @@ import CoreData
 struct TripHome: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var context
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @Binding var selection: SelectionConfig
 
@@ -37,7 +38,10 @@ struct TripHome: View {
                             }
                     }.listStyle(InsetGroupedListStyle())
                 } else {
-                    AddButton(action: {showAddTrip = true}, text: "Add a Trip!")
+                    AddButton(action: {
+                        showAddTrip = true
+                        selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                    }, text: "Add a Trip!")
                     Button(action: {
                         SampleDataFactory(context: context).addSampleTrips()
                     }) {
@@ -50,9 +54,14 @@ struct TripHome: View {
         .navigationBarItems(
              trailing: Button(action: {
                     showAddTrip = true
+                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
                  }) {
                     Image(systemName: "plus")
                 }.padding()
+                .sheet(isPresented: $showAddTrip, content: {
+                    NavigationView {
+                        AddTrip(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)}
+                })
             )
             
             Text("No Trip Selected").font(.subheadline).onAppear(perform: {

@@ -24,6 +24,7 @@ struct AddTrip: View {
     @State var includedTemplates: [Category] = []
 
     @Binding var selection: SelectionConfig
+    var modal: Bool
     
     @Environment(\.managedObjectContext) var context
     
@@ -69,6 +70,17 @@ struct AddTrip: View {
                 }.disabled(!checkTripValidity())
             }
         }.navigationBarTitle("Add Trip")
+        .navigationBarItems(trailing:
+                        Button(action: {
+                            selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+                            self.presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            if (modal) {
+                                Text("Cancel")
+                            } else {
+                                EmptyView()
+                            }
+                        }))
     }
     
     func checkTripValidity() -> Bool {
