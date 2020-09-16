@@ -34,6 +34,9 @@ struct AddTemplate: View {
                     saveContext(context)
                     
                     selection = SelectionConfig(primaryViewSelection: .template, viewSelection: pendingTemplate.objectID)
+                    if (modal) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
                 }) {
                     Text("Save")
                 }.disabled(title.count == 0)

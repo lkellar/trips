@@ -65,6 +65,9 @@ struct AddTrip: View {
                     let objectId = saveTrip()
                     
                     selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: objectId)
+                    if (modal) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
                 }) {
                     Text("Save")
                 }.disabled(!checkTripValidity())
