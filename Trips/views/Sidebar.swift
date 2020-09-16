@@ -76,7 +76,7 @@ struct Sidebar: View {
                 if (newTripCount == 0) {
                     addTripExpanded = true
                 } else {
-                    addTemplateExpanded = false
+                    addTripExpanded = false
                 }
             }
             DisclosureGroup(isExpanded: $addTemplateExpanded) {
