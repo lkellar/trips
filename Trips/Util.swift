@@ -9,6 +9,9 @@
 import Foundation
 import CoreData
 import SwiftUI
+import os
+
+let coreDataLogger = Logger(subsystem: "org.kellar.trips", category: "coredata")
 
 extension Date {
     var formatted_date: String {
@@ -59,9 +62,11 @@ extension Color {
 
 func saveContext(_ context: NSManagedObjectContext) -> Void {
     do {
-        try context.save()
+        if context.hasChanges {
+            try context.save()
+        }
     } catch {
-        print("ERROR: \(error); END OF ERROR")
+        coreDataLogger.log("Failed Saving Context: \(error.localizedDescription)")
     }
 }
 
@@ -113,7 +118,7 @@ func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Ite
     do {
         return try context.fetch(request)
     } catch {
-        print(error)
+        coreDataLogger.error("Failed to fetch items from Category \(category.objectID, privacy: .private(mask: .hash)): \(error.localizedDescription)")
         return []
     }
     
@@ -121,6 +126,7 @@ func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Ite
 
 
 func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext) {
+    coreDataLogger.debug("Copying category \(category.objectID, privacy: .private(mask: .hash)) to Trip \(trip.objectID, privacy: .private(mask: .hash))")
     do {
         let newCategory = Category(context: context)
         newCategory.items = NSSet()
@@ -140,7 +146,41 @@ func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext
         saveContext(context)
         
     } catch {
-        print("Error while copying category")
+        coreDataLogger.error("Error Copying Category  \(category.objectID, privacy: .private(mask: .hash)) to Trip \(trip.objectID, privacy: .private(mask: .hash)): \(error.localizedDescription)")
     }
     
+}
+
+func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
+    var newTrips = trips.filter {$0.startDate != nil}
+    newTrips = newTrips.sorted(by: {$0.startDate! < $1.startDate!})
+    newTrips.append(contentsOf: trips.filter {$0.startDate == nil})
+    return newTrips
+}
+
+enum PrimarySelectionType {
+    case trip
+    case template
+    case addTrip
+    case addTemplate
+}
+
+struct SelectionConfig: Equatable {
+    var primaryViewSelection: PrimarySelectionType
+    var viewSelection: NSManagedObjectID?
+}
+
+extension PrimarySelectionType {
+    func text() -> String {
+        switch(self) {
+        case .trip:
+            return "trip"
+        case .template:
+            return "template"
+        case .addTrip:
+            return "addTrip"
+        case .addTemplate:
+            return "addTemplate"
+        }
+    }
 }

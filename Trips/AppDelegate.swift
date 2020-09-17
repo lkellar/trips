@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Observe Core Data remote change notifications.
         NotificationCenter.default.addObserver(
-            self, selector: #selector(self.storeRemoteChange(_:)),
+            self, selector: #selector(storeRemoteChange(_:)),
             name: .NSPersistentStoreRemoteChange, object: nil)
         
         return container

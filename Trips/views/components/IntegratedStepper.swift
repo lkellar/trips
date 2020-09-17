@@ -29,8 +29,8 @@ struct IntegratedStepper: View {
                         .frame(height: 30)
                     .contentShape(Rectangle())
                         .onTapGesture {
-                            if self.quantity > self.lowerLimit {
-                                self.quantity -= 1
+                            if quantity > lowerLimit {
+                                quantity -= 1
                             }
                         }
                     Spacer()
@@ -39,7 +39,7 @@ struct IntegratedStepper: View {
                         .foregroundColor(colorScheme == .dark ? Color(UIColor(red:0.29, green:0.29, blue:0.31, alpha:1.00)) : Color(UIColor(red:0.87, green:0.87, blue:0.88, alpha:1.00)))
                     Spacer()
                         .frame(width: 10)
-                    Text("\(self.quantity)")
+                    Text("\(quantity)")
                     Spacer()
                         .frame(width: 10)
                     Text("|")
@@ -48,8 +48,8 @@ struct IntegratedStepper: View {
                         .frame(width: 10)
                     Image(systemName: "plus")
                         .onTapGesture {
-                            if self.quantity < self.upperLimit {
-                                self.quantity += 1
+                            if quantity < upperLimit {
+                                quantity += 1
                             }
                         }
                 }
@@ -60,6 +60,6 @@ struct IntegratedStepper: View {
 
 struct IntegratedStepper_Previews: PreviewProvider {
     static var previews: some View {
-        Text("AAAAAAH")
+        NoPreview()
     }
 }

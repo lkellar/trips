@@ -12,10 +12,11 @@ import CoreData
 struct TripHome: View {
     // ❇️ Core Data property wrappers
     @Environment(\.managedObjectContext) var context
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
+    @Binding var selection: SelectionConfig
+
     @Binding var accent: Color
-    
-    @State var selection: NSManagedObjectID? = nil
     
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
@@ -24,22 +25,25 @@ struct TripHome: View {
     var body: some View {
         NavigationView {
             VStack {
-                if (self.trips.count > 0) {
+                if (trips.count > 0) {
                     List {
-                        ForEach(sortTrips(self.trips)) {trip in
-                            NavigationLink(destination: TripDetail(trip: trip, accent: self.$accent, selection: self.$selection), tag:trip.objectID, selection: self.$selection) {
+                        ForEach(sortTrips(trips)) {trip in
+                            NavigationLink(destination: TripDetail(trip: trip, selection: $selection, globalAccent: $accent), tag:trip.objectID, selection: $selection.viewSelection) {
                                     Button(action: {
-                                        self.selection = trip.objectID
+                                        selection.viewSelection = trip.objectID
                                     }) {
                                         TripHomeRow(trip: trip)
                                     }
                                 }
                             }
-                    }.listStyle(DefaultListStyle())
+                    }.listStyle(InsetGroupedListStyle())
                 } else {
-                    AddButton(action: {self.showAddTrip = true}, text: "Add a Trip!")
+                    AddButton(action: {
+                        showAddTrip = true
+                        selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                    }, text: "Add a Trip!")
                     Button(action: {
-                        SampleDataFactory(context: self.context).addSampleTrips()
+                        SampleDataFactory(context: context).addSampleTrips()
                     }) {
                         Text("Or add example Trips.")
                     }
@@ -49,30 +53,25 @@ struct TripHome: View {
             .navigationBarTitle("Trips")
         .navigationBarItems(
              trailing: Button(action: {
-                    self.showAddTrip = true
+                    showAddTrip = true
+                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
                  }) {
                     Image(systemName: "plus")
                 }.padding()
                 .sheet(isPresented: $showAddTrip, content: {
-                    AddTrip().environment(\.managedObjectContext, self.context)
+                    NavigationView {
+                        AddTrip(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)}
                 })
             )
             
             Text("No Trip Selected").font(.subheadline).onAppear(perform: {
-                self.accent = Color.blue
+                accent = Color.blue
             })
-        }.accentColor(self.accent)
+        }.accentColor(accent)
         .onDisappear(perform: {
-            self.accent = Color.blue
+            accent = Color.blue
         })
 
-    }
-    
-    func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
-        var newTrips = trips.filter {$0.startDate != nil}
-        newTrips = newTrips.sorted(by: {$0.startDate! < $1.startDate!})
-        newTrips.append(contentsOf: trips.filter {$0.startDate == nil})
-        return newTrips
     }
 }
 

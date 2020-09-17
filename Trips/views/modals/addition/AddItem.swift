@@ -10,7 +10,7 @@ import SwiftUI
 
 struct AddItem: View {
     var categories: [Category]
-    var selectCategory = true
+    var selectCategory: Bool
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -24,13 +24,26 @@ struct AddItem: View {
     @Binding var refreshing: Bool
     var accent: Color
     
+    init(categories: [Category], selectCategory: Bool, refreshing: Binding<Bool>, accent: Color) {
+        if (categories.count > 1) {
+            self.categories = categories.sorted { first, second in
+                return first.index < second.index
+            }
+        } else {
+            self.categories = categories
+        }
+        self.selectCategory = selectCategory
+        _refreshing = refreshing
+        self.accent = accent
+    }
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("Item Name", text: $title)
                     
-                    IntegratedStepper(quantity: self.$quantity, upperLimit: 20, lowerLimit: 1)
+                    IntegratedStepper(quantity: $quantity, upperLimit: 20, lowerLimit: 1)
                     
                 }
                 if selectCategory {
@@ -39,7 +52,7 @@ struct AddItem: View {
                                content: {
                                 if categories.count > 0 {
                                     ForEach(0 ..< categories.count, id:\.self) { index in
-                                        Text(self.categories[index].name).tag(index)
+                                        Text(categories[index].name).tag(index)
                                     }
                                 } else {
                                     Text("No Categories for this Trip. Please create a category before adding an Item.")
@@ -49,42 +62,42 @@ struct AddItem: View {
                 }
                 Section {
                     Button(action: {
-                        let localTitle = self.title
-                        self.title = ""
-                        for _ in 1...self.quantity {
-                            self.saveItem(title: localTitle)
+                        let localTitle = title
+                        title = ""
+                        for _ in 1...quantity {
+                            saveItem(title: localTitle)
                         }
                         
-                        self.quantity = 1
+                        quantity = 1
                     }) {
                         Text("Add Another")
                     }.disabled(checkForSave() ? false : true)
                 }
                 Section(footer: Text(selectCategory && categories.count == 0 ? "No Categories in Trip. Please create a Category before adding an Item." : "")) {
                     Button(action: {
-                        for _ in 1...self.quantity {
-                            self.saveItem(title: self.title)
+                        for _ in 1...quantity {
+                            saveItem(title: title)
                         }
-                        self.presentationMode.wrappedValue.dismiss()
+                        presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("Save!")
+                        Text("Save")
                     }.disabled(checkForSave() ? false : true)
                 }
             }.navigationBarTitle("Add Item")
             .navigationBarItems(trailing:
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel")
                 }))
-        }.accentColor(self.accent)
+        }.accentColor(accent)
             .onDisappear(perform: {
-            self.refreshing.toggle()
+            refreshing.toggle()
         }).navigationViewStyle(StackNavigationViewStyle())
     }
     
     func checkForSave() -> Bool {
-        if self.title.count == 0 {
+        if title.count == 0 {
             return false
         }
         if selectCategory && categories.count == 0 {
@@ -95,14 +108,14 @@ struct AddItem: View {
     
     func saveItem(title: String) {
         do {
-            let category = self.categories[self.selectedCategory]
-            let item = Item(context: self.context)
+            let category = categories[selectedCategory]
+            let item = Item(context: context)
             
             item.name = title
-            item.index = try Item.generateItemIndex(category: category, context: self.context)
+            item.index = try Item.generateItemIndex(category: category, context: context)
             category.addToItems(item)
             
-            try self.context.save()
+            try context.save()
         } catch {
             print(error)
         }

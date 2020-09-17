@@ -18,12 +18,12 @@ struct ColorPickerCircle: View {
     var body: some View {
         ZStack {
             Button(action: {
-                self.updatedColor = self.color
+                updatedColor = color
             }) {
-                Circle().frame(width: self.circleSize, height: self.circleSize).foregroundColor(self.color)
+                Circle().frame(width: circleSize, height: circleSize).foregroundColor(color)
             }.buttonStyle(BorderlessButtonStyle())
-            if updatedColor == self.color {
-                Image(systemName: "checkmark").foregroundColor(colorScheme == .dark && self.color == Color.primary ? .black : .white).font(.system(size: circleSize/3))
+            if updatedColor == color {
+                Image(systemName: "checkmark").foregroundColor(colorScheme == .dark && color == Color.primary ? .black : .white).font(.system(size: circleSize/3))
             }
         }
     }

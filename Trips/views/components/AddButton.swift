@@ -20,12 +20,12 @@ struct AddButton: View {
     }
 
     var body: some View {
-        Button(action: self.action) {
+        Button(action: action) {
                 Text(text)
                     .fontWeight(.bold)
                     .font(.title)
                     .padding()
-                    .background(self.accent)
+                    .background(accent)
                     .foregroundColor(.white)
                     .cornerRadius(40)
                     .padding(20)

@@ -6,6 +6,7 @@
 //  Copyright © 2019 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 enum TripError : Error {
@@ -21,6 +22,9 @@ struct AddTrip: View {
     @State var endDate: Date = Date()
     @State var showEndDate: Bool = false
     @State var includedTemplates: [Category] = []
+
+    @Binding var selection: SelectionConfig
+    var modal: Bool
     
     @Environment(\.managedObjectContext) var context
     
@@ -33,81 +37,89 @@ struct AddTrip: View {
     }
     
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Trip Name", text: $title)
+        Form {
+            Section {
+                TextField("Trip Name", text: $title)
+            }
+            
+            TripDateSelector(date: $startDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
+            
+            TripDateSelector(date: $endDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
+            
+            Section {
+                NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
+                    Text("Templates")
                 }
-                
-                TripDateSelector(date: self.$startDate, showDate: self.$showStartDate, validDates: self.validDates, isEndDate: false)
-                
-                TripDateSelector(date: self.$endDate, showDate: self.$showEndDate, validDates: self.validDates, isEndDate: true)
-                
-                Section {
-                    NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
-                        Text("Templates")
-                    }
-                }
-                
-                Section(header: Text("Color")) {
-                    ColorPicker(updatedColor: $color)
-                }
-                
-                Section(header: Text("Icon")) {
-                    IconPicker(selectedIcon: self.$icon)
-                }
-                
-                Section {
-                    Button(action: {
-                        self.saveTrip()
-                    }) {
-                        Text("Save")
-                    }.disabled(!self.checkTripValidity())
-                }
-            }.navigationBarTitle("Add Trip")
-            .navigationBarItems(trailing:
+            }
+            
+            Section(header: Text("Color")) {
+                ColorPicker(updatedColor: $color)
+            }
+            
+            Section(header: Text("Icon")) {
+                IconPicker(selectedIcon: $icon)
+            }
+            
+            Section {
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }, label: {
-                    Text("Cancel")
-                }))
-        }.navigationViewStyle(StackNavigationViewStyle())
+                    let objectId = saveTrip()
+                    
+                    selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: objectId)
+                    if (modal) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                }) {
+                    Text("Save")
+                }.disabled(!checkTripValidity())
+            }
+        }.navigationBarTitle("Add Trip")
+        .navigationBarItems(trailing:
+                        Button(action: {
+                            selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+                            self.presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            if (modal) {
+                                Text("Cancel")
+                            } else {
+                                EmptyView()
+                            }
+                        }))
     }
     
     func checkTripValidity() -> Bool {
-        if !self.validDates {
+        if !validDates {
             return false
         }
-        if self.title.count == 0 {
+        if title.count == 0 {
             return false
         }
         return true
     }
     
-    func saveTrip() {
-        let pendingTrip = Trip(context: self.context)
+    func saveTrip() -> NSManagedObjectID {
+        let pendingTrip = Trip(context: context)
         
-        pendingTrip.name = self.title
-        if self.showStartDate {
-            pendingTrip.startDate = self.startDate
+        pendingTrip.name = title
+        if showStartDate {
+            pendingTrip.startDate = startDate
         }
-        if self.showEndDate {
-            pendingTrip.endDate = self.endDate
+        if showEndDate {
+            pendingTrip.endDate = endDate
         }
-        pendingTrip.color = self.color.description
-        pendingTrip.icon = self.icon
+        pendingTrip.color = color.description
+        pendingTrip.icon = icon
         
-        for tomplate in self.includedTemplates {
+        for tomplate in includedTemplates {
             do {
-                try copyTemplateToTrip(template: tomplate, trip: pendingTrip, context: self.context)
+                try copyTemplateToTrip(template: tomplate, trip: pendingTrip, context: context)
             } catch {
                 print(error)
             }
         }
         
-        saveContext(self.context)
+        saveContext(context)
         
-        self.presentationMode.wrappedValue.dismiss()
+        return pendingTrip.objectID
     }
 }
 

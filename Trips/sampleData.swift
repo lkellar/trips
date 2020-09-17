@@ -61,6 +61,12 @@ struct SampleDataFactory {
             let item = generateItem(name: name, index: increturn(&index))
             exampleCategory.addToItems(item)
         }
+        
+        do {
+            try context.save()
+        } catch {
+            print(error)
+        }
     }
 
     func addSampleTrips() {

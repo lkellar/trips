@@ -16,20 +16,20 @@ struct ColorPicker: View {
     var body: some View {
         HStack {
             VStack {
-                ColorPickerCircle(circleSize: self.circleSize, color: .blue, updatedColor: self.$updatedColor)
-                ColorPickerCircle(circleSize: self.circleSize, color: .green, updatedColor: self.$updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .blue, updatedColor: $updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .green, updatedColor: $updatedColor)
             }
             VStack {
-                ColorPickerCircle(circleSize: self.circleSize, color: .red, updatedColor: self.$updatedColor)
-                ColorPickerCircle(circleSize: self.circleSize, color: .orange, updatedColor: self.$updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .red, updatedColor: $updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .orange, updatedColor: $updatedColor)
             }
             VStack {
-                ColorPickerCircle(circleSize: self.circleSize, color: .pink, updatedColor: self.$updatedColor)
-                ColorPickerCircle(circleSize: self.circleSize, color: .purple, updatedColor: self.$updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .pink, updatedColor: $updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .purple, updatedColor: $updatedColor)
             }
             VStack {
-                ColorPickerCircle(circleSize: self.circleSize, color: .primary, updatedColor: self.$updatedColor)
-                ColorPickerCircle(circleSize: self.circleSize, color: .yellow, updatedColor: self.$updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .primary, updatedColor: $updatedColor)
+                ColorPickerCircle(circleSize: circleSize, color: .yellow, updatedColor: $updatedColor)
             }
         }
     }

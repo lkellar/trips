@@ -21,8 +21,13 @@
 		A034F74A24536C980025EA62 /* EditCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74924536C980025EA62 /* EditCategory.swift */; };
 		A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */; };
 		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
+		A0475FF624BFE0D60046026D /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0475FF224BFE0D50046026D /* Sidebar.swift */; };
+		A0475FF724BFE0D60046026D /* SidebarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0475FF324BFE0D50046026D /* SidebarController.swift */; };
+		A0475FF824BFE0D60046026D /* NoPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0475FF424BFE0D50046026D /* NoPreview.swift */; };
+		A0475FF924BFE0D60046026D /* TabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0475FF524BFE0D60046026D /* TabController.swift */; };
 		A04D80E92342BC08004EE95F /* sampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A04D80E82342BC08004EE95F /* sampleData.swift */; };
 		A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564377240FF9F10032217A /* AddTemplateToExisting.swift */; };
+		A059DF4024F964B0009908BE /* EditItemCategorySelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */; };
 		A05C7CA92484481A006A791A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A05C7CA82484481A006A791A /* CloudKit.framework */; };
 		A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */; };
 		A07B6C8F234798FA00578CDC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = A07B6C8E234798FA00578CDC /* Util.swift */; };
@@ -45,7 +50,8 @@
 		A0F6837F2496BA5600139D74 /* IconPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F6837E2496BA5600139D74 /* IconPicker.swift */; };
 		A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F683802496BAB300139D74 /* IconPickerCircle.swift */; };
 		A0F756FF237B0B9700DCBC77 /* AddCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F756FE237B0B9700DCBC77 /* AddCategory.swift */; };
-		A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE956423C8D8FD007400BC /* PackRectangular.swift */; };
+		A0FB049F25029EAE00433AA5 /* CategoryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FB049E25029EAE00433AA5 /* CategoryList.swift */; };
+		A0FE956523C8D8FD007400BC /* CategoryRectangular.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0FE956423C8D8FD007400BC /* CategoryRectangular.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,8 +71,13 @@
 		A034F74924536C980025EA62 /* EditCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategory.swift; sourceTree = "<group>"; };
 		A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyToOtherTrip.swift; sourceTree = "<group>"; };
 		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
+		A0475FF224BFE0D50046026D /* Sidebar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
+		A0475FF324BFE0D50046026D /* SidebarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarController.swift; sourceTree = "<group>"; };
+		A0475FF424BFE0D50046026D /* NoPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoPreview.swift; sourceTree = "<group>"; };
+		A0475FF524BFE0D60046026D /* TabController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabController.swift; sourceTree = "<group>"; };
 		A04D80E82342BC08004EE95F /* sampleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sampleData.swift; sourceTree = "<group>"; };
 		A0564377240FF9F10032217A /* AddTemplateToExisting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplateToExisting.swift; sourceTree = "<group>"; };
+		A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemCategorySelector.swift; sourceTree = "<group>"; };
 		A05C7CA624844818006A791A /* Trips.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Trips.entitlements; sourceTree = "<group>"; };
 		A05C7CA82484481A006A791A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateDetail.swift; sourceTree = "<group>"; };
@@ -91,7 +102,8 @@
 		A0F6837E2496BA5600139D74 /* IconPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPicker.swift; sourceTree = "<group>"; };
 		A0F683802496BAB300139D74 /* IconPickerCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerCircle.swift; sourceTree = "<group>"; };
 		A0F756FE237B0B9700DCBC77 /* AddCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCategory.swift; sourceTree = "<group>"; };
-		A0FE956423C8D8FD007400BC /* PackRectangular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PackRectangular.swift; sourceTree = "<group>"; };
+		A0FB049E25029EAE00433AA5 /* CategoryList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryList.swift; sourceTree = "<group>"; };
+		A0FE956423C8D8FD007400BC /* CategoryRectangular.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRectangular.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,6 +194,10 @@
 		A0877C5623326DD20006F902 /* views */ = {
 			isa = PBXGroup;
 			children = (
+				A0475FF424BFE0D50046026D /* NoPreview.swift */,
+				A0475FF224BFE0D50046026D /* Sidebar.swift */,
+				A0475FF324BFE0D50046026D /* SidebarController.swift */,
+				A0475FF524BFE0D60046026D /* TabController.swift */,
 				A0A8A69723A9789500E3AC04 /* components */,
 				A03AB4B5237EF8CE00979899 /* modals */,
 				A0EBA0F6233A5CDD0000837C /* TripDetail.swift */,
@@ -200,7 +216,7 @@
 				A0050B7923A92E54000B7E59 /* ColorPicker.swift */,
 				A0050B7B23A9346F000B7E59 /* ColorPickerCircle.swift */,
 				A0C9210023B0191700A3493E /* TripDateSelector.swift */,
-				A0FE956423C8D8FD007400BC /* PackRectangular.swift */,
+				A0FE956423C8D8FD007400BC /* CategoryRectangular.swift */,
 				A026AAF4240575AB003414AF /* AddButton.swift */,
 				A091C10D243BF22500804B61 /* IntegratedStepper.swift */,
 				A0C28147244D33AA00012372 /* AddExpander.swift */,
@@ -208,6 +224,8 @@
 				A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */,
 				A0F6837E2496BA5600139D74 /* IconPicker.swift */,
 				A0F683802496BAB300139D74 /* IconPickerCircle.swift */,
+				A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */,
+				A0FB049E25029EAE00433AA5 /* CategoryList.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -319,13 +337,16 @@
 				A07B6C952347994D00578CDC /* Category.swift in Sources */,
 				A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */,
 				A0F756FF237B0B9700DCBC77 /* AddCategory.swift in Sources */,
+				A0475FF924BFE0D60046026D /* TabController.swift in Sources */,
 				A0F683812496BAB300139D74 /* IconPickerCircle.swift in Sources */,
 				A024932023BE7A60009AF5EF /* AppView.swift in Sources */,
-				A0FE956523C8D8FD007400BC /* PackRectangular.swift in Sources */,
+				A0FB049F25029EAE00433AA5 /* CategoryList.swift in Sources */,
+				A0FE956523C8D8FD007400BC /* CategoryRectangular.swift in Sources */,
 				A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */,
 				A07B6C972347994D00578CDC /* Item.swift in Sources */,
 				A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */,
 				A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */,
+				A059DF4024F964B0009908BE /* EditItemCategorySelector.swift in Sources */,
 				A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */,
 				A0EC86C423E9C7AB0081DFD5 /* IncludeTemplates.swift in Sources */,
 				A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */,
@@ -333,13 +354,16 @@
 				A0050B7A23A92E54000B7E59 /* ColorPicker.swift in Sources */,
 				A01FB8C02331CE48008062A1 /* AppDelegate.swift in Sources */,
 				A01F207323C4E50B0028180E /* TemplateHome.swift in Sources */,
+				A0475FF824BFE0D60046026D /* NoPreview.swift in Sources */,
 				A026AAF5240575AB003414AF /* AddButton.swift in Sources */,
 				A0EBEF49234CDF6D0099FEC2 /* AddItem.swift in Sources */,
 				A01FB8C22331CE48008062A1 /* SceneDelegate.swift in Sources */,
 				A0B61B692343A44500D0D13C /* Trip.swift in Sources */,
 				A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */,
 				A034F74A24536C980025EA62 /* EditCategory.swift in Sources */,
+				A0475FF724BFE0D60046026D /* SidebarController.swift in Sources */,
 				A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */,
+				A0475FF624BFE0D60046026D /* Sidebar.swift in Sources */,
 				A04D80E92342BC08004EE95F /* sampleData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,18 +502,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Trips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.2;
+				MARKETING_VERSION = 2020.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -503,18 +527,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Trips/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.2;
+				MARKETING_VERSION = 2020.3;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

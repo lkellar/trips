@@ -78,7 +78,7 @@ extension Category {
     }
     
     static func generateCategoryIndex(trip: Trip, context: NSManagedObjectContext) throws -> Int {
-        // Finds the lowest available Category index
+        // finds the highest index, and adds one to that
         
         let request: NSFetchRequest<Category> = Category.fetchRequest() as! NSFetchRequest<Category>
         

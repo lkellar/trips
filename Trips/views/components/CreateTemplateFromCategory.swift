@@ -22,7 +22,7 @@ struct CreateTemplateFromCategory: View {
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
     init(category: Category, accent: Color) {
-        self.itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+        itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.category), category))
         
         self.category = category
@@ -34,25 +34,25 @@ struct CreateTemplateFromCategory: View {
             Form {
                 Section {
                     TextField("Template Name", text: $updatedName).onAppear {
-                        self.updatedName = self.category.name
+                        updatedName = category.name
                     }
                 }
                 Section {
-                    if (self.items.count > 0) {
-                        ForEach(self.items, id:\.self) { item in
+                    if (items.count > 0) {
+                        ForEach(items, id:\.self) { item in
                             Button(action: {
-                                guard let index = self.excluded.firstIndex(of: item) else {
-                                    self.excluded.append(item)
+                                guard let index = excluded.firstIndex(of: item) else {
+                                    excluded.append(item)
                                     return
                                 }
-                                self.excluded.remove(at: index)
+                                excluded.remove(at: index)
                                 
                             }) {
                                 HStack {
                                     Text(item.name)
                                         .foregroundColor(.primary)
                                     Spacer()
-                                    if !self.excluded.contains(item) {
+                                    if !excluded.contains(item) {
                                         Image(systemName: "checkmark")
                                             .foregroundColor(.accentColor)
                                     }
@@ -65,18 +65,18 @@ struct CreateTemplateFromCategory: View {
                 }
                 Section {
                     Button(action: {
-                        let pendingTemplate = Category(context: self.context)
+                        let pendingTemplate = Category(context: context)
                         
-                        pendingTemplate.name = self.updatedName
+                        pendingTemplate.name = updatedName
                         pendingTemplate.isTemplate = true
                         
                         do {
-                            for itom in self.items {
-                                if !self.excluded.contains(itom) {
-                                    let item = Item(context: self.context)
+                            for itom in items {
+                                if !excluded.contains(itom) {
+                                    let item = Item(context: context)
                                     
                                     item.name = itom.name
-                                    item.index = try Item.generateItemIndex(category: pendingTemplate, context: self.context)
+                                    item.index = try Item.generateItemIndex(category: pendingTemplate, context: context)
                                     pendingTemplate.addToItems(item)
                                 }
                             }
@@ -84,22 +84,22 @@ struct CreateTemplateFromCategory: View {
                             print(error)
                         }
                         
-                        saveContext(self.context)
+                        saveContext(context)
 
-                        self.presentationMode.wrappedValue.dismiss()
+                        presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save")
-                    }.disabled(self.updatedName.count == 0 ? true : false)
+                    }.disabled(updatedName.count == 0 ? true : false)
                 }
             }.navigationBarTitle(Text("Create Template"))
             .navigationBarItems(trailing:
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel")
                 }))
         }.navigationViewStyle(StackNavigationViewStyle())
-        .accentColor(self.accent)
+        .accentColor(accent)
     }
 }
 

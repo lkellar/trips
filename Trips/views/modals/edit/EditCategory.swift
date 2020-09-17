@@ -6,6 +6,7 @@
 //  Copyright © 2020 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 struct EditCategory: View {
@@ -28,15 +29,15 @@ struct EditCategory: View {
             Section {
                 TextField("Category Name", text: $updatedName)
                     .onAppear {
-                        self.updatedName = self.category.name
+                        updatedName = category.name
                     }
                     .onDisappear(perform: {
-                        if self.updatedName.count > 0 && self.updatedName != self.category.name && !self.category.isDeleted{
-                            self.category.name = self.updatedName
+                        if updatedName.count > 0 && updatedName != category.name && !category.isDeleted{
+                            category.name = updatedName
                         }
                         
-                        if (self.category.hasChanges) {
-                            saveContext(self.context)
+                        if (category.hasChanges) {
+                            saveContext(context)
                         }
                         
                     })
@@ -44,57 +45,60 @@ struct EditCategory: View {
                 
             Section(footer: Text("This will create a copy of this category in another Trip")) {
                 Button(action: {
-                    if self.trips.count > 1  || self.showCopyToOther {
-                        self.showCopyToOther.toggle()
+                    if trips.count > 1  || showCopyToOther {
+                        showCopyToOther.toggle()
                     } else {
-                        self.showNoTripsAlert = true
+                        showNoTripsAlert = true
                     }
                 }) {
                     Text("Copy to Other Trip")
                 }
-                if self.showCopyToOther {
-                    CopyToOtherTrip(trip: self.category.trip, category: self.category, showSelf: self.$showCopyToOther)
+                if showCopyToOther {
+                    CopyToOtherTrip(trip: category.trip, category: category, showSelf: $showCopyToOther)
                 }
             }
             
             Section(footer: Text("This will create a template containing all items from this category")) {
                 Button(action: {
-                    self.showCreateTemplate.toggle()
+                    showCreateTemplate.toggle()
                 }) {
                     Text("Create Template from Category")
                 }.sheet(isPresented: $showCreateTemplate, content: {
-                    CreateTemplateFromCategory(category: self.category, accent: self.accent).environment(\.managedObjectContext, self.context)
+                    CreateTemplateFromCategory(category: category, accent: accent).environment(\.managedObjectContext, context)
                 })
             }
             
             Section {
                 Button(action: {
-                    copyToOther(category: self.category, trip: self.category.trip!, context: self.context)
-                    self.showDuplicateAlert = true
+                    copyToOther(category: category, trip: category.trip!, context: context)
+                    showDuplicateAlert = true
                 }) {
                     Text("Duplicate")
-                }.alert(isPresented: self.$showDuplicateAlert, content: {
-                    Alert(title: Text("Category \(self.updatedName) Duplicated"),
+                }.alert(isPresented: $showDuplicateAlert, content: {
+                    Alert(title: Text("Category \(updatedName) Duplicated"),
                           dismissButton: .default(Text("Dismiss")))
                 })
                 
                 Button(action: {
-                    self.showDeleteAlert = true
+                    showDeleteAlert = true
                 }) {
                     Text("Delete")
                 }.foregroundColor(.red)
-                    .alert(isPresented: self.$showDeleteAlert, content: {
-                    Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
+                    .alert(isPresented: $showDeleteAlert, content: {
+                    Alert(title: Text("Are you sure you want to delete \(updatedName)?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                            self.context.delete(self.category)
+                            category.items.forEach {item in
+                                context.delete(item as! NSManagedObject)
+                            }
+                            context.delete(category)
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })
                 
             }
         }.navigationBarTitle(Text("Edit Category"))
             .navigationBarItems(trailing: HStack {
-                Text("").alert(isPresented: self.$showNoTripsAlert, content:{
+                Text("").alert(isPresented: $showNoTripsAlert, content:{
                     Alert(title: Text("There are no other Trips"),
                         message: Text("Please go create another Trip first"),
                         dismissButton: .default(Text("Dismiss")))

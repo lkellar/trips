@@ -39,7 +39,7 @@ public class Item: NSManagedObject, Identifiable {
     }
     
     static func generateItemIndex(category: Category, context: NSManagedObjectContext) throws -> Int {
-        // Finds the lowest available Item index
+        // finds the highest index, and adds one to that
         // Stolen from generateCategoryIndex
         
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>

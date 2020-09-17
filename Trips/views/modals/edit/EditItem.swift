@@ -14,21 +14,25 @@ struct EditItem: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var item: Item
+    var trip: Trip?
     
     var accent: Color
     
     @State var updatedName: String = ""
     @State var selectedCategory: Int = -1
     
-    var categoryRequest : FetchRequest<Category>
-    var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
-    
     init(item: Item, accent: Color, trip: Trip) {
         self.item = item
         self.accent = accent
-        
-        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        self.trip = trip
+        print("Initiazing EditItem with \(item.name)")
+    }
+    
+    init(item: Item) {
+        self.item = item
+        self.accent = Color.accentColor
+        self.trip = nil
+        print("Initiazing EditItem with \(item.name)")
     }
    
     var body: some View {
@@ -37,47 +41,42 @@ struct EditItem: View {
                 Section {
                     TextField("Item Name", text: $updatedName)
                         .onAppear {
-                            if self.item.name.count > 0 {
-                                self.updatedName = self.item.name
+                            if item.name.count > 0 {
+                                updatedName = item.name
                             }
                         }
                         .onDisappear {
-                            if !self.item.isDeleted {
-                                if self.item.name != self.updatedName {
-                                    self.item.name = self.updatedName
-                                }
-                                if self.selectedCategory != -1 && self.item.category != self.categories[self.selectedCategory] {
-                                    self.item.category = self.categories[self.selectedCategory]
+                            if !item.isDeleted {
+                                if item.name != updatedName {
+                                    item.name = updatedName
                                 }
                             }
-                            if self.item.hasChanges {
-                                
-                                saveContext(self.context)
+                            if item.hasChanges {
+                                saveContext(context)
                             }
                         }
-                }
-                Section {
-                    Picker(selection: self.$selectedCategory, label: Text("Category"),
-                           content: {
-                            ForEach(0 ..< categories.count, id:\.self) { index in
-                                Text(self.categories[index].name).tag(index)
-                            }
-                    }).onAppear {
-                        if self.selectedCategory == -1 {
-                            self.selectedCategory = self.categories.firstIndex(of: self.item.category!) ?? 0
-                        }
+                    if let trip = trip {
+                        EditItemCategorySelector(item: item, trip: trip, selectedCategory: $selectedCategory)
                     }
+                }
+                
+                Section {
+                    Button(action: {
+                        presentationMode.wrappedValue.dismiss()
+                    }, label: {
+                        Text("Save")
+                    })
                 }
             }
             .navigationBarTitle("Edit Item")
             .navigationBarItems(trailing:
             Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("Close")
             }))
         }
-        .accentColor(self.accent)
+        .accentColor(accent)
         .navigationViewStyle(StackNavigationViewStyle())
     }
 }

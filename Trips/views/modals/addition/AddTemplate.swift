@@ -6,49 +6,57 @@
 //  Copyright © 2020 Lucas Kellar. All rights reserved.
 //
 
+import CoreData
 import SwiftUI
 
 struct AddTemplate: View {
     @State var title: String = ""
     
+    @Binding var selection: SelectionConfig
+    var modal: Bool
+    
     @Environment(\.managedObjectContext) var context
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    TextField("Template Name", text: $title)
-                }
-                
-                Section {
-                    Button(action: {
-                        let pendingTemplate = Category(context: self.context)
-                        
-                        pendingTemplate.name = self.title
-                        pendingTemplate.isTemplate = true
-                        
-                        saveContext(self.context)
-                        
-                        self.presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Save")
-                    }.disabled(title.count == 0)
-                }
+        Form {
+            Section {
+                TextField("Template Name", text: $title)
             }
-        .navigationBarTitle("Add Template")
+            
+            Section {
+                Button(action: {
+                    let pendingTemplate = Category(context: context)
+                    
+                    pendingTemplate.name = title
+                    pendingTemplate.isTemplate = true
+                    
+                    saveContext(context)
+                    
+                    selection = SelectionConfig(primaryViewSelection: .template, viewSelection: pendingTemplate.objectID)
+                    if (modal) {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                }) {
+                    Text("Save")
+                }.disabled(title.count == 0)
+            }
+        }
+    .navigationBarTitle("Add Template")
         .navigationBarItems(trailing:
-            Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
-            }, label: {
-                Text("Cancel")
-            }))
-        }.navigationViewStyle(StackNavigationViewStyle())
+                        Button(action: {
+                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
+                            self.presentationMode.wrappedValue.dismiss()
+                        }, label: {
+                            if (modal) {
+                                Text("Cancel")
+                            }
+                        }))
     }
 }
 
 struct AddTemplate_Previews: PreviewProvider {
     static var previews: some View {
-        AddTemplate()
+        NoPreview()
     }
 }

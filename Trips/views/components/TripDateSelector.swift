@@ -17,20 +17,20 @@ struct TripDateSelector: View {
     var isEndDate: Bool
     
     var body: some View {
-        Section(footer: Text(!(!self.validDates && self.isEndDate) ? "" : "These dates are invalid and cannot be saved")) {
-            if !self.showDate {
+        Section(footer: Text(!(!validDates && isEndDate) ? "" : "These dates are invalid and cannot be saved")) {
+            if !showDate {
                 Button(action: {
-                    self.showDate = true
+                    showDate = true
                 }) {
-                    Text("Add \(self.isEndDate ? "End" : "Start" ) Date")
+                    Text("Add \(isEndDate ? "End" : "Start" ) Date")
                 }
             } else {
-                DatePicker(selection: $date, displayedComponents: .date, label: { Text("\(self.isEndDate ? "End" : "Start") Date")
-                }).foregroundColor(self.validDates ? .primary : .red)
+                DatePicker(selection: $date, displayedComponents: .date, label: { Text("\(isEndDate ? "End" : "Start") Date")
+                }).foregroundColor(validDates ? .primary : .red)
                 Button(action: {
-                    self.showDate = false
+                    showDate = false
                 }) {
-                    Text("Reset \(self.isEndDate ? "End" : "Start" ) Date")
+                    Text("Reset \(isEndDate ? "End" : "Start" ) Date")
                 }
             }
         }

@@ -19,22 +19,22 @@ struct IconPickerCircle: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(self.determineColor(), lineWidth: 3)
-                .opacity(self.colorScheme == .dark && self.icon != self.selectedColor ? 0 : 1)
-                .frame(width: self.iconSize*2, height: self.iconSize*2)
+                .stroke(determineColor(), lineWidth: 3)
+                .opacity(colorScheme == .dark && icon != selectedColor ? 0 : 1)
+                .frame(width: iconSize*2, height: iconSize*2)
             Button(action: {
-                self.selectedColor = self.icon
+                selectedColor = icon
             }) {
-                Image(systemName: self.icon).font(.system(size:self.iconSize)).foregroundColor(self.colorScheme == .dark ? Color.white : Color.black)
+                Image(systemName: icon).font(.system(size:iconSize)).foregroundColor(colorScheme == .dark ? Color.white : Color.black)
             }.buttonStyle(BorderlessButtonStyle())
         }
     }
     
     func determineColor() -> Color {
-        if (self.colorScheme == .dark) {
-            return self.icon == self.selectedColor ? Color.white : Color.black
+        if (colorScheme == .dark) {
+            return icon == selectedColor ? Color.white : Color.black
         }
-        return self.icon == self.selectedColor ? Color.black : Color.white
+        return icon == selectedColor ? Color.black : Color.white
     }
 }
 

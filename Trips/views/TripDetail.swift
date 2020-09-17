@@ -20,67 +20,89 @@ struct TripDetail: View {
     @State var itemModalDisplayed = false
     @State var categoryModalDisplayed = false
     @State var editTripDisplayed = false
+    @State var templateModalDisplayed = false
+    
+    @State var selectedItemToEdit: Item? = nil
     
     @State var addActionSheet = false
     @State var completedAlert = false
     
-    @Binding var accent: Color
-    @Binding var selection: NSManagedObjectID?
+    @Binding var globalAccent: Color
+    @Binding var selection: SelectionConfig
     
     var trip: Trip
-
+    
     var categoryRequest : FetchRequest<Category>
     var itemRequest: FetchRequest<Item>
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
     
-    init(trip: Trip, accent: Binding<Color>, selection: Binding<NSManagedObjectID?>) {
-        self.trip = trip
-        self.categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
-            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
-        
-        self.itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
-        
-        self._accent = accent
-        self._selection = selection
+    var accent: Color {
+        get {
+            return Color.fromString(color: trip.color ?? "blue")
+        }
     }
     
-    @ViewBuilder
+    init(trip: Trip, selection: Binding<SelectionConfig>) {
+        self.trip = trip
+        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        
+        itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
+        
+        _globalAccent = Binding.constant(.blue)
+        _selection = selection
+    }
+    
+    init(trip: Trip, selection: Binding<SelectionConfig>, globalAccent: Binding<Color>) {
+        self.trip = trip
+        categoryRequest = FetchRequest(entity: Category.entity(),sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
+            NSPredicate(format: "%K == %@", #keyPath(Category.trip), trip))
+        
+        itemRequest = FetchRequest(fetchRequest: Item.itemsInTripFetchRequest(trip: trip))
+        
+        _globalAccent = globalAccent
+        _selection = selection
+    }
+        
     var body: some View {
-        if self.trip.isDeleted {
+        if trip.isDeleted {
             Text("No Trip Selected").font(.subheadline)
                 .onAppear(perform: {
-                    self.accent = Color.blue
+                    globalAccent = .blue
                 })
                 .navigationBarTitle("No Trip Selected")
                 .navigationBarItems(trailing: EmptyView())
         } else {
             ZStack {
                 VStack {
-                    if !(!self.trip.showCompleted && (self.items.filter {$0.completed == false}).count == 0 && self.items.count > 0) {
+                    if !(!trip.showCompleted && (items.filter {$0.completed == false}).count == 0 && items.count > 0) {
                         List {
-                            ForEach(self.categories, id: \.self) {category in
+                            ForEach(categories, id: \.self) {category in
                                 // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                                Section(header: Text(category.name + (self.refreshing ? "" : ""))) {
-                                    ForEach(self.items.filter {$0.category == category}) { item in
-                                        if (!item.completed || self.trip.showCompleted) && !self.editTripDisplayed {
+                                Section(header: Text(category.name + (refreshing ? "" : ""))) {
+                                    ForEach(items.filter {$0.category == category}) { item in
+                                        if (!item.completed || trip.showCompleted) && !editTripDisplayed {
                                             HStack {
-                                                Button(action: {self.itemModalDisplayed = true}) {
+                                                Button(action: {
+                                                    selectedItemToEdit = item
+                                                    // For some reason if the view isn't updated, the first time one opens edititem, it won't work
+                                                    refreshing.toggle()
+                                                    itemModalDisplayed = true
+                                                }) {
                                                     Text(item.name)
                                                         .accentColor(.primary)
-                                                }.sheet(isPresented: self.$itemModalDisplayed, content: {
-                                                    EditItem(item: item, accent: self.accent, trip: self.trip).environment(\.managedObjectContext, self.context)
-                                                })
+                                                }
                                                 Spacer()
                                                 Button(action: {
-                                                    self.toggleItemCompleted(item)
+                                                    toggleItemCompleted(item)
                                                     let impactMed = UIImpactFeedbackGenerator(style: .medium)
                                                     impactMed.impactOccurred()
                                                     
                                                     // If there are no uncompleted items
-                                                    if (self.items.filter {$0.completed == false}).count == 0 {
-                                                        self.completedAlert = true
+                                                    if (items.filter {$0.completed == false}).count == 0 {
+                                                        completedAlert = true
                                                     }
                                                 }) {
                                                     ZStack {
@@ -97,21 +119,20 @@ struct TripDetail: View {
                                                 }.buttonStyle(BorderlessButtonStyle())
                                             }
                                         }
-                                    }.onDelete(perform: self.getDeleteFunction(category: category))
-                                        .onMove(perform: self.getMoveFunction(category: category))
+                                    }.onDelete(perform: getDeleteFunction(category: category))
+                                        .onMove(perform: getMoveFunction(category: category))
                                 }
                             }
                         }.listStyle(GroupedListStyle())
-                    //Text(refreshing ? "" : "")
                     } else {
-                        if self.trip.categories.count > 0 && self.items.count > 0 {
+                        if trip.categories.count > 0 && items.count > 0 {
                             AddButton(action: {
                                 do {
-                                    try self.trip.beginNextLeg(context: self.context)
+                                    try trip.beginNextLeg(context: context)
                                 } catch {
                                     print(error)
                                 }
-                            }, text: "Begin Next Leg", accent: self.accent)
+                            }, text: "Begin Next Leg", accent: .accentColor)
                             Text("This will uncheck all items.").font(.callout)
                         }
                     }
@@ -119,34 +140,35 @@ struct TripDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: self.accent, showAddItem: self.$modalDisplayed, showAddCategory: self.$categoryModalDisplayed).padding()
+                        AddExpander(color: .accentColor, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed, showAddTemplate: $templateModalDisplayed).padding()
                     }
                 }
             }
+            .accentColor(accent)
             .navigationBarTitle(trip.name)
                 .navigationBarItems(trailing: HStack {
                     Button(action: {
                         print("Hidden 0.5")
                     }) {
-                        Spacer()
+                        Text(refreshing ? "" : "")
                     }.alert(isPresented: $completedAlert, content: {
                         Alert(title: Text("All Items Checked"),
                               message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
                               primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
                                 do {
-                                    try self.trip.beginNextLeg(context: self.context)
+                                    try trip.beginNextLeg(context: context)
                                 } catch {
                                     print(error)
                                 }
                               }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
                     })
                     Button(action: {
-                        self.editTripDisplayed = true
+                        editTripDisplayed = true
                     }, label: {
-                        Image(systemName: "info.circle")
+                        Image(systemName: "info.circle").foregroundColor(accent)
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
-                            EditTrip(trip: self.trip, refreshing: self.$refreshing, accent: self.$accent, selection: self.$selection).environment(\.managedObjectContext, self.context)
+                            EditTrip(trip: trip, refreshing: $refreshing, globalAccent: $globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                         }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                     Button(action: {
                         print("Hidden 1")
@@ -154,7 +176,18 @@ struct TripDetail: View {
                         Spacer()
                     }
                     .sheet(isPresented: $modalDisplayed, content: {
-                        AddItem(categories: self.trip.categories.allObjects as! [Category], refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                        AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                    })
+                    Button(action: {
+                        print("Hidedn 1.5")
+                    }) {
+                        Spacer()
+                    }.sheet(isPresented: $itemModalDisplayed, content: {
+                        if let item = selectedItemToEdit {
+                            EditItem(item: item, accent: accent, trip: trip).environment(\.managedObjectContext, context)
+                        } else {
+                            Text("No Item Selected")
+                        }
                     })
                     Button(action: {
                         print("Hidden 2")
@@ -162,16 +195,28 @@ struct TripDetail: View {
                         Spacer()
                     }
                     .sheet(isPresented: $categoryModalDisplayed, content: {
-                        AddCategory(trip: self.trip, refreshing: self.$refreshing, accent: self.accent).environment(\.managedObjectContext, self.context)
+                        AddCategory(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
                     })
-                    EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                }).onAppear(perform: {
-                    self.accent = Color.fromString(color: self.trip.color ?? "blue")
-                }).onDisappear(perform: {
-                    if (UIDevice.current.userInterfaceIdiom == .phone) {
-                        self.accent = Color.blue
+                    Button(action: {
+                        print("Hidden 3")
+                    }) {
+                        Spacer()
                     }
+                    .sheet(isPresented: $templateModalDisplayed, content: {
+                        AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                    })
+                    EditButton().foregroundColor(accent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 })
+            .onAppear(perform: {
+                globalAccent = accent
+                selection.viewSelection = trip.objectID
+            })
+            .onChange(of: accent) { newAccent in
+                globalAccent = accent
+            }
+            .onDisappear(perform: {
+                globalAccent = Color.blue
+            })
         }
     }
     
@@ -182,11 +227,11 @@ struct TripDetail: View {
             for offset in offsets {
                 let item = items[offset]
                 category.removeFromItems(item)
-                self.context.delete(item)
+                context.delete(item)
             }
                         
-            saveContext(self.context)
-            self.refreshing.toggle()
+            saveContext(context)
+            refreshing.toggle()
             
         }
         
@@ -195,23 +240,23 @@ struct TripDetail: View {
     
     func toggleItemCompleted(_ item: Item) -> Void {
         item.completed.toggle()
-        saveContext(self.context)
-        self.refreshing.toggle()
+        saveContext(context)
+        refreshing.toggle()
     }
     
     func getMoveFunction(category: Category) -> (IndexSet, Int) -> Void {
         func moveItem(from source: IndexSet, to destination: Int) {
             var items: [Item] = []
             for index in source {
-                items.append(fetchItems(category, self.context)[index])
+                items.append(fetchItems(category, context)[index])
             }
             
             for item in items {
-                Item.adjustItemIndex(source: item.index, index: destination, category: category, context: self.context)
-                item.index = (fetchItems(category, self.context).count != destination ? destination : destination - 1)
+                Item.adjustItemIndex(source: item.index, index: destination, category: category, context: context)
+                item.index = (fetchItems(category, context).count != destination ? destination : destination - 1)
             }
             
-            saveContext(self.context)
+            saveContext(context)
         }
         
         return moveItem

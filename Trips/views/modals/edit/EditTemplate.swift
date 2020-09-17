@@ -19,34 +19,36 @@ struct EditTemplate: View {
     @State var showDeleteAlert: Bool = false
     
     @State var updatedName: String = ""
+    @Binding var selection: SelectionConfig
     
-    @Binding var selection: NSManagedObjectID?
-   
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     TextField("Template Name", text: $updatedName)
                         .onAppear {
-                            if self.template.name.count > 0 {
-                                self.updatedName = self.template.name
+                            if template.name.count > 0 {
+                                updatedName = template.name
                             }
                     }
-                    //Text((self.refreshing ? "" : ""))
+                    //Text((refreshing ? "" : ""))
                 }
                 Button(action: {
-                    self.showDeleteAlert = true;
+                    showDeleteAlert = true;
                 }) {
                     Text("Delete").foregroundColor(.red)
-                }.alert(isPresented: self.$showDeleteAlert, content: {
-                    Alert(title: Text("Are you sure you want to delete \(self.updatedName)?"),
+                }.alert(isPresented: $showDeleteAlert, content: {
+                    Alert(title: Text("Are you sure you want to delete \(updatedName)?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                            self.presentationMode.wrappedValue.dismiss()
+                            presentationMode.wrappedValue.dismiss()
+                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
 
                             DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-                                self.context.delete(self.template)
-                                self.selection = nil
+                                template.items.forEach {item in
+                                    context.delete(item as! NSManagedObject)
+                                }
+                                context.delete(template)
                             })
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })
@@ -54,17 +56,17 @@ struct EditTemplate: View {
             .navigationBarTitle("Edit Template")
             .navigationBarItems(trailing:
             Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
             }, label: {
                 Text("Close")
             }))
         }.onDisappear {
-            if !self.template.isDeleted && self.template.name != self.updatedName {
-                self.template.name = self.updatedName
+            if !template.isDeleted && template.name != updatedName {
+                template.name = updatedName
             }
-            if self.template.hasChanges {
-                saveContext(self.context)
-                self.refreshing.toggle()
+            if template.hasChanges {
+                saveContext(context)
+                refreshing.toggle()
             }
         }.navigationViewStyle(StackNavigationViewStyle())
     }
