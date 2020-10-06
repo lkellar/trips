@@ -22,10 +22,17 @@ struct TripDetail: View {
     @State var editTripDisplayed = false
     @State var templateModalDisplayed = false
     
-    @State var selectedItemToEdit: Item? = nil
-    
     @State var addActionSheet = false
     @State var completedAlert = false
+    @State var showModals = false
+    
+    @State var addItemToggle = false
+    @State var addCategoryToggle = false
+    @State var addTemplateToggle = false
+    
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    #endif
     
     @Binding var globalAccent: Color
     @Binding var selection: SelectionConfig
@@ -37,12 +44,6 @@ struct TripDetail: View {
     
     var categories: FetchedResults<Category>{categoryRequest.wrappedValue}
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
-    
-    var accent: Color {
-        get {
-            return Color.fromString(color: trip.color ?? "blue")
-        }
-    }
     
     init(trip: Trip, selection: Binding<SelectionConfig>) {
         self.trip = trip
@@ -86,10 +87,12 @@ struct TripDetail: View {
                                         if (!item.completed || trip.showCompleted) && !editTripDisplayed {
                                             HStack {
                                                 Button(action: {
-                                                    selectedItemToEdit = item
-                                                    // For some reason if the view isn't updated, the first time one opens edititem, it won't work
-                                                    refreshing.toggle()
-                                                    itemModalDisplayed = true
+                                                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                                                                  secondaryViewSelectionType: selection.secondaryViewSelection == item.objectID ? nil : .editItem,
+                                                                  secondaryViewSelection: selection.secondaryViewSelection == item.objectID ? nil : item.objectID)
+                                                    if (showModals) {
+                                                        itemModalDisplayed = true
+                                                    }
                                                 }) {
                                                     Text(item.name)
                                                         .accentColor(.primary)
@@ -140,11 +143,11 @@ struct TripDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: .accentColor, showAddItem: $modalDisplayed, showAddCategory: $categoryModalDisplayed, showAddTemplate: $templateModalDisplayed).padding()
+                        AddExpander(color: .accentColor, showAddItem: $addItemToggle, showAddCategory: $addCategoryToggle, showAddTemplate: $addTemplateToggle).padding()
                     }
                 }
             }
-            .accentColor(accent)
+            .accentColor(globalAccent)
             .navigationBarTitle(trip.name)
                 .navigationBarItems(trailing: HStack {
                     Button(action: {
@@ -163,9 +166,12 @@ struct TripDetail: View {
                               }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
                     })
                     Button(action: {
-                        editTripDisplayed = true
+                        if (showModals) {
+                            editTripDisplayed = true
+                        }
+                        selection.secondaryViewSelectionType = selection.secondaryViewSelectionType == .editTrip ? nil : .editTrip
                     }, label: {
-                        Image(systemName: "info.circle").foregroundColor(accent)
+                        Image(systemName: "info.circle").foregroundColor(globalAccent)
                         }).padding()
                         .sheet(isPresented: $editTripDisplayed, content: {
                             EditTrip(trip: trip, refreshing: $refreshing, globalAccent: $globalAccent, selection: $selection).environment(\.managedObjectContext, context)
@@ -176,18 +182,14 @@ struct TripDetail: View {
                         Spacer()
                     }
                     .sheet(isPresented: $modalDisplayed, content: {
-                        AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                        AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                     })
                     Button(action: {
                         print("Hidedn 1.5")
                     }) {
                         Spacer()
                     }.sheet(isPresented: $itemModalDisplayed, content: {
-                        if let item = selectedItemToEdit {
-                            EditItem(item: item, accent: accent, trip: trip).environment(\.managedObjectContext, context)
-                        } else {
-                            Text("No Item Selected")
-                        }
+                        EditItem(selection: $selection, accent: $globalAccent).environment(\.managedObjectContext, context)
                     })
                     Button(action: {
                         print("Hidden 2")
@@ -195,7 +197,7 @@ struct TripDetail: View {
                         Spacer()
                     }
                     .sheet(isPresented: $categoryModalDisplayed, content: {
-                        AddCategory(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                        AddCategory(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                     })
                     Button(action: {
                         print("Hidden 3")
@@ -203,16 +205,45 @@ struct TripDetail: View {
                         Spacer()
                     }
                     .sheet(isPresented: $templateModalDisplayed, content: {
-                        AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: accent).environment(\.managedObjectContext, context)
+                        AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                     })
-                    EditButton().foregroundColor(accent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    EditButton().foregroundColor(globalAccent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 })
             .onAppear(perform: {
-                globalAccent = accent
+                globalAccent = Color.fromString(color: trip.color ?? "blue")
                 selection.viewSelection = trip.objectID
+                #if os(iOS)
+                if horizontalSizeClass == .compact {
+                    showModals = true
+                }
+                #endif
             })
-            .onChange(of: accent) { newAccent in
-                globalAccent = accent
+            .onChange(of: trip) { newTrip in
+                globalAccent = Color.fromString(color: newTrip.color ?? "blue")
+            }
+            .onChange(of: addItemToggle) {newAddItemToggle in
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                    secondaryViewSelectionType: selection.secondaryViewSelectionType == .addItem ? nil : .addItem,
+                  secondaryViewSelection: nil)
+                if (showModals) {
+                    modalDisplayed = true
+                }
+            }
+            .onChange(of: addCategoryToggle) {newAddCategoryToggle in
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                    secondaryViewSelectionType: selection.secondaryViewSelectionType == .addCategory ? nil : .addCategory,
+                  secondaryViewSelection: nil)
+                if (showModals) {
+                    categoryModalDisplayed = true
+                }
+            }
+            .onChange(of: addTemplateToggle) {newAddTemplateToggle in
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                    secondaryViewSelectionType: selection.secondaryViewSelectionType == .addTemplate ? nil : .addTemplate,
+                  secondaryViewSelection: nil)
+                if (showModals) {
+                    modalDisplayed = true
+                }
             }
             .onDisappear(perform: {
                 globalAccent = Color.blue

@@ -57,7 +57,7 @@ struct TemplateHome: View {
                             Spacer()
                             AddButton(action: {
                                 addTemplateModalDisplayed = true
-                                selection = SelectionConfig(primaryViewSelection: .addTemplate, viewSelection: nil)
+                                selection = SelectionConfig(viewSelectionType: .addTemplate, viewSelection: nil, secondaryViewSelectionType: .none)
                             }, text: "Add a Template!")
                             Spacer()
                         }
@@ -78,7 +78,7 @@ struct TemplateHome: View {
             .navigationBarItems(trailing:
             Button(action: {
                 addTemplateModalDisplayed = true
-                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
             }, label: {
                 Image(systemName: "plus")
             }
@@ -110,10 +110,10 @@ struct TemplatePairView: View {
     var body: some View {
         HStack {
             Spacer()
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection), tag: pair.first.objectID, selection: $selection.viewSelection) {
+            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: pair.first.objectID, selection: $selection.viewSelection) {
                 Button(action: {
                     selection.viewSelection = pair.first.objectID
-                    selection.primaryViewSelection = .template
+                    selection.viewSelectionType = .template
                 }) {
                     CategoryRectangular(name: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width)
                 }.buttonStyle(PlainButtonStyle())
@@ -121,7 +121,7 @@ struct TemplatePairView: View {
         
         if (pair.second != nil) {
             // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection), tag: pair.second!.objectID, selection: $selection.viewSelection) {
+            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: pair.second!.objectID, selection: $selection.viewSelection) {
                 Button(action: {
                     selection.viewSelection = pair.second!.objectID
                 }) {

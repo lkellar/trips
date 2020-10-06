@@ -22,9 +22,10 @@ struct AddItem: View {
     @State var quantity: Int = 1
     
     @Binding var refreshing: Bool
+    @Binding var selection: SelectionConfig
     var accent: Color
     
-    init(categories: [Category], selectCategory: Bool, refreshing: Binding<Bool>, accent: Color) {
+    init(categories: [Category], selectCategory: Bool, refreshing: Binding<Bool>, accent: Color, selection: Binding<SelectionConfig>) {
         if (categories.count > 1) {
             self.categories = categories.sorted { first, second in
                 return first.index < second.index
@@ -34,6 +35,7 @@ struct AddItem: View {
         }
         self.selectCategory = selectCategory
         _refreshing = refreshing
+        _selection = selection
         self.accent = accent
     }
     
@@ -78,6 +80,7 @@ struct AddItem: View {
                         for _ in 1...quantity {
                             saveItem(title: title)
                         }
+                        selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save")
@@ -86,13 +89,15 @@ struct AddItem: View {
             }.navigationBarTitle("Add Item")
             .navigationBarItems(trailing:
                 Button(action: {
+                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel")
                 }))
         }.accentColor(accent)
             .onDisappear(perform: {
-            refreshing.toggle()
+                refreshing.toggle()
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
         }).navigationViewStyle(StackNavigationViewStyle())
     }
     

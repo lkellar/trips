@@ -39,7 +39,7 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $tripsExpanded) {
                 ForEach(sortTrips(trips)) { trip in
                     Button(action: {
-                        selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: trip.objectID)
+                        selection = SelectionConfig(viewSelectionType: .trip, viewSelection: trip.objectID)
                     }) {
                         Label(trip.name, systemImage: trip.icon?.replacingOccurrences(of: ".fill", with: "") ?? "house").accentColor(Color.fromString(color: trip.color ?? "default"))
                     } 
@@ -50,7 +50,7 @@ struct Sidebar: View {
             DisclosureGroup(isExpanded: $templatesExpanded) {
                 ForEach(templates) { template in
                     Button(action: {
-                        selection = SelectionConfig(primaryViewSelection: .template, viewSelection: template.objectID)
+                        selection = SelectionConfig(viewSelectionType: .template, viewSelection: template.objectID)
                     }) {
                         Text(template.name)
                     }
@@ -67,7 +67,7 @@ struct Sidebar: View {
                 }
             } label: {
                 Button(action: {
-                    selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                    selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
                 }) {
                     Label("Add Trip", systemImage: "plus")
                 }
@@ -87,7 +87,7 @@ struct Sidebar: View {
                 }
             } label: {
                 Button(action: {
-                    selection = SelectionConfig(primaryViewSelection: .addTemplate, viewSelection: nil)
+                    selection = SelectionConfig(viewSelectionType: .addTemplate, viewSelection: nil, secondaryViewSelectionType: .none)
                 }) {
                     Label("Add Template", systemImage: "plus")
                 }

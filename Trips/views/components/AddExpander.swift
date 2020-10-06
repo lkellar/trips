@@ -47,7 +47,7 @@ struct AddExpander: View {
                     if showExpandedText {
                         VStack {
                             Button(action: {
-                                showAddItem = true
+                                showAddItem.toggle()
                                 unExpand()
                             }) {
                                 HStack {
@@ -59,7 +59,7 @@ struct AddExpander: View {
                             }
                             Spacer()
                             Button(action: {
-                                showAddCategory = true
+                                showAddCategory.toggle()
                                 unExpand()
                             }) {
                                 HStack {
@@ -71,7 +71,7 @@ struct AddExpander: View {
                             }
                             Spacer()
                             Button(action: {
-                                showAddTemplate = true
+                                showAddTemplate.toggle()
                                 unExpand()
                             }) {
                                 HStack {
@@ -111,7 +111,7 @@ struct AddExpander: View {
                                     }
                                 }
                             } else {
-                                showAddItem = true
+                                showAddItem.toggle()
                             }
                         }) {
                         Image(systemName: "plus")

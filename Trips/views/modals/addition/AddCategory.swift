@@ -20,16 +20,18 @@ struct AddCategory: View {
     var templates: FetchedResults<Category>{templateRequest.wrappedValue}
     
     @Binding var refreshing: Bool
+    @Binding var selection: SelectionConfig
     
     var accent: Color
     
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Color) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Color, selection: Binding<SelectionConfig>) {
         templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
         
         _refreshing = refreshing
+        _selection = selection
         
         self.accent = accent
     }
@@ -53,6 +55,7 @@ struct AddCategory: View {
                     } catch {
                         print(error)
                     }
+                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Save Category")
@@ -60,6 +63,7 @@ struct AddCategory: View {
             }.navigationBarTitle("Add Category")
                 .navigationBarItems(trailing:
                     Button(action: {
+                        selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                         presentationMode.wrappedValue.dismiss()
                     }, label: {
                         Text("Cancel")
@@ -67,6 +71,7 @@ struct AddCategory: View {
             )
         }.accentColor(accent)
         .onDisappear(perform: {
+            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
             refreshing.toggle()
         }).navigationViewStyle(StackNavigationViewStyle())
     }

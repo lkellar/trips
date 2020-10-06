@@ -129,7 +129,7 @@ struct EditTrip: View {
                               message: Text("This cannot be undone."),
                               primaryButton: Alert.Button.destructive(Text("Delete"), action: {
                                 presentationMode.wrappedValue.dismiss()
-                                selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+                                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                                 DispatchQueue.main.async {
                                     trip.categories.forEach {category in
                                         (category as! Category).items.forEach { item in
@@ -147,6 +147,7 @@ struct EditTrip: View {
             .navigationBarTitle("Edit Trip")
             .navigationBarItems(trailing:
                 Button(action: {
+                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Close")
@@ -180,6 +181,7 @@ struct EditTrip: View {
                 saveContext(context)
             }
             refreshing.toggle()
+            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
         }
     }
 }

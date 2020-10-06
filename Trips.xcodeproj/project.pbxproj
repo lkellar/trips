@@ -42,6 +42,7 @@
 		A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BE157123E0949E000F8542 /* EditTemplate.swift */; };
 		A0C28148244D33AA00012372 /* AddExpander.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C28147244D33AA00012372 /* AddExpander.swift */; };
 		A0C9210123B0191700A3493E /* TripDateSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0C9210023B0191700A3493E /* TripDateSelector.swift */; };
+		A0CFE6642515223D0002284B /* iPadDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0CFE6632515223D0002284B /* iPadDetailController.swift */; };
 		A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */; };
 		A0E7811C233E8579007974CD /* Trips.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0E7811A233E8579007974CD /* Trips.xcdatamodeld */; };
 		A0EBA0F7233A5CDD0000837C /* TripDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0EBA0F6233A5CDD0000837C /* TripDetail.swift */; };
@@ -94,6 +95,7 @@
 		A0BE157123E0949E000F8542 /* EditTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplate.swift; sourceTree = "<group>"; };
 		A0C28147244D33AA00012372 /* AddExpander.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpander.swift; sourceTree = "<group>"; };
 		A0C9210023B0191700A3493E /* TripDateSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDateSelector.swift; sourceTree = "<group>"; };
+		A0CFE6632515223D0002284B /* iPadDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPadDetailController.swift; sourceTree = "<group>"; };
 		A0E63DE524676CE700731B62 /* CreateTemplateFromCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTemplateFromCategory.swift; sourceTree = "<group>"; };
 		A0E7811B233E8579007974CD /* Trips.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Trips.xcdatamodel; sourceTree = "<group>"; };
 		A0EBA0F6233A5CDD0000837C /* TripDetail.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripDetail.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				A024931F23BE7A60009AF5EF /* AppView.swift */,
 				A01F207223C4E50B0028180E /* TemplateHome.swift */,
 				A0762B7123D75BD2007A9E9D /* TemplateDetail.swift */,
+				A0CFE6632515223D0002284B /* iPadDetailController.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
 				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
 				A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */,
+				A0CFE6642515223D0002284B /* iPadDetailController.swift in Sources */,
 				A0F6837F2496BA5600139D74 /* IconPicker.swift in Sources */,
 				A0877C5C233274360006F902 /* TripHome.swift in Sources */,
 				A07B6C952347994D00578CDC /* Category.swift in Sources */,
@@ -502,7 +506,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -513,9 +517,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.3;
+				MARKETING_VERSION = 2020.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -527,7 +532,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -538,9 +543,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.3;
+				MARKETING_VERSION = 2020.4;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

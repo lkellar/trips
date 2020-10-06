@@ -64,7 +64,7 @@ struct AddTrip: View {
                 Button(action: {
                     let objectId = saveTrip()
                     
-                    selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: objectId)
+                    selection = SelectionConfig(viewSelectionType: .trip, viewSelection: objectId, secondaryViewSelectionType: .none)
                     if (modal) {
                         self.presentationMode.wrappedValue.dismiss()
                     }
@@ -75,7 +75,7 @@ struct AddTrip: View {
         }.navigationBarTitle("Add Trip")
         .navigationBarItems(trailing:
                         Button(action: {
-                            selection = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+                            selection = SelectionConfig(viewSelectionType: .trip, viewSelection: nil, secondaryViewSelectionType: .none)
                             self.presentationMode.wrappedValue.dismiss()
                         }, label: {
                             if (modal) {

@@ -40,7 +40,7 @@ struct TripHome: View {
                 } else {
                     AddButton(action: {
                         showAddTrip = true
-                        selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                        selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
                     }, text: "Add a Trip!")
                     Button(action: {
                         SampleDataFactory(context: context).addSampleTrips()
@@ -54,7 +54,7 @@ struct TripHome: View {
         .navigationBarItems(
              trailing: Button(action: {
                     showAddTrip = true
-                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
                  }) {
                     Image(systemName: "plus")
                 }.padding()

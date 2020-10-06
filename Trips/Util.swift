@@ -165,9 +165,20 @@ enum PrimarySelectionType {
     case addTemplate
 }
 
+enum SecondarySelectionType {
+    case editTrip
+    case editTemplate
+    case editItem
+    case addItem
+    case addTemplate
+    case addCategory
+}
+
 struct SelectionConfig: Equatable {
-    var primaryViewSelection: PrimarySelectionType
+    var viewSelectionType: PrimarySelectionType
     var viewSelection: NSManagedObjectID?
+    var secondaryViewSelectionType: SecondarySelectionType?
+    var secondaryViewSelection: NSManagedObjectID?
 }
 
 extension PrimarySelectionType {
@@ -182,5 +193,28 @@ extension PrimarySelectionType {
         case .addTemplate:
             return "addTemplate"
         }
+    }
+}
+
+
+func fetchEntityByExisting<T: NSManagedObject>(id: NSManagedObjectID?, entityType: T.Type, context: NSManagedObjectContext) -> T? {
+    if let id = id {
+        do {
+            // We can force unwrap the selection, as there is a check in the parent to only use this view if selection is valid
+            logger.info("Looking up existing entity by ID. ID is \(id, privacy: .private(mask: .hash))")
+            let entity = try context.existingObject(with: id) as? T
+            if let unwrappedEntity = entity {
+                logger.info("Successfully found entity with ID:  \(id, privacy: .private(mask: .hash))")
+                return unwrappedEntity
+            }
+            logger.info("Couldn't found entity with ID for Given Type:  \(id, privacy: .private(mask: .hash))")
+
+            return nil
+        } catch {
+            logger.error("Looking up entity with ID: \(id, privacy: .private(mask: .hash)) failed. Error: \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
+    } else {
+        return nil
     }
 }
