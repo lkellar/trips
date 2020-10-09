@@ -152,7 +152,7 @@ struct EditTrip: View {
                 }, label: {
                     Text("Close")
                         .foregroundColor(updatedColor)
-                })
+                }).padding()
             )
         }.accentColor(updatedColor)
         .navigationViewStyle(StackNavigationViewStyle())

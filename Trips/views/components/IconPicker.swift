@@ -23,12 +23,11 @@ struct IconPicker: View {
                 IconPickerCircle(icon: "gamecontroller.fill", selectedColor: $selectedIcon, iconSize: iconSize)
             }
             HStack {
-            
-            IconPickerCircle(icon: "gift.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "studentdesk", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "cart.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "car.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "person.2.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "gift.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "studentdesk", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "cart.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "car.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+                IconPickerCircle(icon: "person.2.fill", selectedColor: $selectedIcon, iconSize: iconSize)
             }
         }
     }

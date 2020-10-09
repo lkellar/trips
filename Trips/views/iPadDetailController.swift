@@ -29,12 +29,15 @@ struct iPadDetailController<Content: View, OtherContent: View>: View {
             HStack {
                 left
                     .navigationBarHidden(width > 0)
-                    .frame(width: CGFloat(width == 0 ? geo.size.width : geo.size.width * 0.5))
+                    .frame(width: CGFloat(width == 0 ? geo.size.width : (geo.size.width - CGFloat(max(400, Int(geo.size.width * 0.4))))))
+                if (width > 0) {
+                    Divider()
+                }
                 right
                 .frame(width: CGFloat(width))
                 .onAppear {
                     withAnimation {
-                        width = Int(geo.size.width * 0.5)
+                        width = max(400, Int(geo.size.width * 0.4))
                     }
                 }
                 .onDisappear {
@@ -44,6 +47,9 @@ struct iPadDetailController<Content: View, OtherContent: View>: View {
                 }
             }
         }
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: (width > 0 ? 25 : 0)))
+        .background(Color(UIColor.systemGray6))
+        .edgesIgnoringSafeArea(.all)
     }
 }
 

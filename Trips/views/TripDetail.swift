@@ -207,7 +207,7 @@ struct TripDetail: View {
                     .sheet(isPresented: $templateModalDisplayed, content: {
                         AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                     })
-                    EditButton().foregroundColor(globalAccent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    EditButton().foregroundColor(globalAccent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 25))
                 })
             .onAppear(perform: {
                 globalAccent = Color.fromString(color: trip.color ?? "blue")

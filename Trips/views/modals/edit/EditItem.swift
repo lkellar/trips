@@ -34,8 +34,10 @@ struct EditItem: View {
                     Section {
                         TextField("Item Name", text: $updatedName)
                             .onAppear {
-                                if item!.name.count > 0 {
-                                    updatedName = item!.name
+                                if !(item?.isDeleted ?? true){
+                                    if item!.name.count > 0 {
+                                        updatedName = item!.name
+                                    }
                                 }
                             }
                             .onDisappear {
@@ -63,6 +65,7 @@ struct EditItem: View {
                                 }
                                 
                             }
+                            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
                             Text("Save")
@@ -74,12 +77,14 @@ struct EditItem: View {
             }
             .navigationBarTitle("Edit Item")
             .navigationBarItems(trailing:
-            Button(action: {
-                presentationMode.wrappedValue.dismiss()
-                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
-            }, label: {
-                Text("Close")
-            }))
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
+                }, label: {
+                    Text("Close")
+                })
+                  .padding()
+            )
             .onChange(of: selection.secondaryViewSelection) { newSecondaryViewSelection in
                 item = fetchEntityByExisting(id: newSecondaryViewSelection, entityType: Item.self, context: context)
                 if let item = item {
@@ -93,9 +98,6 @@ struct EditItem: View {
                 } else {
                     trip = nil
                 }
-            }
-            .onDisappear {
-                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
             }
         }
         .accentColor(accent)
