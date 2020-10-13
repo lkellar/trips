@@ -40,15 +40,25 @@ struct TemplateHome: View {
         }
     }
     
+    var columnGrid = [GridItem(.flexible()), GridItem(.flexible())]
+    
     var body: some View {
         NavigationView {
             GeometryReader { geo in
                 if (templates.count > 0) {
                     ScrollView {
-                        ForEach (Array(pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: $refreshing, width: Int(geo.size.width), selection: $selection).environment(\.managedObjectContext, context)
+                        LazyVGrid(columns: columnGrid) {
+                            ForEach(Array(templates.enumerated()), id: \.element) {index, template in
+                                NavigationLink(destination: TemplateDetail(template: template, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: template.objectID, selection: $selection.viewSelection) {
+                                    Button(action: {
+                                        selection.viewSelection = template.objectID
+                                        selection.viewSelectionType = .template
+                                    }) {
+                                        CategoryRectangular(name: template.name, color: (index % 4 == 1 || index % 4 == 2 ? iconBlue : iconGreen), width: Int(geo.size.width))
+                                    }.buttonStyle(PlainButtonStyle())
+                                }
+                            }
                         }
-                        Spacer()
                     }
                 } else {
                     VStack {
@@ -91,52 +101,6 @@ struct TemplateHome: View {
                                 }))
                 Text("No Template Selected").font(.subheadline)
             }
-    }
-}
-    
-struct TemplatePairView: View {
-    var pair: TemplatePair
-    var index: Int
-    
-    @Environment(\.managedObjectContext) var context
-    @Environment(\.colorScheme) var colorScheme
-    
-    @Binding var refreshing: Bool
-    
-    var width: Int
-    
-    @Binding var selection: SelectionConfig
-    
-    var body: some View {
-        HStack {
-            Spacer()
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: pair.first.objectID, selection: $selection.viewSelection) {
-                Button(action: {
-                    selection.viewSelection = pair.first.objectID
-                    selection.viewSelectionType = .template
-                }) {
-                    CategoryRectangular(name: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width)
-                }.buttonStyle(PlainButtonStyle())
-        }
-        
-        if (pair.second != nil) {
-            // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: pair.second!.objectID, selection: $selection.viewSelection) {
-                Button(action: {
-                    selection.viewSelection = pair.second!.objectID
-                }) {
-                    CategoryRectangular(name: pair.second!.name, color: (index % 2 == 0 ? iconBlue : iconGreen), width: width)
-                }.buttonStyle(PlainButtonStyle())
-            }
-        } else {
-            // Invisible box, to make it even, so an odd row (just one box) doesn't center
-            RoundedRectangle(cornerRadius: 30)
-                .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
-                .frame(width: CGFloat(width < 375 ? 125 : 150), height: CGFloat(width < 375 ? 125 : 150))
-                .padding()
-        }
-        Spacer()
-        }
     }
 }
 
