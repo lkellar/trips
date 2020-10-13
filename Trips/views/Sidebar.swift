@@ -113,6 +113,7 @@ struct Sidebar: View {
             }
         }
         .listStyle(SidebarListStyle())
+        .accentColor(Color.blue)
     }
 }
 

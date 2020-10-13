@@ -70,7 +70,7 @@ struct SidebarController: View {
             case .addTemplate:
                 AddTemplate(selection: $selection, modal: false)
             }
-        }
+        }.accentColor(accent)
             
     }
     
