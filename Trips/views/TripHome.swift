@@ -21,6 +21,8 @@ struct TripHome: View {
     @FetchRequest(fetchRequest: Trip.allTripsFetchRequest()) var trips: FetchedResults<Trip>
     
     @State var showAddTrip = false
+    @State var showDeleteAlert: Bool = false
+    @State var tripToDelete: Trip? = nil
     
     var body: some View {
         NavigationView {
@@ -30,9 +32,26 @@ struct TripHome: View {
                         ForEach(sortTrips(trips)) {trip in
                             NavigationLink(destination: TripDetail(trip: trip, selection: $selection, globalAccent: $accent), tag:trip.objectID, selection: $selection.viewSelection) {
                                     Button(action: {
+                                        selection.viewSelectionType = .trip
                                         selection.viewSelection = trip.objectID
                                     }) {
                                         TripHomeRow(trip: trip)
+                                            .contextMenu {
+                                                Button(action: {
+                                                    selection.viewSelectionType = .trip
+                                                    selection.viewSelection = trip.objectID
+                                                    selection.secondaryViewSelectionType = .editTrip
+                                                }) {
+                                                    Label("Edit", systemImage: "info.circle")
+                                                }
+                                                Button(action: {
+                                                    tripToDelete = trip
+                                                    showDeleteAlert = true
+                                                }) {
+                                                    // Changing color to red does not work
+                                                    Label("Delete", systemImage: "trash")
+                                                }
+                                        }
                                     }
                                 }
                             }
@@ -52,7 +71,25 @@ struct TripHome: View {
             }
             .navigationBarTitle("Trips")
         .navigationBarItems(
-             trailing: Button(action: {
+            trailing: HStack {
+                Button(action: {
+                    print("hidden")
+                }) {
+                    Spacer()
+                }.alert(isPresented: $showDeleteAlert, content: {
+                    Alert(title: Text("Are you sure you want to delete \(tripToDelete?.name ?? "Unknown Trip")?"),
+                          message: Text("This cannot be undone."),
+                          primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                            if let trip = tripToDelete {
+                                Trip.deleteTrip(trip: trip, context: context)
+                                saveContext(context)
+                                
+                                selection = SelectionConfig(viewSelectionType: .trip, viewSelection: nil)
+                                tripToDelete = nil
+                            }
+                          }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
+                })
+                Button(action: {
                     showAddTrip = true
                 selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
                  }) {
@@ -62,6 +99,7 @@ struct TripHome: View {
                     NavigationView {
                         AddTrip(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)}
                 })
+            }
             )
             
             Text("No Trip Selected").font(.subheadline).onAppear(perform: {

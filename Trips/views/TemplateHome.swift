@@ -56,6 +56,24 @@ struct TemplateHome: View {
                                     }) {
                                         CategoryRectangular(name: template.name, color: (index % 4 == 1 || index % 4 == 2 ? iconBlue : iconGreen), width: Int(geo.size.width))
                                     }.buttonStyle(PlainButtonStyle())
+                                    
+                                    .contextMenu {
+                                        Button(action: {
+                                            selection = SelectionConfig(viewSelectionType: .template, viewSelection: template.objectID, secondaryViewSelectionType: .editTemplate, secondaryViewSelection: nil)
+                                            
+                                        }) {
+                                            Label("Edit Template", systemImage: "info.circle")
+                                        }
+                                        Button(action: {
+                                            template.items.forEach {item in
+                                                context.delete(item as! NSManagedObject)
+                                            }
+                                            context.delete(template)
+                                            saveContext(context)
+                                        }) {
+                                            Label("Delete Template", systemImage: "trash")
+                                        }
+                                    }
                                 }
                             }
                         }

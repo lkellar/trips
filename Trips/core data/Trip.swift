@@ -78,6 +78,16 @@ extension Trip {
         return request
     }
     
+    static func deleteTrip(trip: Trip, context: NSManagedObjectContext) {
+      trip.categories.forEach {category in
+          (category as! Category).items.forEach { item in
+              context.delete(item as! NSManagedObject)
+          }
+          context.delete(category as! NSManagedObject)
+      }
+      context.delete(trip)
+    }
+    
     func beginNextLeg(context: NSManagedObjectContext) throws -> Void {
         let items = try context.fetch(Item.itemsInTripFetchRequest(trip: self))
         

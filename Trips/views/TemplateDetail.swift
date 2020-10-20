@@ -56,6 +56,39 @@ struct TemplateDetail: View {
                             }
                     }) {
                         Text(item.name)
+                            .contextMenu {
+                                Button(action: {
+                                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: .editItem, secondaryViewSelection: item.objectID)
+                                    
+                                    if (showModals) {
+                                        editItemModalDisplayed = true
+                                    }
+                                }) {
+                                    Label("Edit Item", systemImage: "info.circle")
+                                }
+                                Button(action: {
+                                    do {
+                                        let newItem = Item(context: context)
+                                        newItem.name = item.name
+                                        newItem.index = try Item.generateItemIndex(category: template, context: context)
+                                        template.addToItems(item)
+                                        newItem.category = template
+                                        
+                                        saveContext(context)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }) {
+                                    Label("Duplicate Item", systemImage: "doc.on.doc")
+                                }
+                                Button(action: {
+                                    template.removeFromItems(item)
+                                    context.delete(item)
+                                    saveContext(context)
+                                }) {
+                                    Label("Delete Item", systemImage: "trash")
+                                }
+                            }
                             .accentColor(.primary)
                     }
                     }.onDelete(perform: removeItem)
@@ -122,6 +155,9 @@ struct TemplateDetail: View {
             #if os(iOS)
             if horizontalSizeClass == .compact {
                 showModals = true
+                if (selection.secondaryViewSelectionType == .editTemplate) {
+                    editTemplateDisplayed = true
+                }
             }
             #endif
         }

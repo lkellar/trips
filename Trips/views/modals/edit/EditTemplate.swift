@@ -63,7 +63,7 @@ struct EditTemplate: View {
             .navigationBarTitle("Edit Template")
             .onDisappear {
                 selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
-                if !template.isDeleted && template.name != updatedName {
+                if !template.isDeleted && template.name != updatedName && updatedName.count > 0 {
                     template.name = updatedName
                 }
                 if template.hasChanges {

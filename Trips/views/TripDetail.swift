@@ -95,6 +95,44 @@ struct TripDetail: View {
                                                     }
                                                 }) {
                                                     Text(item.name)
+                                                        .contextMenu {
+                                                            Button(action: {
+                                                                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: .editItem, secondaryViewSelection: item.objectID)
+                                                                
+                                                                if (showModals) {
+                                                                    itemModalDisplayed = true
+                                                                }
+                                                            }) {
+                                                                Label("Edit Item", systemImage: "info.circle")
+                                                            }
+                                                            Button(action: {
+                                                                do {
+                                                                    let newItem = Item(context: context)
+                                                                    newItem.name = item.name
+                                                                    newItem.index = try Item.generateItemIndex(category: category, context: context)
+                                                                    category.addToItems(item)
+                                                                    newItem.category = category
+                                                                    
+                                                                    saveContext(context)
+                                                                } catch {
+                                                                    print(error)
+                                                                }
+                                                            }) {
+                                                                Label("Duplicate Item", systemImage: "doc.on.doc")
+                                                            }
+                                                            Button(action: {
+                                                                toggleItemCompleted(item)
+                                                            }) {
+                                                                Label("Mark as \(item.completed ? "Uncompleted" : "Completed")", systemImage: "checkmark.circle")
+                                                            }
+                                                            Button(action: {
+                                                                category.removeFromItems(item)
+                                                                context.delete(item)
+                                                                saveContext(context)
+                                                            }) {
+                                                                Label("Delete Item", systemImage: "trash")
+                                                            }
+                                                        }
                                                         .accentColor(.primary)
                                                 }
                                                 Spacer()
@@ -215,6 +253,10 @@ struct TripDetail: View {
                 #if os(iOS)
                 if horizontalSizeClass == .compact {
                     showModals = true
+                    
+                    if (selection.secondaryViewSelectionType == .editTrip) {
+                        editTripDisplayed = true
+                    }
                 }
                 #endif
             })
