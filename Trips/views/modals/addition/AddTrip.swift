@@ -37,40 +37,42 @@ struct AddTrip: View {
     }
     
     var body: some View {
-        Form {
-            Section {
-                TextField("Trip Name", text: $title)
-            }
-            
-            TripDateSelector(date: $startDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
-            
-            TripDateSelector(date: $endDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
-            
-            Section {
-                NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
-                    Text("Templates")
+        GeometryReader {geo in
+            Form {
+                Section {
+                    TextField("Trip Name", text: $title)
                 }
-            }
-            
-            Section(header: Text("Color")) {
-                ColorPicker(updatedColor: $color)
-            }
-            
-            Section(header: Text("Icon")) {
-                IconPicker(selectedIcon: $icon)
-            }
-            
-            Section {
-                Button(action: {
-                    let objectId = saveTrip()
-                    
-                    selection = SelectionConfig(viewSelectionType: .trip, viewSelection: objectId, secondaryViewSelectionType: .none)
-                    if (modal) {
-                        self.presentationMode.wrappedValue.dismiss()
+                
+                TripDateSelector(date: $startDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
+                
+                TripDateSelector(date: $endDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
+                
+                Section {
+                    NavigationLink(destination: IncludeTemplates(included: $includedTemplates)) {
+                        Text("Templates")
                     }
-                }) {
-                    Text("Save")
-                }.disabled(!checkTripValidity())
+                }
+                
+                Section(header: Text("Color")) {
+                    ColorPicker(updatedColor: $color)
+                }
+                
+                Section(header: Text("Icon")) {
+                    IconPicker(selectedIcon: $icon, width: geo.size.width)
+                }
+                
+                Section {
+                    Button(action: {
+                        let objectId = saveTrip()
+                        
+                        selection = SelectionConfig(viewSelectionType: .trip, viewSelection: objectId, secondaryViewSelectionType: .none)
+                        if (modal) {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                    }) {
+                        Text("Save")
+                    }.disabled(!checkTripValidity())
+                }
             }
         }.navigationBarTitle("Add Trip")
         .navigationBarItems(trailing:

@@ -42,14 +42,14 @@ struct TripHome: View {
                                                     selection.viewSelection = trip.objectID
                                                     selection.secondaryViewSelectionType = .editTrip
                                                 }) {
-                                                    Label("Edit", systemImage: "info.circle")
+                                                    Label("Edit Trip", systemImage: "info.circle")
                                                 }
                                                 Button(action: {
                                                     tripToDelete = trip
                                                     showDeleteAlert = true
                                                 }) {
                                                     // Changing color to red does not work
-                                                    Label("Delete", systemImage: "trash")
+                                                    Label("Delete Trip", systemImage: "trash")
                                                 }
                                         }
                                     }

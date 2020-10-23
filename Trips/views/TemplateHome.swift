@@ -15,11 +15,6 @@ let iconGreen = Color(UIColor(red: 0.30, green: 0.86, blue: 0.75, alpha: 1.00))
 //let iconGreen = Color.green
 let iconBlue = Color.blue
 
-struct TemplatePair: Hashable {
-    var first: Category
-    var second: Category?
-}
-
 struct TemplateHome: View {
     @Binding var selection: SelectionConfig
     @State var detailSelection: NSManagedObjectID? = nil
@@ -31,14 +26,6 @@ struct TemplateHome: View {
     @Environment(\.managedObjectContext) var context
     
     @FetchRequest(fetchRequest: Category.allTemplatesFetchRequest()) var templates: FetchedResults<Category>
-    
-    var pairs: [TemplatePair] {
-        get {
-            return stride(from: 0, to: templates.count, by: 2).map {
-                TemplatePair(first: templates[$0], second: (templates.count > ($0 + 1) ? templates[$0.advanced(by: 1)] : nil))
-            }
-        }
-    }
     
     var columnGrid = [GridItem(.flexible()), GridItem(.flexible())]
     

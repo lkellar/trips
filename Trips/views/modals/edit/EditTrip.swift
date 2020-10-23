@@ -78,70 +78,72 @@ struct EditTrip: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section {
-                    TextField("Trip Name", text: $updatedTitle)
-                        .onAppear {
-                            updatedTitle = trip.name
-                    }
-                }
-                Toggle("Show Completed Items", isOn: $showCompleted)
-                
-                TripDateSelector(date: $updatedStartDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
-                
-                TripDateSelector(date: $updatedEndDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
-                
-                Section(header: Text("Color")) {
-                    ColorPicker(updatedColor: $updatedColor)
-                }
-
-                Section(header: Text("Icon")) {
-                    IconPicker(selectedIcon: $updatedIcon)
-                }
-                
-                
-                if (trip.categories.count > 0) {
-                    NavigationLink(destination: CategoryList(trip: trip, accent: $updatedColor)) {
-                        Text("Categories")
-                    }
-                }
-                
-                Section(footer: Text("This will uncheck all items")) {
-                    Button(action: {
-                        do {
-                            try trip.beginNextLeg(context: context)
-                        } catch {
-                            print(error)
+            GeometryReader { geo in
+                Form {
+                    Section {
+                        TextField("Trip Name", text: $updatedTitle)
+                            .onAppear {
+                                updatedTitle = trip.name
                         }
-                    }) {
-                        Text("Begin Next Leg")
                     }
-                }
-                
-                Section {
-                
-                    Button(action: {
-                        showDeleteAlert = true;
-                    }) {
-                        Text("Delete").foregroundColor(.red)
-                    }.alert(isPresented: $showDeleteAlert, content: {
-                        Alert(title: Text("Are you sure you want to delete \(updatedTitle)?"),
-                              message: Text("This cannot be undone."),
-                              primaryButton: Alert.Button.destructive(Text("Delete"), action: {
-                                presentationMode.wrappedValue.dismiss()
-                                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
-                                DispatchQueue.main.async {
-                                    trip.categories.forEach {category in
-                                        (category as! Category).items.forEach { item in
-                                            context.delete(item as! NSManagedObject)
+                    Toggle("Show Completed Items", isOn: $showCompleted)
+                    
+                    TripDateSelector(date: $updatedStartDate, showDate: $showStartDate, validDates: validDates, isEndDate: false)
+                    
+                    TripDateSelector(date: $updatedEndDate, showDate: $showEndDate, validDates: validDates, isEndDate: true)
+                    
+                    Section(header: Text("Color")) {
+                        ColorPicker(updatedColor: $updatedColor)
+                    }
+
+                    Section(header: Text("Icon")) {
+                        IconPicker(selectedIcon: $updatedIcon, width: geo.size.width)
+                    }
+                    
+                    
+                    if (trip.categories.count > 0) {
+                        NavigationLink(destination: CategoryList(trip: trip, accent: $updatedColor)) {
+                            Text("Categories")
+                        }
+                    }
+                    
+                    Section(footer: Text("This will uncheck all items")) {
+                        Button(action: {
+                            do {
+                                try trip.beginNextLeg(context: context)
+                            } catch {
+                                print(error)
+                            }
+                        }) {
+                            Text("Begin Next Leg")
+                        }
+                    }
+                    
+                    Section {
+                    
+                        Button(action: {
+                            showDeleteAlert = true;
+                        }) {
+                            Text("Delete").foregroundColor(.red)
+                        }.alert(isPresented: $showDeleteAlert, content: {
+                            Alert(title: Text("Are you sure you want to delete \(updatedTitle)?"),
+                                  message: Text("This cannot be undone."),
+                                  primaryButton: Alert.Button.destructive(Text("Delete"), action: {
+                                    presentationMode.wrappedValue.dismiss()
+                                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
+                                    DispatchQueue.main.async {
+                                        trip.categories.forEach {category in
+                                            (category as! Category).items.forEach { item in
+                                                context.delete(item as! NSManagedObject)
+                                            }
+                                            context.delete(category as! NSManagedObject)
                                         }
-                                        context.delete(category as! NSManagedObject)
+                                        context.delete(trip)
+                                        saveContext(context)
                                     }
-                                    context.delete(trip)
-                                    saveContext(context)
-                                }
-                              }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
-                    })
+                                  }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
+                        })
+                    }
                 }
             }
             .navigationBarTitle("Edit Trip")
