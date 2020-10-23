@@ -14,6 +14,8 @@ struct iPadDetailController<Content: View, OtherContent: View>: View {
     
     @State var width = 0
     
+    @Environment(\.colorScheme) var colorScheme
+    
     init(@ViewBuilder left: () -> Content, @ViewBuilder right: () -> OtherContent) {
         self.left = left()
         self.right = right()
@@ -48,7 +50,7 @@ struct iPadDetailController<Content: View, OtherContent: View>: View {
             }
         }
         .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: (width > 0 ? 25 : 0)))
-        .background(Color(UIColor.systemGray6))
+        .background(colorScheme == .dark ? Color.black : Color(UIColor.systemGray6))
         .edgesIgnoringSafeArea(.all)
     }
 }
