@@ -22,16 +22,46 @@ struct SidebarController: View {
     var body: some View {
         NavigationView {
             Sidebar(selection: $selection)
-            switch selection.primaryViewSelection {
+            switch selection.viewSelectionType {
             case .trip:
-                if let trip = fetchEntityByExisting(id: selection.viewSelection, entityType: Trip.self) {
-                    TripDetail(trip: trip, selection: $selection)
+                if let trip = fetchEntityByExisting(id: selection.viewSelection, entityType: Trip.self, context: context) {
+                    iPadDetailController {
+                        TripDetail(trip: trip, selection: $selection, globalAccent: $accent)
+                    } right: {
+                        switch selection.secondaryViewSelectionType {
+                        case .addItem:
+                            AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: accent, selection: $selection)
+                        case .addCategory:
+                            AddCategory(trip: trip, refreshing: $refreshing, accent: accent, selection: $selection)
+                        case .addTemplate:
+                            AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: accent, selection: $selection)
+                        case .editItem:
+                            EditItem(selection: $selection, accent: $accent)
+                        case .editTrip:
+                            EditTrip(trip: trip, refreshing: $refreshing, globalAccent: $accent, selection: $selection)
+                        default:
+                            EmptyView()
+                        }
+                    }
                 } else {
                     Text("No Trip Selected")
                 }
             case .template:
-                if let template = fetchEntityByExisting(id: selection.viewSelection, entityType: Category.self) {
-                    TemplateDetail(template: template, refreshing: $refreshing, selection: $selection)
+                if let template = fetchEntityByExisting(id: selection.viewSelection, entityType: Category.self, context: context) {
+                    iPadDetailController {
+                        TemplateDetail(template: template, refreshing: $refreshing, selection: $selection, accent: $accent)
+                    } right: {
+                        switch selection.secondaryViewSelectionType {
+                        case .editTemplate:
+                            EditTemplate(template: template, refreshing: $refreshing, selection: $selection)
+                        case .editItem:
+                            EditItem(selection: $selection, accent: $accent)
+                        case .addItem:
+                            AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: accent, selection: $selection)
+                        default:
+                            EmptyView()
+                        }
+                    }
                 } else {
                     Text ("No Template Selected")
                 }
@@ -40,31 +70,11 @@ struct SidebarController: View {
             case .addTemplate:
                 AddTemplate(selection: $selection, modal: false)
             }
-        }
+        }.accentColor(accent)
             
     }
     
-    func fetchEntityByExisting<T: NSManagedObject>(id: NSManagedObjectID?, entityType: T.Type) -> T? {
-        if let id = id {
-            do {
-                // We can force unwrap the selection, as there is a check in the parent to only use this view if selection is valid
-                logger.info("Looking up existing entity by ID. ID is \(id, privacy: .private(mask: .hash))")
-                let entity = try context.existingObject(with: id) as? T
-                if let unwrappedEntity = entity {
-                    logger.info("Successfully found entity with ID:  \(id, privacy: .private(mask: .hash))")
-                    return unwrappedEntity
-                }
-                logger.info("Couldn't found entity with ID for Given Type:  \(id, privacy: .private(mask: .hash))")
-
-                return nil
-            } catch {
-                logger.error("Looking up entity with ID: \(id, privacy: .private(mask: .hash)) failed. Error: \(error.localizedDescription, privacy: .public)")
-                return nil
-            }
-        } else {
-            return nil
-        }
-    }
+    
 }
 
 struct SidebarController_Previews: PreviewProvider {

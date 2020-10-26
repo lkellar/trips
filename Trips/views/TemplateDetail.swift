@@ -17,24 +17,29 @@ struct TemplateDetail: View {
     
     @Binding var refreshing: Bool
     
-    @State var selectedItemToEdit: Item? = nil
-    
     var itemRequest : FetchRequest<Item>
     var items: FetchedResults<Item>{itemRequest.wrappedValue}
 
     @State var editItemModalDisplayed = false
     @State var addItemModalDisplayed = false;
     @State var editTemplateDisplayed = false;
+    @State var addItemToggle = false;
     
     @Binding var selection: SelectionConfig
+    @Binding var accent: Color
+    #if os(iOS)
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    #endif
+    @State var showModals: Bool = false
     
-    init(template: Category, refreshing: Binding<Bool>, selection: Binding<SelectionConfig>) {
+    init(template: Category, refreshing: Binding<Bool>, selection: Binding<SelectionConfig>, accent: Binding<Color>) {
         itemRequest = FetchRequest(entity: Item.entity(), sortDescriptors: [NSSortDescriptor(key: "index", ascending: true)], predicate:
         NSPredicate(format: "%K == %@", #keyPath(Item.category), template))
         
         self.template = template
         _refreshing = refreshing
         _selection = selection
+        _accent = accent
     }
     
     var body: some View {
@@ -43,12 +48,47 @@ struct TemplateDetail: View {
                 List {
                     ForEach(items) { item in
                         Button(action: {
-                            selectedItemToEdit = item
-                            // For some reason if the view isn't updated, the first time one opens edititem, it won't work
-                            refreshing.toggle()
-                            editItemModalDisplayed = true
+                            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                                          secondaryViewSelectionType: selection.secondaryViewSelection == item.objectID ? nil : .editItem,
+                                          secondaryViewSelection: selection.secondaryViewSelection == item.objectID ? nil : item.objectID)
+                            if (showModals) {
+                                editItemModalDisplayed = true
+                            }
                     }) {
                         Text(item.name)
+                            .contextMenu {
+                                Button(action: {
+                                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: .editItem, secondaryViewSelection: item.objectID)
+                                    
+                                    if (showModals) {
+                                        editItemModalDisplayed = true
+                                    }
+                                }) {
+                                    Label("Edit Item", systemImage: "info.circle")
+                                }
+                                Button(action: {
+                                    do {
+                                        let newItem = Item(context: context)
+                                        newItem.name = item.name
+                                        newItem.index = try Item.generateItemIndex(category: template, context: context)
+                                        template.addToItems(item)
+                                        newItem.category = template
+                                        
+                                        saveContext(context)
+                                    } catch {
+                                        print(error)
+                                    }
+                                }) {
+                                    Label("Duplicate Item", systemImage: "doc.on.doc")
+                                }
+                                Button(action: {
+                                    template.removeFromItems(item)
+                                    context.delete(item)
+                                    saveContext(context)
+                                }) {
+                                    Label("Delete Item", systemImage: "trash")
+                                }
+                            }
                             .accentColor(.primary)
                     }
                     }.onDelete(perform: removeItem)
@@ -59,11 +99,17 @@ struct TemplateDetail: View {
                 VStack {
                     Spacer()
                     HStack {
-                        AddExpander(color: .accentColor, showAddItem: $addItemModalDisplayed).padding()
+                        AddExpander(color: .accentColor, showAddItem: $addItemToggle).padding()
                     }
                 }
             } else {
-                AddButton(action: {addItemModalDisplayed = true}, text: "Add an Item!")
+                VStack {
+                    Spacer()
+                    AddButton(action: {
+                        addItemToggle.toggle()
+                    }, text: "Add an Item!")
+                    Spacer()
+                }
             }
                 
         }.navigationBarTitle(template.name + (refreshing ? "" : ""))
@@ -74,7 +120,7 @@ struct TemplateDetail: View {
                 }) {
                     Text("")
                 }.sheet(isPresented: $addItemModalDisplayed, content: {
-                            AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor).environment(\.managedObjectContext, context)
+                    AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor, selection: $selection).environment(\.managedObjectContext, context)
                 }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
                 Button(action: {
@@ -82,14 +128,13 @@ struct TemplateDetail: View {
                 }) {
                     Spacer()
                 }.sheet(isPresented: $editItemModalDisplayed, content: {
-                    if let item = selectedItemToEdit {
-                        EditItem(item: item).environment(\.managedObjectContext, context)
-                    } else {
-                        Text("No Item Selected")
-                    }
+                    EditItem(selection: $selection, accent: $accent).environment(\.managedObjectContext, context)
                 })
                 Button(action: {
-                    editTemplateDisplayed = true
+                    if (showModals) {
+                        editTemplateDisplayed = true
+                    }
+                    selection.secondaryViewSelectionType = selection.secondaryViewSelectionType == .editTemplate ? nil : .editTemplate
                 }, label: {
                     Image(systemName: "info.circle")
                     })
@@ -98,7 +143,24 @@ struct TemplateDetail: View {
                     }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
-            })
+            }).onChange(of: addItemToggle) {newAddItemToggle in
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                    secondaryViewSelectionType: selection.secondaryViewSelectionType == .addItem ? nil : .addItem,
+                  secondaryViewSelection: nil)
+                if (showModals) {
+                    addItemModalDisplayed = true
+                }
+            }
+        .onAppear {
+            #if os(iOS)
+            if horizontalSizeClass == .compact {
+                showModals = true
+                if (selection.secondaryViewSelectionType == .editTemplate) {
+                    editTemplateDisplayed = true
+                }
+            }
+            #endif
+        }
     }
     
     func removeItem(at offsets: IndexSet) {

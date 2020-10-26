@@ -42,7 +42,7 @@ struct EditTemplate: View {
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
                             presentationMode.wrappedValue.dismiss()
-                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
+                            selection = SelectionConfig(viewSelectionType: .template, viewSelection: nil)
 
                             DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
                                 template.items.forEach {item in
@@ -53,22 +53,26 @@ struct EditTemplate: View {
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
                 })
             }
-            .navigationBarTitle("Edit Template")
             .navigationBarItems(trailing:
             Button(action: {
                 presentationMode.wrappedValue.dismiss()
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
             }, label: {
                 Text("Close")
             }))
-        }.onDisappear {
-            if !template.isDeleted && template.name != updatedName {
-                template.name = updatedName
+            .navigationBarTitle("Edit Template")
+            .onDisappear {
+                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
+                if !template.isDeleted && template.name != updatedName && updatedName.count > 0 {
+                    template.name = updatedName
+                }
+                if template.hasChanges {
+                    saveContext(context)
+                    refreshing.toggle()
+                }
             }
-            if template.hasChanges {
-                saveContext(context)
-                refreshing.toggle()
-            }
-        }.navigationViewStyle(StackNavigationViewStyle())
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

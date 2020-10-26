@@ -15,11 +15,6 @@ let iconGreen = Color(UIColor(red: 0.30, green: 0.86, blue: 0.75, alpha: 1.00))
 //let iconGreen = Color.green
 let iconBlue = Color.blue
 
-struct TemplatePair: Hashable {
-    var first: Category
-    var second: Category?
-}
-
 struct TemplateHome: View {
     @Binding var selection: SelectionConfig
     @State var detailSelection: NSManagedObjectID? = nil
@@ -32,23 +27,43 @@ struct TemplateHome: View {
     
     @FetchRequest(fetchRequest: Category.allTemplatesFetchRequest()) var templates: FetchedResults<Category>
     
-    var pairs: [TemplatePair] {
-        get {
-            return stride(from: 0, to: templates.count, by: 2).map {
-                TemplatePair(first: templates[$0], second: (templates.count > ($0 + 1) ? templates[$0.advanced(by: 1)] : nil))
-            }
-        }
-    }
+    var columnGrid = [GridItem(.flexible()), GridItem(.flexible())]
     
     var body: some View {
         NavigationView {
             GeometryReader { geo in
                 if (templates.count > 0) {
                     ScrollView {
-                        ForEach (Array(pairs.enumerated()), id:\.element) { index, pair in
-                            TemplatePairView(pair: pair, index: index, refreshing: $refreshing, width: Int(geo.size.width), selection: $selection).environment(\.managedObjectContext, context)
+                        LazyVGrid(columns: columnGrid) {
+                            ForEach(Array(templates.enumerated()), id: \.element) {index, template in
+                                NavigationLink(destination: TemplateDetail(template: template, refreshing: $refreshing, selection: $selection, accent: Binding.constant(Color.blue)), tag: template.objectID, selection: $selection.viewSelection) {
+                                    Button(action: {
+                                        selection.viewSelection = template.objectID
+                                        selection.viewSelectionType = .template
+                                    }) {
+                                        CategoryRectangular(name: template.name, color: (index % 4 == 1 || index % 4 == 2 ? iconBlue : iconGreen), width: Int(geo.size.width))
+                                    }.buttonStyle(PlainButtonStyle())
+                                    
+                                    .contextMenu {
+                                        Button(action: {
+                                            selection = SelectionConfig(viewSelectionType: .template, viewSelection: template.objectID, secondaryViewSelectionType: .editTemplate, secondaryViewSelection: nil)
+                                            
+                                        }) {
+                                            Label("Edit Template", systemImage: "info.circle")
+                                        }
+                                        Button(action: {
+                                            template.items.forEach {item in
+                                                context.delete(item as! NSManagedObject)
+                                            }
+                                            context.delete(template)
+                                            saveContext(context)
+                                        }) {
+                                            Label("Delete Template", systemImage: "trash")
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        Spacer()
                     }
                 } else {
                     VStack {
@@ -57,7 +72,7 @@ struct TemplateHome: View {
                             Spacer()
                             AddButton(action: {
                                 addTemplateModalDisplayed = true
-                                selection = SelectionConfig(primaryViewSelection: .addTemplate, viewSelection: nil)
+                                selection = SelectionConfig(viewSelectionType: .addTemplate, viewSelection: nil, secondaryViewSelectionType: .none)
                             }, text: "Add a Template!")
                             Spacer()
                         }
@@ -78,7 +93,7 @@ struct TemplateHome: View {
             .navigationBarItems(trailing:
             Button(action: {
                 addTemplateModalDisplayed = true
-                selection = SelectionConfig(primaryViewSelection: .addTrip, viewSelection: nil)
+                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
             }, label: {
                 Image(systemName: "plus")
             }
@@ -91,52 +106,6 @@ struct TemplateHome: View {
                                 }))
                 Text("No Template Selected").font(.subheadline)
             }
-    }
-}
-    
-struct TemplatePairView: View {
-    var pair: TemplatePair
-    var index: Int
-    
-    @Environment(\.managedObjectContext) var context
-    @Environment(\.colorScheme) var colorScheme
-    
-    @Binding var refreshing: Bool
-    
-    var width: Int
-    
-    @Binding var selection: SelectionConfig
-    
-    var body: some View {
-        HStack {
-            Spacer()
-            NavigationLink(destination: TemplateDetail(template: pair.first, refreshing: $refreshing, selection: $selection), tag: pair.first.objectID, selection: $selection.viewSelection) {
-                Button(action: {
-                    selection.viewSelection = pair.first.objectID
-                    selection.primaryViewSelection = .template
-                }) {
-                    CategoryRectangular(name: pair.first.name, color: (index % 2 == 0 ? iconGreen : iconBlue), width: width)
-                }.buttonStyle(PlainButtonStyle())
-        }
-        
-        if (pair.second != nil) {
-            // SwiftUI won't let me do the if let xyz = etc etc, so If we know it's not nil, we can force unwrap (I think?)
-            NavigationLink(destination: TemplateDetail(template: pair.second!, refreshing: $refreshing, selection: $selection), tag: pair.second!.objectID, selection: $selection.viewSelection) {
-                Button(action: {
-                    selection.viewSelection = pair.second!.objectID
-                }) {
-                    CategoryRectangular(name: pair.second!.name, color: (index % 2 == 0 ? iconBlue : iconGreen), width: width)
-                }.buttonStyle(PlainButtonStyle())
-            }
-        } else {
-            // Invisible box, to make it even, so an odd row (just one box) doesn't center
-            RoundedRectangle(cornerRadius: 30)
-                .foregroundColor(colorScheme == .dark ? Color.black : Color.white)
-                .frame(width: CGFloat(width < 375 ? 125 : 150), height: CGFloat(width < 375 ? 125 : 150))
-                .padding()
-        }
-        Spacer()
-        }
     }
 }
 

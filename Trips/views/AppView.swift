@@ -15,7 +15,7 @@ struct AppView: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     #endif
     
-    @State var selection: SelectionConfig = SelectionConfig(primaryViewSelection: .trip, viewSelection: nil)
+    @State var selection: SelectionConfig = SelectionConfig(viewSelectionType: .trip, viewSelection: nil, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
     
     @State var accentColor: Color = Color.blue
     

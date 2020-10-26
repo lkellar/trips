@@ -19,7 +19,7 @@ struct TabController: View {
     init(selection: Binding<SelectionConfig>, accent: Binding<Color>) {
         _selection = selection
         _accent = accent
-        self._selectedTab = State.init(initialValue: selection.wrappedValue.primaryViewSelection == .template ? 1 : 0)
+        self._selectedTab = State.init(initialValue: selection.wrappedValue.viewSelectionType == .template ? 1 : 0)
     }
     
     var body: some View {

@@ -146,5 +146,5 @@ iOSInjectionProject/
 
 # End of https://www.gitignore.io/api/linux,swift,xcode,macos
 
-trips.sketch
+*.sketch
 *.coredataproj

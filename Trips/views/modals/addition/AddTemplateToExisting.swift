@@ -21,15 +21,17 @@ struct AddTemplateToExisting: View {
     @State var included: [Category] = []
     
     @Binding var refreshing: Bool
+    @Binding var selection: SelectionConfig
     
     var trip: Trip
     
-    init(trip: Trip, refreshing: Binding<Bool>, accent: Color) {
+    init(trip: Trip, refreshing: Binding<Bool>, accent: Color, selection: Binding<SelectionConfig>) {
         templateRequest = FetchRequest(entity: Category.entity(), sortDescriptors: [NSSortDescriptor(key: "name", ascending: true)], predicate:
         NSPredicate(format: "%K == true", #keyPath(Category.isTemplate)))
         
         self.trip = trip
         _refreshing = refreshing
+        _selection = selection
         self.accent = accent
     }
     
@@ -72,6 +74,7 @@ struct AddTemplateToExisting: View {
                                 saveContext(context)
                             }
                             refreshing.toggle()
+                            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                             presentationMode.wrappedValue.dismiss()
                         }, label: {
                             Text("Save").foregroundColor(accent)
@@ -83,11 +86,15 @@ struct AddTemplateToExisting: View {
             }.navigationBarTitle("Templates")
             .navigationBarItems(trailing:
                 Button(action: {
+                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("Cancel").foregroundColor(accent)
                 }))
+        }.onDisappear {
+            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -33,7 +33,7 @@ struct AddTemplate: View {
                     
                     saveContext(context)
                     
-                    selection = SelectionConfig(primaryViewSelection: .template, viewSelection: pendingTemplate.objectID)
+                    selection = SelectionConfig(viewSelectionType: .template, viewSelection: pendingTemplate.objectID)
                     if (modal) {
                         self.presentationMode.wrappedValue.dismiss()
                     }
@@ -45,7 +45,7 @@ struct AddTemplate: View {
     .navigationBarTitle("Add Template")
         .navigationBarItems(trailing:
                         Button(action: {
-                            selection = SelectionConfig(primaryViewSelection: .template, viewSelection: nil)
+                            selection = SelectionConfig(viewSelectionType: .template, viewSelection: nil)
                             self.presentationMode.wrappedValue.dismiss()
                         }, label: {
                             if (modal) {
