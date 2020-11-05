@@ -284,7 +284,7 @@ struct TripDetail: View {
                     secondaryViewSelectionType: selection.secondaryViewSelectionType == .addTemplate ? nil : .addTemplate,
                   secondaryViewSelection: nil)
                 if (showModals) {
-                    modalDisplayed = true
+                    templateModalDisplayed = true
                 }
             }
             .onDisappear(perform: {
