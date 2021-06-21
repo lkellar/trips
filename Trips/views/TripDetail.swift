@@ -149,21 +149,7 @@ struct TripDetail: View {
                                                         completedAlert = true
                                                     }
                                                 }) {
-                                                    
-                                                    ZStack {
-                                                        RoundedRectangle(cornerRadius: CGFloat(15))
-                                                        .stroke(Color.secondary, lineWidth: CGFloat(3))
-
-                                                            if (item.totalCount > 1 && item.completedCount != 0) || item.completed {
-                                                                Circle()
-                                                                    .trim(from: itemPartCompl(item) ? 0.25 : 0, to: itemPartCompl(item) ? 0.75 : 1)
-                                                                    .fill(Color.secondary)
-                                                                    .animation(.default)
-                                                                    .frame(width: CGFloat(16.0), height: CGFloat(16.0))
-                                                            }
-                                                            
-                                                        }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
-                                                    .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                                    CheckoffCircle(status: itemCompletionStatus(item))
                                                 }.buttonStyle(BorderlessButtonStyle())
                                             }
                                         }
@@ -300,11 +286,6 @@ struct TripDetail: View {
         }
     }
     
-    // is an item partially completed, where both total count and completed count are above zero, but not equal
-    func itemPartCompl(_ item: Item) -> Bool {
-        return item.totalCount > 1 && item.completedCount > 0 && item.totalCount != item.completedCount
-    }
-    
     func getDeleteFunction(category: Category) -> (IndexSet) -> Void {
         func delete(at offsets: IndexSet) {
             let items = fetchItems(category, context)
@@ -366,6 +347,16 @@ struct TripDetail: View {
         return moveItem
     }
     
+    // is an item partially completed, where both total count and completed count are above zero, but not equal
+    func itemCompletionStatus(_ item: Item) -> ItemCompletionStatus {
+        if item.completed {
+            return .completed
+        } else if (item.totalCount > 1 && item.completedCount < item.totalCount && item.completedCount > 0) {
+            return .partial
+        } else {
+            return .notcompleted
+        }
+    }
     
 }
 

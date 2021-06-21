@@ -38,6 +38,7 @@
 		A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5723326E140006F902 /* TripHomeRow.swift */; };
 		A0877C5C233274360006F902 /* TripHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5B233274360006F902 /* TripHome.swift */; };
 		A091C10E243BF22500804B61 /* IntegratedStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091C10D243BF22500804B61 /* IntegratedStepper.swift */; };
+		A09CB7A326815416006E1C2F /* CheckoffCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09CB7A226815416006E1C2F /* CheckoffCircle.swift */; };
 		A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */; };
 		A0B61B692343A44500D0D13C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B61B652343A44500D0D13C /* Trip.swift */; };
 		A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BE157123E0949E000F8542 /* EditTemplate.swift */; };
@@ -92,6 +93,7 @@
 		A0877C5B233274360006F902 /* TripHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHome.swift; sourceTree = "<group>"; };
 		A08E15722375C7DB00DB454E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A091C10D243BF22500804B61 /* IntegratedStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegratedStepper.swift; sourceTree = "<group>"; };
+		A09CB7A226815416006E1C2F /* CheckoffCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoffCircle.swift; sourceTree = "<group>"; };
 		A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrip.swift; sourceTree = "<group>"; };
 		A0B61B652343A44500D0D13C /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		A0BE157123E0949E000F8542 /* EditTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplate.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */,
 				A0FB049E25029EAE00433AA5 /* CategoryList.swift */,
 				A0313C392680556200C0CF03 /* StackCounter.swift */,
+				A09CB7A226815416006E1C2F /* CheckoffCircle.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -336,6 +339,7 @@
 				A07B6C8F234798FA00578CDC /* Util.swift in Sources */,
 				A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */,
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
+				A09CB7A326815416006E1C2F /* CheckoffCircle.swift in Sources */,
 				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
 				A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */,
 				A0CFE6642515223D0002284B /* iPadDetailController.swift in Sources */,

@@ -159,6 +159,12 @@ func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
     return newTrips
 }
 
+enum ItemCompletionStatus {
+    case completed
+    case partial
+    case notcompleted
+}
+
 enum PrimarySelectionType {
     case trip
     case template
