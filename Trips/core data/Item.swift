@@ -19,6 +19,8 @@ public class Item: NSManagedObject, Identifiable {
     @NSManaged public var completed: Bool
     @NSManaged public var category: Category?
     @NSManaged public var index: Int
+    @NSManaged public var completedCount: Int
+    @NSManaged public var totalCount: Int
 
     static func allItemsFetchRequest() ->NSFetchRequest<Item> {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>
