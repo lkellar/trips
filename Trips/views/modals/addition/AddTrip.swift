@@ -58,7 +58,7 @@ struct AddTrip: View {
                 }
                 
                 Section(header: Text("Icon")) {
-                    IconPicker(selectedIcon: $icon, width: geo.size.width)
+                    IconPicker(selectedIcon: $icon)
                 }
                 
                 Section {

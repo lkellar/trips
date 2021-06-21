@@ -8,30 +8,26 @@
 
 import SwiftUI
 
+let icons = ["house.fill", "airplane", "briefcase.fill", "map.fill", "gamecontroller.fill", "gift.fill", "studentdesk", "cart.fill", "car.fill", "person.2.fill", "tram.fill", "bicycle", "bag.fill", "cross.fill", "desktopcomputer", "book.fill", "ticket.fill", "graduationcap.fill", "bed.double.fill"]
+
 struct IconPicker: View {
     @Binding var selectedIcon: String
 
     var iconSize: CGFloat
+    var gridItemLayout: [GridItem]
     
-    init(selectedIcon: Binding<String>, width: CGFloat) {
-        iconSize = width * 0.07
+    init(selectedIcon: Binding<String>) {
+        iconSize = 32
         _selectedIcon = selectedIcon
+        gridItemLayout = [GridItem(.adaptive(minimum: iconSize * 2))]
     }
-    
-    var gridItemLayout = [GridItem(.adaptive(minimum: 50))]
 
     var body: some View {
         LazyVGrid(columns: gridItemLayout) {
-            IconPickerCircle(icon: "house.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "airplane", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "briefcase.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "map.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "gamecontroller.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "gift.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "studentdesk", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "cart.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "car.fill", selectedColor: $selectedIcon, iconSize: iconSize)
-            IconPickerCircle(icon: "person.2.fill", selectedColor: $selectedIcon, iconSize: iconSize)
+            ForEach(icons, id: \.self) {icon in
+                IconPickerCircle(icon: icon, selectedColor: $selectedIcon, iconSize: iconSize)
+                
+            }
         }
     }
 }
