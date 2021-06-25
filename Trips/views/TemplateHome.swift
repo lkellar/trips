@@ -93,7 +93,7 @@ struct TemplateHome: View {
             .navigationBarItems(trailing:
             Button(action: {
                 addTemplateModalDisplayed = true
-                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
+                selection = SelectionConfig(viewSelectionType: .addTemplate, viewSelection: nil)
             }, label: {
                 Image(systemName: "plus")
             }

@@ -18,6 +18,7 @@
 		A024932023BE7A60009AF5EF /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A024931F23BE7A60009AF5EF /* AppView.swift */; };
 		A0251D9323EDF376001F5D66 /* AddTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0251D9223EDF376001F5D66 /* AddTemplate.swift */; };
 		A026AAF5240575AB003414AF /* AddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A026AAF4240575AB003414AF /* AddButton.swift */; };
+		A0313C3A2680556200C0CF03 /* StackCounter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0313C392680556200C0CF03 /* StackCounter.swift */; };
 		A034F74A24536C980025EA62 /* EditCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74924536C980025EA62 /* EditCategory.swift */; };
 		A034F74C245370AA0025EA62 /* CopyToOtherTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */; };
 		A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AB4B6237EF8F900979899 /* EditTrip.swift */; };
@@ -37,6 +38,7 @@
 		A0877C5823326E140006F902 /* TripHomeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5723326E140006F902 /* TripHomeRow.swift */; };
 		A0877C5C233274360006F902 /* TripHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0877C5B233274360006F902 /* TripHome.swift */; };
 		A091C10E243BF22500804B61 /* IntegratedStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091C10D243BF22500804B61 /* IntegratedStepper.swift */; };
+		A09CB7A326815416006E1C2F /* CheckoffCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A09CB7A226815416006E1C2F /* CheckoffCircle.swift */; };
 		A0A8A69B23A97BC000E3AC04 /* AddTrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */; };
 		A0B61B692343A44500D0D13C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0B61B652343A44500D0D13C /* Trip.swift */; };
 		A0BE157223E0949E000F8542 /* EditTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0BE157123E0949E000F8542 /* EditTemplate.swift */; };
@@ -69,6 +71,7 @@
 		A024931F23BE7A60009AF5EF /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		A0251D9223EDF376001F5D66 /* AddTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTemplate.swift; sourceTree = "<group>"; };
 		A026AAF4240575AB003414AF /* AddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddButton.swift; sourceTree = "<group>"; };
+		A0313C392680556200C0CF03 /* StackCounter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackCounter.swift; sourceTree = "<group>"; };
 		A034F74924536C980025EA62 /* EditCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCategory.swift; sourceTree = "<group>"; };
 		A034F74B245370AA0025EA62 /* CopyToOtherTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyToOtherTrip.swift; sourceTree = "<group>"; };
 		A03AB4B6237EF8F900979899 /* EditTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTrip.swift; sourceTree = "<group>"; };
@@ -90,6 +93,7 @@
 		A0877C5B233274360006F902 /* TripHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripHome.swift; sourceTree = "<group>"; };
 		A08E15722375C7DB00DB454E /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A091C10D243BF22500804B61 /* IntegratedStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegratedStepper.swift; sourceTree = "<group>"; };
+		A09CB7A226815416006E1C2F /* CheckoffCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoffCircle.swift; sourceTree = "<group>"; };
 		A0A8A69A23A97BC000E3AC04 /* AddTrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTrip.swift; sourceTree = "<group>"; };
 		A0B61B652343A44500D0D13C /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
 		A0BE157123E0949E000F8542 /* EditTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditTemplate.swift; sourceTree = "<group>"; };
@@ -229,6 +233,8 @@
 				A0F683802496BAB300139D74 /* IconPickerCircle.swift */,
 				A059DF3F24F964B0009908BE /* EditItemCategorySelector.swift */,
 				A0FB049E25029EAE00433AA5 /* CategoryList.swift */,
+				A0313C392680556200C0CF03 /* StackCounter.swift */,
+				A09CB7A226815416006E1C2F /* CheckoffCircle.swift */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -333,6 +339,7 @@
 				A07B6C8F234798FA00578CDC /* Util.swift in Sources */,
 				A0762B7223D75BD2007A9E9D /* TemplateDetail.swift in Sources */,
 				A03AB4B7237EF8F900979899 /* EditTrip.swift in Sources */,
+				A09CB7A326815416006E1C2F /* CheckoffCircle.swift in Sources */,
 				A0050B7C23A9346F000B7E59 /* ColorPickerCircle.swift in Sources */,
 				A0E63DE624676CE700731B62 /* CreateTemplateFromCategory.swift in Sources */,
 				A0CFE6642515223D0002284B /* iPadDetailController.swift in Sources */,
@@ -365,6 +372,7 @@
 				A0B61B692343A44500D0D13C /* Trip.swift in Sources */,
 				A0564378240FF9F10032217A /* AddTemplateToExisting.swift in Sources */,
 				A034F74A24536C980025EA62 /* EditCategory.swift in Sources */,
+				A0313C3A2680556200C0CF03 /* StackCounter.swift in Sources */,
 				A0475FF724BFE0D60046026D /* SidebarController.swift in Sources */,
 				A081AB6F23A3ECA6000F391A /* EditItem.swift in Sources */,
 				A0475FF624BFE0D60046026D /* Sidebar.swift in Sources */,
@@ -506,7 +514,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -517,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.5;
+				MARKETING_VERSION = 2021.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;
@@ -532,7 +540,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Trips/Trips.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Trips/Preview Content\"";
 				DEVELOPMENT_TEAM = 27888865CT;
@@ -543,7 +551,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2020.5;
+				MARKETING_VERSION = 2021.1;
 				PRODUCT_BUNDLE_IDENTIFIER = org.kellar.trips;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = NO;

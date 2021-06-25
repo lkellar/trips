@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19F96" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="18154" systemVersion="20F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
     <entity name="Category" representedClassName="Category" syncable="YES">
         <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES"/>
@@ -10,9 +10,11 @@
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES">
         <attribute name="completed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="completedCount" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 64" defaultValueString="-1" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String" defaultValueString=""/>
         <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="totalCount" optional="YES" attributeType="Integer 64" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Category" inverseName="items" inverseEntity="Category"/>
     </entity>
     <entity name="Trip" representedClassName="Trip" syncable="YES">
@@ -27,7 +29,7 @@
     </entity>
     <elements>
         <element name="Category" positionX="-36" positionY="36" width="128" height="133"/>
-        <element name="Item" positionX="-54" positionY="27" width="128" height="118"/>
+        <element name="Item" positionX="-54" positionY="27" width="128" height="134"/>
         <element name="Trip" positionX="-63" positionY="-18" width="128" height="163"/>
     </elements>
 </model>

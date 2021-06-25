@@ -20,6 +20,7 @@ struct EditItem: View {
     @Binding var accent: Color
     
     @State var updatedName: String = ""
+    @State var updatedQuantity: Int = 1
     @State var selectedCategory: Int = -1
     
     init(selection: Binding<SelectionConfig>, accent: Binding<Color>) {
@@ -40,16 +41,14 @@ struct EditItem: View {
                                     }
                                 }
                             }
-                            .onDisappear {
+                        
+                        IntegratedStepper(quantity: $updatedQuantity, upperLimit: 50, lowerLimit: 1)
+                            .onAppear {
                                 if !(item?.isDeleted ?? true){
-                                    if item!.name != updatedName {
-                                        item!.name = updatedName
-                                    }
-                                }
-                                if item?.hasChanges ?? false {
-                                    saveContext(context)
+                                    updatedQuantity = item!.totalCount
                                 }
                             }
+                        
                         if let trip = trip {
                             // Using force unwrap because of optional detection higher up
                             EditItemCategorySelector(item: item!, trip: trip, selectedCategory: $selectedCategory)
@@ -60,6 +59,11 @@ struct EditItem: View {
                         Button(action: {
                             if let item = item {
                                 item.name = updatedName
+                                item.totalCount = updatedQuantity
+                                if (item.completedCount > updatedQuantity) {
+                                    item.completedCount = updatedQuantity
+                                    item.completed = true
+                                }
                                 if item.hasChanges {
                                     saveContext(context)
                                 }
@@ -97,6 +101,22 @@ struct EditItem: View {
                     trip = fetchEntityByExisting(id: selection.viewSelection, entityType: Trip.self, context: context)
                 } else {
                     trip = nil
+                }
+            }
+            .onDisappear {
+                if !(item?.isDeleted ?? true){
+                    if item!.name != updatedName {
+                        item!.name = updatedName
+                    }
+                    if item!.totalCount != updatedQuantity {
+                        item!.totalCount = updatedQuantity
+                        if (item!.completedCount > updatedQuantity) {
+                            item!.completedCount = updatedQuantity
+                        }
+                    }
+                }
+                if item?.hasChanges ?? false {
+                    saveContext(context)
                 }
             }
         }

@@ -93,6 +93,7 @@ extension Trip {
         
         for item in items {
             item.completed = false
+            item.completedCount = 0
         }
         
         saveContext(context)

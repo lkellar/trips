@@ -45,7 +45,7 @@ struct AddItem: View {
                 Section {
                     TextField("Item Name", text: $title)
                     
-                    IntegratedStepper(quantity: $quantity, upperLimit: 20, lowerLimit: 1)
+                    IntegratedStepper(quantity: $quantity, upperLimit: 50, lowerLimit: 1)
                     
                 }
                 if selectCategory {
@@ -66,9 +66,7 @@ struct AddItem: View {
                     Button(action: {
                         let localTitle = title
                         title = ""
-                        for _ in 1...quantity {
-                            saveItem(title: localTitle)
-                        }
+                        saveItem(title: localTitle, quantity: quantity)
                         
                         quantity = 1
                     }) {
@@ -77,9 +75,7 @@ struct AddItem: View {
                 }
                 Section(footer: Text(selectCategory && categories.count == 0 ? "No Categories in Trip. Please create a Category before adding an Item." : "")) {
                     Button(action: {
-                        for _ in 1...quantity {
-                            saveItem(title: title)
-                        }
+                        saveItem(title: title, quantity: quantity)
                         selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: nil, secondaryViewSelection: nil)
                         presentationMode.wrappedValue.dismiss()
                     }) {
@@ -111,7 +107,7 @@ struct AddItem: View {
         return true
     }
     
-    func saveItem(title: String) {
+    func saveItem(title: String, quantity: Int) {
         do {
             let category = categories[selectedCategory]
             let item = Item(context: context)
@@ -119,6 +115,11 @@ struct AddItem: View {
             item.name = title
             item.index = try Item.generateItemIndex(category: category, context: context)
             category.addToItems(item)
+            
+            if (quantity > 1) {
+                item.completedCount = 0
+                item.totalCount = quantity
+            }
             
             try context.save()
         } catch {

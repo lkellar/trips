@@ -136,6 +136,7 @@ func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext
         for item in category.items {
             let newItem = Item(context: context)
             newItem.completed = false
+            newItem.completedCount = 0
             newItem.name = (item as! Item).name
             newItem.index = try Item.generateItemIndex(category: newCategory, context: context)
             
@@ -156,6 +157,12 @@ func sortTrips(_ trips: FetchedResults<Trip>) -> [Trip] {
     newTrips = newTrips.sorted(by: {$0.startDate! < $1.startDate!})
     newTrips.append(contentsOf: trips.filter {$0.startDate == nil})
     return newTrips
+}
+
+enum ItemCompletionStatus {
+    case completed
+    case partial
+    case notcompleted
 }
 
 enum PrimarySelectionType {

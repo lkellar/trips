@@ -121,7 +121,7 @@ struct TripDetail: View {
                                                                 Label("Duplicate Item", systemImage: "doc.on.doc")
                                                             }
                                                             Button(action: {
-                                                                toggleItemCompleted(item)
+                                                                toggleItemCompleted(item, all: true)
                                                             }) {
                                                                 Label("Mark as \(item.completed ? "Uncompleted" : "Completed")", systemImage: "checkmark.circle")
                                                             }
@@ -136,6 +136,9 @@ struct TripDetail: View {
                                                         .accentColor(.primary)
                                                 }
                                                 Spacer()
+                                                if (item.totalCount > 1) {
+                                                    StackCounter(completedCount: item.completedCount, totalCount: item.totalCount)
+                                                }
                                                 Button(action: {
                                                     toggleItemCompleted(item)
                                                     let impactMed = UIImpactFeedbackGenerator(style: .medium)
@@ -146,17 +149,7 @@ struct TripDetail: View {
                                                         completedAlert = true
                                                     }
                                                 }) {
-                                                    ZStack {
-                                                    RoundedRectangle(cornerRadius: CGFloat(15))
-                                                    .stroke(Color.secondary, lineWidth: CGFloat(3))
-                                                        
-                                                        if item.completed {
-                                                            Circle().fill(Color.secondary)
-                                                                .frame(width: CGFloat(16.0), height: CGFloat(16.0))
-                                                        }
-                                                        
-                                                    }.frame(width: CGFloat(26.0), height: CGFloat(26.0))
-                                                    .padding(EdgeInsets(top: CGFloat(0), leading: CGFloat(0), bottom: CGFloat(0), trailing: CGFloat(10)))
+                                                    CheckoffCircle(status: itemCompletionStatus(item))
                                                 }.buttonStyle(BorderlessButtonStyle())
                                             }
                                         }
@@ -311,8 +304,27 @@ struct TripDetail: View {
         return delete
     }
     
-    func toggleItemCompleted(_ item: Item) -> Void {
-        item.completed.toggle()
+    func toggleItemCompleted(_ item: Item, all: Bool = false) -> Void {
+        if (item.totalCount > 1 && !all) {
+            if (item.completedCount < item.totalCount) {
+                item.completedCount += 1
+                if (item.completedCount == item.totalCount) {
+                    item.completed = true
+                }
+            } else {
+                item.completedCount = 0
+                item.completed = false
+            }
+        } else {
+            if (item.totalCount > 1) {
+                if (item.completed) {
+                    item.completedCount = 0
+                } else {
+                    item.completedCount = item.totalCount
+                }
+            }
+            item.completed.toggle()
+        }
         saveContext(context)
         refreshing.toggle()
     }
@@ -335,6 +347,16 @@ struct TripDetail: View {
         return moveItem
     }
     
+    // is an item partially completed, where both total count and completed count are above zero, but not equal
+    func itemCompletionStatus(_ item: Item) -> ItemCompletionStatus {
+        if item.completed {
+            return .completed
+        } else if (item.totalCount > 1 && item.completedCount < item.totalCount && item.completedCount > 0) {
+            return .partial
+        } else {
+            return .notcompleted
+        }
+    }
     
 }
 
