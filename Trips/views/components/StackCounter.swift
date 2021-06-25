@@ -24,7 +24,7 @@ struct StackCounter: View {
             Text("\(completedCount)/\(totalCount)")
                 .font(.system(.body, design: .rounded))
                 .bold()
-                .foregroundColor(colorScheme == .dark ? .black : .white)
+                .foregroundColor(.white)
         }
         .padding(.trailing, 10)
     }
