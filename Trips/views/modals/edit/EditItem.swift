@@ -62,6 +62,7 @@ struct EditItem: View {
                                 item.totalCount = updatedQuantity
                                 if (item.completedCount > updatedQuantity) {
                                     item.completedCount = updatedQuantity
+                                    item.completed = true
                                 }
                                 if item.hasChanges {
                                     saveContext(context)

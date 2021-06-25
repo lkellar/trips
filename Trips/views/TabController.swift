@@ -14,28 +14,21 @@ struct TabController: View {
     
     @Binding var selection: SelectionConfig
     @Binding var accent: Color
-    @State var selectedTab: Int
-    
-    init(selection: Binding<SelectionConfig>, accent: Binding<Color>) {
-        _selection = selection
-        _accent = accent
-        self._selectedTab = State.init(initialValue: selection.wrappedValue.viewSelectionType == .template ? 1 : 0)
-    }
     
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $selection.viewSelectionType) {
             TripHome(selection: $selection, accent: $accent)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Trips")
-                }.tag(0)
+                }.tag(PrimarySelectionType.trip)
             TemplateHome(selection: $selection)
                 .environment(\.managedObjectContext, context)
                 .tabItem {
                     Image(systemName: "square.grid.2x2.fill")
                     Text("Templates")
-                }.tag(1)
+                }.tag(PrimarySelectionType.template)
         }.accentColor(accent)
     }
 }

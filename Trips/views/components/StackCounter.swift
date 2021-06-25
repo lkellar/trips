@@ -18,7 +18,9 @@ struct StackCounter: View {
         ZStack {
             RoundedRectangle(cornerRadius: 7.92)
                 .fill(Color.accentColor)
-                .frame(width: 40, height: 30)
+                // for each digit, add six, plus a base of thirty
+                .frame(width: 30 + (totalCount >= 10 ? 12 : 6) + (completedCount >= 10 ? 12 : 6), height: 30)
+                .animation(.easeOut)
             Text("\(completedCount)/\(totalCount)")
                 .font(.system(.body, design: .rounded))
                 .bold()
