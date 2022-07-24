@@ -184,21 +184,6 @@ struct TripDetail: View {
             .navigationBarTitle(trip.name)
                 .navigationBarItems(trailing: HStack {
                     Button(action: {
-                        print("Hidden 0.5")
-                    }) {
-                        Text(refreshing ? "" : "")
-                    }.alert(isPresented: $completedAlert, content: {
-                        Alert(title: Text("All Items Checked"),
-                              message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
-                              primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
-                                do {
-                                    try trip.beginNextLeg(context: context)
-                                } catch {
-                                    print(error)
-                                }
-                              }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
-                    })
-                    Button(action: {
                         if (showModals) {
                             editTripDisplayed = true
                         }
@@ -209,37 +194,30 @@ struct TripDetail: View {
                         .sheet(isPresented: $editTripDisplayed, content: {
                             EditTrip(trip: trip, refreshing: $refreshing, globalAccent: $globalAccent, selection: $selection).environment(\.managedObjectContext, context)
                         }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                    Button(action: {
-                        print("Hidden 1")
-                    }) {
-                        Spacer()
-                    }
-                    .sheet(isPresented: $modalDisplayed, content: {
-                        AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
-                    })
-                    Button(action: {
-                        print("Hidedn 1.5")
-                    }) {
-                        Spacer()
-                    }.sheet(isPresented: $itemModalDisplayed, content: {
-                        EditItem(selection: $selection, accent: $globalAccent).environment(\.managedObjectContext, context)
-                    })
-                    Button(action: {
-                        print("Hidden 2")
-                    }) {
-                        Spacer()
-                    }
-                    .sheet(isPresented: $categoryModalDisplayed, content: {
-                        AddCategory(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
-                    })
-                    Button(action: {
-                        print("Hidden 3")
-                    }) {
-                        Spacer()
-                    }
-                    .sheet(isPresented: $templateModalDisplayed, content: {
-                        AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
-                    })
+                        .sheet(isPresented: $modalDisplayed, content: {
+                            AddItem(categories: trip.categories.allObjects as! [Category], selectCategory: true, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
+                        })
+                        .sheet(isPresented: $itemModalDisplayed, content: {
+                            EditItem(selection: $selection, accent: $globalAccent).environment(\.managedObjectContext, context)
+                        })
+                        .sheet(isPresented: $categoryModalDisplayed, content: {
+                            AddCategory(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
+                        })
+                            
+                        .sheet(isPresented: $templateModalDisplayed, content: {
+                            AddTemplateToExisting(trip: trip, refreshing: $refreshing, accent: globalAccent, selection: $selection).environment(\.managedObjectContext, context)
+                        })
+                        .alert(isPresented: $completedAlert, content: {
+                            Alert(title: Text("All Items Checked"),
+                                  message: Text("Would you like to uncheck all items for the next leg of your Trip?"),
+                                  primaryButton: Alert.Button.default(Text("Begin Next Leg"), action: {
+                                    do {
+                                        try trip.beginNextLeg(context: context)
+                                    } catch {
+                                        print(error)
+                                    }
+                                  }), secondaryButton: Alert.Button.cancel(Text("Dismiss")))
+                        })
                     EditButton().foregroundColor(globalAccent).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 25))
                 })
             .onAppear(perform: {

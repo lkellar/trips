@@ -116,21 +116,6 @@ struct TemplateDetail: View {
         .navigationBarItems(trailing:
             HStack {
                 Button(action: {
-                    print("Hidden what?")
-                }) {
-                    Text("")
-                }.sheet(isPresented: $addItemModalDisplayed, content: {
-                    AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor, selection: $selection).environment(\.managedObjectContext, context)
-                }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
-                
-                Button(action: {
-                    print("Hidedn 1.5")
-                }) {
-                    Spacer()
-                }.sheet(isPresented: $editItemModalDisplayed, content: {
-                    EditItem(selection: $selection, accent: $accent).environment(\.managedObjectContext, context)
-                })
-                Button(action: {
                     if (showModals) {
                         editTemplateDisplayed = true
                     }
@@ -140,7 +125,14 @@ struct TemplateDetail: View {
                     })
                     .sheet(isPresented: $editTemplateDisplayed, content: {
                         EditTemplate(template: template, refreshing: $refreshing, selection: $selection).environment(\.managedObjectContext, context)
-                    }).padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
+                    })
+                    .sheet(isPresented: $addItemModalDisplayed, content: {
+                        AddItem(categories: [template], selectCategory: false, refreshing: $refreshing, accent: Color.accentColor, selection: $selection).environment(\.managedObjectContext, context)
+                    })
+                    .sheet(isPresented: $editItemModalDisplayed, content: {
+                        EditItem(selection: $selection, accent: $accent).environment(\.managedObjectContext, context)
+                    })
+                    .padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 EditButton().padding(EdgeInsets(top: 25, leading: 25, bottom: 25, trailing: 0))
                 
             }).onChange(of: addItemToggle) {newAddItemToggle in

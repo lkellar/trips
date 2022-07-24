@@ -73,10 +73,16 @@ struct TripHome: View {
         .navigationBarItems(
             trailing: HStack {
                 Button(action: {
-                    print("hidden")
-                }) {
-                    Spacer()
-                }.alert(isPresented: $showDeleteAlert, content: {
+                    showAddTrip = true
+                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
+                 }) {
+                    Image(systemName: "plus")
+                }.padding()
+                .sheet(isPresented: $showAddTrip, content: {
+                    NavigationView {
+                        AddTrip(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)}
+                })
+                .alert(isPresented: $showDeleteAlert, content: {
                     Alert(title: Text("Are you sure you want to delete \(tripToDelete?.name ?? "Unknown Trip")?"),
                           message: Text("This cannot be undone."),
                           primaryButton: Alert.Button.destructive(Text("Delete"), action: {
@@ -88,16 +94,6 @@ struct TripHome: View {
                                 tripToDelete = nil
                             }
                           }), secondaryButton: Alert.Button.cancel(Text("Cancel")))
-                })
-                Button(action: {
-                    showAddTrip = true
-                selection = SelectionConfig(viewSelectionType: .addTrip, viewSelection: nil)
-                 }) {
-                    Image(systemName: "plus")
-                }.padding()
-                .sheet(isPresented: $showAddTrip, content: {
-                    NavigationView {
-                        AddTrip(selection: $selection, modal: true).environment(\.managedObjectContext, self.context)}
                 })
             }
             )
