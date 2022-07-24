@@ -92,7 +92,6 @@ extension Trip {
         let items = try context.fetch(Item.itemsInTripFetchRequest(trip: self))
         
         for item in items {
-            item.completed = false
             item.completedCount = 0
         }
         

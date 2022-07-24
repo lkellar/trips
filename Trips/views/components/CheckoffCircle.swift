@@ -15,7 +15,7 @@ struct CheckoffCircle: View {
             RoundedRectangle(cornerRadius: CGFloat(15))
             .stroke(Color.secondary, lineWidth: CGFloat(3))
                 Circle()
-                    .trim(from: statusToVal(status, from: true), to: statusToVal(status, from: false))
+                .trim(from: statusToVal(status, from: true), to: statusToVal(status, from: false))
                     .fill(Color.secondary)
                     .animation(.default)
                     .frame(width: CGFloat(16.0), height: CGFloat(16.0))

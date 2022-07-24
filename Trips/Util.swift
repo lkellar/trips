@@ -170,7 +170,6 @@ func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext
         newCategory.index =  try Category.generateCategoryIndex(trip: trip, context: context)
         for item in category.items {
             let newItem = Item(context: context)
-            newItem.completed = false
             newItem.completedCount = 0
             newItem.name = (item as! Item).name
             newItem.index = try Item.generateItemIndex(category: newCategory, context: context)

@@ -76,107 +76,102 @@ struct TripDetail: View {
                 .navigationBarTitle("No Trip Selected")
                 .navigationBarItems(trailing: EmptyView())
         } else {
-            ZStack {
-                VStack {
-                    if !(!trip.showCompleted && (items.filter {$0.completed == false}).count == 0 && items.count > 0) {
-                        List {
-                            ForEach(categories, id: \.self) {category in
-                                // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
-                                Section(header: Text(category.name + (refreshing ? "" : ""))) {
-                                    ForEach(items.filter {$0.category == category}) { item in
-                                        if (!item.completed || trip.showCompleted) && !editTripDisplayed {
-                                            HStack {
-                                                Button(action: {
-                                                    selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
-                                                                  secondaryViewSelectionType: selection.secondaryViewSelection == item.objectID ? nil : .editItem,
-                                                                  secondaryViewSelection: selection.secondaryViewSelection == item.objectID ? nil : item.objectID)
-                                                    if (showModals) {
-                                                        itemModalDisplayed = true
-                                                    }
-                                                }) {
-                                                    Text(item.name)
-                                                        .contextMenu {
-                                                            Button(action: {
-                                                                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: .editItem, secondaryViewSelection: item.objectID)
-                                                                
-                                                                if (showModals) {
-                                                                    itemModalDisplayed = true
-                                                                }
-                                                            }) {
-                                                                Label("Edit Item", systemImage: "info.circle")
+            VStack {
+                if !(!trip.showCompleted && (items.filter {$0.status != .completed}).count == 0 && items.count > 0) {
+                    List {
+                        ForEach(categories, id: \.self) {category in
+                            // Same hack used in TripHomeRow.swift, but A. it seems to work, and B. I can't find another way around it. Basically, it manually refereshes view
+                            Section(header: Text(category.name + (refreshing ? "" : ""))) {
+                                ForEach(items.filter {$0.category == category}) { item in
+                                    if (item.status != .completed || trip.showCompleted) && !editTripDisplayed {
+                                        HStack {
+                                            Button(action: {
+                                                selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection,
+                                                              secondaryViewSelectionType: selection.secondaryViewSelection == item.objectID ? nil : .editItem,
+                                                              secondaryViewSelection: selection.secondaryViewSelection == item.objectID ? nil : item.objectID)
+                                                if (showModals) {
+                                                    itemModalDisplayed = true
+                                                }
+                                            }) {
+                                                Text(item.name)
+                                                    .contextMenu {
+                                                        Button(action: {
+                                                            selection = SelectionConfig(viewSelectionType: selection.viewSelectionType, viewSelection: selection.viewSelection, secondaryViewSelectionType: .editItem, secondaryViewSelection: item.objectID)
+                                                            
+                                                            if (showModals) {
+                                                                itemModalDisplayed = true
                                                             }
-                                                            Button(action: {
-                                                                do {
-                                                                    let newItem = Item(context: context)
-                                                                    newItem.name = item.name
-                                                                    newItem.index = try Item.generateItemIndex(category: category, context: context)
-                                                                    category.addToItems(item)
-                                                                    newItem.category = category
-                                                                    
-                                                                    saveContext(context)
-                                                                } catch {
-                                                                    print(error)
-                                                                }
-                                                            }) {
-                                                                Label("Duplicate Item", systemImage: "doc.on.doc")
-                                                            }
-                                                            Button(action: {
-                                                                toggleItemCompleted(item, all: true)
-                                                            }) {
-                                                                Label("Mark as \(item.completed ? "Uncompleted" : "Completed")", systemImage: "checkmark.circle")
-                                                            }
-                                                            Button(action: {
-                                                                category.removeFromItems(item)
-                                                                context.delete(item)
-                                                                saveContext(context)
-                                                            }) {
-                                                                Label("Delete Item", systemImage: "trash")
-                                                            }
+                                                        }) {
+                                                            Label("Edit Item", systemImage: "info.circle")
                                                         }
-                                                        .accentColor(.primary)
-                                                }
-                                                Spacer()
-                                                if (item.totalCount > 1) {
-                                                    StackCounter(completedCount: item.completedCount, totalCount: item.totalCount)
-                                                }
-                                                Button(action: {
-                                                    toggleItemCompleted(item)
-                                                    let impactMed = UIImpactFeedbackGenerator(style: .medium)
-                                                    impactMed.impactOccurred()
-                                                    
-                                                    // If there are no uncompleted items
-                                                    if (items.filter {$0.completed == false}).count == 0 {
-                                                        completedAlert = true
+                                                        Button(action: {
+                                                            do {
+                                                                let newItem = Item(context: context)
+                                                                newItem.name = item.name
+                                                                newItem.index = try Item.generateItemIndex(category: category, context: context)
+                                                                category.addToItems(item)
+                                                                newItem.category = category
+                                                                
+                                                                saveContext(context)
+                                                            } catch {
+                                                                print(error)
+                                                            }
+                                                        }) {
+                                                            Label("Duplicate Item", systemImage: "doc.on.doc")
+                                                        }
+                                                        Button(action: {
+                                                            toggleItemCompleted(item, all: true)
+                                                        }) {
+                                                            Label("Mark as \(item.status == .completed ? "Uncompleted" : "Completed")", systemImage: "checkmark.circle")
+                                                        }
+                                                        Button(action: {
+                                                            category.removeFromItems(item)
+                                                            context.delete(item)
+                                                            saveContext(context)
+                                                        }) {
+                                                            Label("Delete Item", systemImage: "trash")
+                                                        }
                                                     }
-                                                }) {
-                                                    CheckoffCircle(status: itemCompletionStatus(item))
-                                                }.buttonStyle(BorderlessButtonStyle())
+                                                    .accentColor(.primary)
                                             }
+                                            Spacer()
+                                                StackCounter(completedCount: item.completedCount, totalCount: item.totalCount)
+                                            Button(action: {
+                                                toggleItemCompleted(item)
+                                                let impactMed = UIImpactFeedbackGenerator(style: .medium)
+                                                impactMed.impactOccurred()
+                                                
+                                                // If there are no uncompleted items
+                                                if (items.filter {$0.status != .completed}).count == 0 {
+                                                    completedAlert = true
+                                                }
+                                            }) {
+                                                CheckoffCircle(status: item.status)
+                                            }.buttonStyle(BorderlessButtonStyle())
                                         }
-                                    }.onDelete(perform: getDeleteFunction(category: category, context: context, onComplete: {
-                                            refreshing.toggle()
-                                        }))
-                                        .onMove(perform: getMoveFunction(category: category, context: context))
-                                }
+                                    }
+                                }.onDelete(perform: getDeleteFunction(category: category, context: context, onComplete: {
+                                        refreshing.toggle()
+                                    }))
+                                    .onMove(perform: getMoveFunction(category: category, context: context))
+                                
                             }
-                        }.listStyle(GroupedListStyle())
-                    } else {
-                        if trip.categories.count > 0 && items.count > 0 {
-                            AddButton(action: {
-                                do {
-                                    try trip.beginNextLeg(context: context)
-                                } catch {
-                                    print(error)
-                                }
-                            }, text: "Begin Next Leg", accent: .accentColor)
-                            Text("This will uncheck all items.").font(.callout)
                         }
-                    }
-                }
-                VStack {
-                    Spacer()
-                    HStack {
-                        AddExpander(color: .accentColor, showAddItem: $addItemToggle, showAddCategory: $addCategoryToggle, showAddTemplate: $addTemplateToggle).padding()
+                    }.listStyle(GroupedListStyle())
+                    
+                        .safeAreaInset(edge: .bottom, spacing: -30.0) {
+                            AddExpander(color: .accentColor, showAddItem: $addItemToggle, showAddCategory: $addCategoryToggle, showAddTemplate: $addTemplateToggle).padding()
+                        }
+                } else {
+                    if trip.categories.count > 0 && items.count > 0 {
+                        AddButton(action: {
+                            do {
+                                try trip.beginNextLeg(context: context)
+                            } catch {
+                                print(error)
+                            }
+                        }, text: "Begin Next Leg", accent: .accentColor)
+                        Text("This will uncheck all items.").font(.callout)
                     }
                 }
             }
@@ -267,39 +262,21 @@ struct TripDetail: View {
     }
     
     func toggleItemCompleted(_ item: Item, all: Bool = false) -> Void {
-        if (item.totalCount > 1 && !all) {
+        if (!all) {
             if (item.completedCount < item.totalCount) {
                 item.completedCount += 1
-                if (item.completedCount == item.totalCount) {
-                    item.completed = true
-                }
             } else {
                 item.completedCount = 0
-                item.completed = false
             }
         } else {
-            if (item.totalCount > 1) {
-                if (item.completed) {
-                    item.completedCount = 0
-                } else {
-                    item.completedCount = item.totalCount
-                }
+            if (item.completedCount == item.totalCount) {
+                item.completedCount = 0
+            } else {
+                item.completedCount = item.totalCount
             }
-            item.completed.toggle()
         }
         saveContext(context)
         refreshing.toggle()
-    }
-    
-    // is an item partially completed, where both total count and completed count are above zero, but not equal
-    func itemCompletionStatus(_ item: Item) -> ItemCompletionStatus {
-        if item.completed {
-            return .completed
-        } else if (item.totalCount > 1 && item.completedCount < item.totalCount && item.completedCount > 0) {
-            return .partial
-        } else {
-            return .notcompleted
-        }
     }
     
 }

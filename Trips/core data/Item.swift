@@ -16,11 +16,22 @@ public class Item: NSManagedObject, Identifiable {
 
     @NSManaged public var name: String
     @NSManaged public var notes: String?
-    @NSManaged public var completed: Bool
     @NSManaged public var category: Category?
     @NSManaged public var index: Int
     @NSManaged public var completedCount: Int
     @NSManaged public var totalCount: Int
+    
+    
+    // is an item partially completed, where both total count and completed count are above zero, but not equal
+    var status: ItemCompletionStatus {
+        if self.totalCount == self.completedCount {
+            return .completed
+        } else if (self.totalCount > 1 && self.completedCount < self.totalCount && self.completedCount > 0) {
+            return .partial
+        } else {
+            return .notcompleted
+        }
+    }
 
     static func allItemsFetchRequest() ->NSFetchRequest<Item> {
         let request: NSFetchRequest<Item> = Item.fetchRequest() as! NSFetchRequest<Item>

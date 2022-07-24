@@ -35,6 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let container = NSPersistentCloudKitContainer(name: "Trips")
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            storeDescription.setOption(true as NSObject, forKey: NSMigratePersistentStoresAutomaticallyOption)
+            storeDescription.setOption(true as NSObject, forKey: NSInferMappingModelAutomaticallyOption)
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }

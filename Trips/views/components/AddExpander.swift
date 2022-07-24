@@ -36,92 +36,96 @@ struct AddExpander: View {
         _showAddCategory = Binding.constant(false)
         _showAddTemplate = Binding.constant(false)
         addCategory = false
-        
     }
     
     var body: some View {
         RoundedRectangle(cornerRadius: radius)
-            .frame(width: width, height: height)
-            .foregroundColor(color).overlay(
-                VStack {
-                    if showExpandedText {
+            .frame(width: 64, height: 64)
+            .foregroundColor(color).overlay(alignment: .bottom) {
+                RoundedRectangle(cornerRadius: radius)
+                    .foregroundColor(color)
+                    .overlay(
                         VStack {
-                            Button(action: {
-                                showAddItem.toggle()
-                                unExpand()
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus")
-                                    Text("Add Item")
-                                    Spacer()
-                                }
-                                .padding(.leading, 15)
-                            }
-                            Spacer()
-                            Button(action: {
-                                showAddCategory.toggle()
-                                unExpand()
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.square.fill.on.square.fill")
-                                    Text("Add Category")
-                                    Spacer()
-                                }
-                                .padding(.leading, 15)
-                            }
-                            Spacer()
-                            Button(action: {
-                                showAddTemplate.toggle()
-                                unExpand()
-                            }) {
-                                HStack {
-                                    Image(systemName: "plus.square.fill.on.square.fill")
-                                    Text("Add Template")
-                                    Spacer()
-                                }
-                                .padding(.leading, 15)
-                            }
-                            Spacer()
-                            Button(action: {
-                                unExpand()
-                            }) {
-                                HStack {
-                                    Image(systemName: "xmark.circle.fill")
-                                    Text("Cancel")
-                                    Spacer()
-                                }
-                                .padding(.leading, 15)
-                            }
-                        }.padding(.vertical, 20)
-                    } else {
-                        Button(action: {
-                            if addCategory {
-                                expand.toggle()
-                                withAnimation() {
-                                    width = 210
-                                    height = 200
-                                    radius = 15
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
-                                    showExpandedText = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                    if !expand {
-                                        unExpand();
+                            if showExpandedText {
+                                VStack {
+                                    Button(action: {
+                                        showAddItem.toggle()
+                                        unExpand()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "plus")
+                                            Text("Add Item")
+                                            Spacer()
+                                        }
+                                        .padding(.leading, 15)
                                     }
-                                }
+                                    Spacer()
+                                    Button(action: {
+                                        showAddCategory.toggle()
+                                        unExpand()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "plus.square.fill.on.square.fill")
+                                            Text("Add Category")
+                                            Spacer()
+                                        }
+                                        .padding(.leading, 15)
+                                    }
+                                    Spacer()
+                                    Button(action: {
+                                        showAddTemplate.toggle()
+                                        unExpand()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "plus.square.fill.on.square.fill")
+                                            Text("Add Template")
+                                            Spacer()
+                                        }
+                                        .padding(.leading, 15)
+                                    }
+                                    Spacer()
+                                    Button(action: {
+                                        unExpand()
+                                    }) {
+                                        HStack {
+                                            Image(systemName: "xmark.circle.fill")
+                                            Text("Cancel")
+                                            Spacer()
+                                        }
+                                        .padding(.leading, 15)
+                                    }
+                                }.padding(.vertical, 20)
                             } else {
-                                showAddItem.toggle()
+                                Button(action: {
+                                    if addCategory {
+                                        expand.toggle()
+                                        withAnimation() {
+                                            width = 210
+                                            height = 200
+                                            radius = 15
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.225) {
+                                            showExpandedText = true
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                                            if !expand {
+                                                unExpand();
+                                            }
+                                        }
+                                    } else {
+                                        showAddItem.toggle()
+                                    }
+                                }) {
+                                Image(systemName: "plus")
+                                    .font(.system(size: 40))
+                                }
                             }
-                        }) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 40))
                         }
-                    }
-                }
-                .foregroundColor(colorScheme == .dark && color == Color.primary ? Color.black : Color.white)
-                .font(.system(size: 23))
-        )
+                        .foregroundColor(colorScheme == .dark && color == Color.primary ? Color.black : Color.white)
+                        .font(.system(size: 23))
+                    )
+                .frame(width: width, height: height)
+            }
     }
     
     func unExpand() {
