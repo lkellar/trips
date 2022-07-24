@@ -91,8 +91,8 @@ struct TemplateDetail: View {
                             }
                             .accentColor(.primary)
                     }
-                    }.onDelete(perform: removeItem)
-                        .onMove(perform: moveItem)
+                    }.onDelete(perform: getDeleteFunction(category: template, context: context))
+                        .onMove(perform: getMoveFunction(category: template, context: context))
                     // using grouped style here, even though there's no grouping, just because it looks better and matches TripDetail
                 }.listStyle(GroupedListStyle())
                 
@@ -161,28 +161,6 @@ struct TemplateDetail: View {
             }
             #endif
         }
-    }
-    
-    func removeItem(at offsets: IndexSet) {
-        for offset in offsets {
-            let item = items[offset]
-            template.removeFromItems(item)
-            context.delete(item)
-        }
-    }
-    
-    func moveItem(from source: IndexSet, to destination: Int) {
-        var items: [Item] = []
-        for index in source {
-            items.append(items[index])
-        }
-        
-        for item in items {
-            Item.adjustItemIndex(source: item.index, index: destination, category: template, context: context)
-            item.index = (items.count != destination ? destination : destination - 1)
-        }
-        
-        saveContext(context)
     }
 }
 

@@ -124,6 +124,41 @@ func fetchItems(_ category: Category, _ context: NSManagedObjectContext) -> [Ite
     
 }
 
+func getMoveFunction(category: Category, context: NSManagedObjectContext) -> (IndexSet, Int) -> Void {
+    func moveItem(from source: IndexSet, to destination: Int) {
+        var items: [Item] = Array(fetchItems(category, context))
+    
+        items.move(fromOffsets: source, toOffset: destination)
+        for (index, item) in items.enumerated() {
+            item.index = index
+        }
+        
+        saveContext(context)
+    }
+    
+    return moveItem
+}
+
+func getDeleteFunction(category: Category, context: NSManagedObjectContext, onComplete: Optional<() -> Void> = nil) -> (IndexSet) -> Void {
+    func delete(at offsets: IndexSet) {
+        let items = fetchItems(category, context)
+        
+        for offset in offsets {
+            let item = items[offset]
+            category.removeFromItems(item)
+            context.delete(item)
+        }
+                    
+        saveContext(context)
+        if let onComplete = onComplete {
+            onComplete()
+        }
+    }
+    
+    return delete
+}
+
+
 
 func copyToOther(category: Category, trip: Trip, context: NSManagedObjectContext) {
     coreDataLogger.debug("Copying category \(category.objectID, privacy: .private(mask: .hash)) to Trip \(trip.objectID, privacy: .private(mask: .hash))")

@@ -153,8 +153,10 @@ struct TripDetail: View {
                                                 }.buttonStyle(BorderlessButtonStyle())
                                             }
                                         }
-                                    }.onDelete(perform: getDeleteFunction(category: category))
-                                        .onMove(perform: getMoveFunction(category: category))
+                                    }.onDelete(perform: getDeleteFunction(category: category, context: context, onComplete: {
+                                            refreshing.toggle()
+                                        }))
+                                        .onMove(perform: getMoveFunction(category: category, context: context))
                                 }
                             }
                         }.listStyle(GroupedListStyle())
@@ -286,24 +288,6 @@ struct TripDetail: View {
         }
     }
     
-    func getDeleteFunction(category: Category) -> (IndexSet) -> Void {
-        func delete(at offsets: IndexSet) {
-            let items = fetchItems(category, context)
-            
-            for offset in offsets {
-                let item = items[offset]
-                category.removeFromItems(item)
-                context.delete(item)
-            }
-                        
-            saveContext(context)
-            refreshing.toggle()
-            
-        }
-        
-        return delete
-    }
-    
     func toggleItemCompleted(_ item: Item, all: Bool = false) -> Void {
         if (item.totalCount > 1 && !all) {
             if (item.completedCount < item.totalCount) {
@@ -327,24 +311,6 @@ struct TripDetail: View {
         }
         saveContext(context)
         refreshing.toggle()
-    }
-    
-    func getMoveFunction(category: Category) -> (IndexSet, Int) -> Void {
-        func moveItem(from source: IndexSet, to destination: Int) {
-            var items: [Item] = []
-            for index in source {
-                items.append(fetchItems(category, context)[index])
-            }
-            
-            for item in items {
-                Item.adjustItemIndex(source: item.index, index: destination, category: category, context: context)
-                item.index = (fetchItems(category, context).count != destination ? destination : destination - 1)
-            }
-            
-            saveContext(context)
-        }
-        
-        return moveItem
     }
     
     // is an item partially completed, where both total count and completed count are above zero, but not equal

@@ -58,14 +58,11 @@ struct CategoryList: View {
     }
     
     func moveCategory(from source: IndexSet, to destination: Int) {
-        var items: [Category] = []
-        for index in source {
-            items.append(categories[index])
-        }
+        var localCategories: [Category] = Array(categories)
         
-        for item in items {
-            Category.adjustCategoryIndex(source: item.index, index: destination, trip: trip, context: context)
-            item.index = (categories.count != destination ? destination : destination - 1)
+        localCategories.move(fromOffsets: source, toOffset: destination)
+        for (index, category) in localCategories.enumerated() {
+            category.index = index
         }
         
         saveContext(context)
